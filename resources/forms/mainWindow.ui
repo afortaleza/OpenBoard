@@ -78,6 +78,8 @@
    <addaction name="separator"/>
    <addaction name="actionErase"/>
    <addaction name="separator"/>
+   <addaction name="actionVirtualDesktop"/>
+   <addaction name="separator"/>
    <addaction name="actionBoard"/>
    <addaction name="actionWeb"/>
    <addaction name="actionDocument"/>
@@ -688,6 +690,26 @@
     </font>
    </property>
   </action>
+  <action name="actionVirtualDesktop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../OpenBoard.qrc">
+     <normaloff>:/images/toolbar/window.png</normaloff>:/images/toolbar/window.png</iconset>
+   </property>
+   <property name="text">
+    <string>Virtual</string>
+   </property>
+   <property name="toolTip">
+    <string>Virtual Desktop</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+  </action>  
   <action name="actionPreferences">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">

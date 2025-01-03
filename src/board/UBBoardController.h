@@ -39,6 +39,7 @@
 #include "core/UB.h"
 #include "document/UBDocumentContainer.h"
 #include "core/UBApplicationController.h"
+#include "gui/UBVirtualDesktop.h"
 
 class UBMainWindow;
 class UBApplication;
@@ -59,7 +60,7 @@ class UBGraphicsWidgetItem;
 class UBBoardPaletteManager;
 class UBItem;
 class UBGraphicsItem;
-
+class UBVirtualDesktop;
 
 class UBBoardController : public UBDocumentContainer
 {
@@ -261,6 +262,7 @@ class UBBoardController : public UBDocumentContainer
         void saveData(SaveFlags fls = sf_none);
 
         //void regenerateThumbnails();
+        void showVirtualDesktop(bool enabled);
 
     signals:
         void newPageAdded();
@@ -329,6 +331,7 @@ class UBBoardController : public UBDocumentContainer
         std::shared_ptr<UBGraphicsScene> mInitialDocumentScene;
 
         QTimer *mAutosaveTimer;
+        UBVirtualDesktop *mVirtualDesktop;
 
     private slots:
         void stylusToolDoubleClicked(int tool);

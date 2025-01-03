@@ -467,6 +467,7 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionSleep, SIGNAL(triggered()), this, SLOT(blackout()));
     connect(mMainWindow->actionVirtualKeyboard, SIGNAL(triggered(bool)), this, SLOT(showKeyboard(bool)));
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
+    connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
 }
 
 void UBBoardController::startScript()
@@ -490,6 +491,17 @@ void UBBoardController::saveData(SaveFlags fls)
     }
     if (verbose) {
         UBApplication::showMessage(tr("Document has just been saved..."));
+    }
+}
+
+void UBBoardController::showVirtualDesktop(bool enabled)
+{
+    if (enabled) {
+        mVirtualDesktop = new UBVirtualDesktop(800, 600);
+        mActiveScene->addItem(mVirtualDesktop);
+    }
+    else {
+        UBApplication::showMessage(tr("Hiding virtual desktop"));
     }
 }
 

@@ -1,5 +1,6 @@
 HEADERS += src/gui/UBThumbnailView.h \
     $$PWD/UBStartupHintsPalette.h \
+    $$PWD/UBVirtualDesktop.h \
     src/gui/UBFloatingPalette.h \
     src/gui/UBToolbarButtonGroup.h \
     src/gui/UBStylusPalette.h \
@@ -44,6 +45,7 @@ HEADERS += src/gui/UBThumbnailView.h \
     src/gui/UBSnapIndicator.h
 SOURCES += src/gui/UBThumbnailView.cpp \
     $$PWD/UBStartupHintsPalette.cpp \
+    $$PWD/UBVirtualDesktop.cpp \
     src/gui/UBFloatingPalette.cpp \
     src/gui/UBToolbarButtonGroup.cpp \
     src/gui/UBStylusPalette.cpp \
@@ -91,4 +93,6 @@ macx:OBJECTIVE_SOURCES += src/gui/UBKeyboardPalette_mac.mm
 linux-g++:SOURCES += src/gui/UBKeyboardPalette_linux.cpp
 linux-g++-32:SOURCES += src/gui/UBKeyboardPalette_linux.cpp
 linux-g++-64:SOURCES += src/gui/UBKeyboardPalette_linux.cpp
+
+QT += widgets
 
