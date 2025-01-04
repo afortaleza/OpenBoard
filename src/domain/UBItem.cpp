@@ -140,6 +140,9 @@ UBGraphicsItemDelegate *UBGraphicsItem::Delegate(QGraphicsItem *pItem)
     case UBGraphicsCurtainItem::Type :
         result = (static_cast<UBGraphicsCurtainItem*>(pItem))->Delegate();
         break;
+    case UBGraphicsVirtualDesktop::Type :
+        result = (static_cast<UBGraphicsVirtualDesktop*>(pItem))->Delegate();
+        break;
     }
 
     return result;

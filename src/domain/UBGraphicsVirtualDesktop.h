@@ -1,17 +1,24 @@
-#ifndef UBVIRTUALDESKTOP_H
-#define UBVIRTUALDESKTOP_H
+#ifndef UBGRAPHICSVIRTUALDESKTOP_H
+#define UBGRAPHICSVIRTUALDESKTOP_H
 
 #include <QGraphicsItem>
 #include <QImage>
 #include <QObject>
+#include "domain/UBItem.h"
 
-class UBVirtualDesktop : public QObject, public QGraphicsItem
+class UBGraphicsVirtualDesktop : public QObject, public QGraphicsItem, public UBGraphicsItem
 {
     Q_OBJECT  // Make sure this class is a QObject to support event handling
 
 public:
+    enum { Type = UBGraphicsItemType::VirtualDesktopType };
+    virtual int type() const
+    {
+        return Type;
+    }
+
     // Constructor that accepts width and height of the virtual screen
-    UBVirtualDesktop(int width, int height);
+    UBGraphicsVirtualDesktop(int width, int height);
 
     // Override boundingRect() to define the area of the item
     QRectF boundingRect() const override;
@@ -34,4 +41,4 @@ private:
 };
 
 
-#endif // UBVIRTUALDESKTOP_H
+#endif // UBGRAPHICSVIRTUALDESKTOP_H

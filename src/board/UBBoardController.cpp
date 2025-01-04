@@ -112,6 +112,7 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     , mActionGroupText(tr("Group"))
     , mActionUngroupText(tr("Ungroup"))
     , mAutosaveTimer(0)
+    , mVirtualDesktop(nullptr)
 {
     mZoomFactor = UBSettings::settings()->boardZoomFactor->get().toDouble();
 
@@ -497,11 +498,13 @@ void UBBoardController::saveData(SaveFlags fls)
 void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
-        mVirtualDesktop = new UBVirtualDesktop(800, 600);
+        mVirtualDesktop = new UBGraphicsVirtualDesktop(800, 600);
         mActiveScene->addItem(mVirtualDesktop);
     }
     else {
-        UBApplication::showMessage(tr("Hiding virtual desktop"));
+        mActiveScene->removeItem(mVirtualDesktop);
+        delete mVirtualDesktop;
+        mVirtualDesktop = nullptr;
     }
 }
 
