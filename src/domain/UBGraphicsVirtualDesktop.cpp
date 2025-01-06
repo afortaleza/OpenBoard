@@ -69,3 +69,8 @@ void UBGraphicsVirtualDesktop::timerEvent(QTimerEvent *event)
         update();
     }
 }
+
+QVariant UBGraphicsVirtualDesktop::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    return Delegate()->itemChange(change, value);
+}

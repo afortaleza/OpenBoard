@@ -12,7 +12,7 @@ class UBGraphicsVirtualDesktop : public QObject, public QGraphicsItem, public UB
 
 public:
     enum { Type = UBGraphicsItemType::VirtualDesktopType };
-    virtual int type() const
+    virtual int type() const override
     {
         return Type;
     }
@@ -29,6 +29,7 @@ public:
 protected:
     // Override the timerEvent to handle timer updates for screen capture
     void timerEvent(QTimerEvent *event) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 private:
     int m_width;          // Width of the virtual desktop (secondary screen)
