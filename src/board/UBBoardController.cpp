@@ -498,7 +498,7 @@ void UBBoardController::saveData(SaveFlags fls)
 void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
-        mVirtualDesktop = new UBGraphicsVirtualDesktop(800, 600);
+        mVirtualDesktop = new UBGraphicsVirtualDesktop();
         mActiveScene->addItem(mVirtualDesktop);
     }
     else {

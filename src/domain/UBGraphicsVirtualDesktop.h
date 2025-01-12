@@ -18,7 +18,7 @@ public:
     }
 
     // Constructor that accepts width and height of the virtual screen
-    UBGraphicsVirtualDesktop(int width, int height);
+    UBGraphicsVirtualDesktop();
 
     // Override boundingRect() to define the area of the item
     QRectF boundingRect() const override;

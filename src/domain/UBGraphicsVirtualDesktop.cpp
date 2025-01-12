@@ -5,18 +5,48 @@
 #include "domain/UBGraphicsItemDelegate.h"
 
 
-UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop(int width, int height)
-    : m_width(width), m_height(height), m_timerId(0)
+UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
+    : m_timerId(0)
 {
+    // Get the list of available screens
+    QList<QScreen *> screens = QGuiApplication::screens();
+
+    // Check if we have more than one screen, assuming secondary screen is at index 1
+    if (screens.size() > 1) {
+        QScreen *secondaryScreen = screens.at(1);
+
+        // Get the scaled size of the secondary screen
+        QSize scaledSize = secondaryScreen->size();
+
+        // Get the scaling factor (device pixel ratio)
+        qreal devicePixelRatio = secondaryScreen->devicePixelRatio();
+
+        // Calculate the original (logical) resolution by dividing by the scaling factor
+        QSize originalSize(scaledSize.width() * devicePixelRatio, scaledSize.height() * devicePixelRatio);
+
+        // Set the virtual desktop size to 50% of the original screen width and height
+        m_width = originalSize.width() / 2;
+        m_height = originalSize.height() / 2;
+    }
+    else {
+        // If only one screen, set the virtual desktop size to 50% of the primary screen's width and height
+        QScreen *primaryScreen = screens.at(0);
+        QSize screenSize = primaryScreen->size();
+
+        m_width = screenSize.width() / 2;
+        m_height = screenSize.height() / 2;
+    }
+
+    // Delegate setup with flags
     setDelegate(new UBGraphicsItemDelegate(this, 0, GF_COMMON
                                                         | GF_FLIPPABLE_ALL_AXIS
                                                         | GF_REVOLVABLE
                                                         | GF_RESPECT_RATIO
                                                         | GF_TOOLBAR_USED));
+
+    // Set the data layer types
     setData(UBGraphicsItemData::ItemLayerType, UBItemLayerType::Object);
-    setData(UBGraphicsItemData::itemLayerType, QVariant(itemLayerType::ObjectItem)); //Necessary to set if we want z value to be assigned correctly
-
-
+    setData(UBGraphicsItemData::itemLayerType, QVariant(itemLayerType::ObjectItem));
 
     // Capture the content of the secondary screen when the object is created
     captureSecondaryScreen();
@@ -24,8 +54,8 @@ UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop(int width, int height)
     // Start the timer for periodic screen updates at ~30 FPS
     m_timerId = startTimer(200);
 
+    // Flags for item geometry change and selection
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);  // Optional: Enables tracking of position changes
-    // Set the item to be selectable
     setFlag(QGraphicsItem::ItemIsSelectable);  // Make the item selectable
 }
 
@@ -39,8 +69,10 @@ void UBGraphicsVirtualDesktop::paint(QPainter *painter, const QStyleOptionGraphi
 {
     // Paint the captured secondary screen content (QImage)
     if (!m_screenImage.isNull()) {
-        // Scale the screen content to fit the size of the virtual desktop
-        painter->drawImage(0, 0, m_screenImage.scaled(m_width, m_height, Qt::KeepAspectRatio));
+        QRectF target = this->boundingRect();
+        QRectF source(0, 0, m_width * 2, m_height * 2);
+
+        painter->drawImage(target, m_screenImage, source);
     }
 }
 
