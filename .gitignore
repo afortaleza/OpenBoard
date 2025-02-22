@@ -83,3 +83,7 @@ plugins/cffadaptor/objects
 .directory
 .DS_Store
 Doxyfile
+
+# Penboard
+.vs
+.qtc_clangd
