@@ -206,8 +206,8 @@ Do you wish to override the security check and continue ?   </source>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="43"/>
@@ -348,8 +348,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>Zatvori OpenBoard</translation>
+        <source>Quit PenBoard</source>
+        <translation>Zatvori PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="429"/>
@@ -1106,13 +1106,13 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>Sakrij OpenBoard</translation>
+        <source>Hide PenBoard</source>
+        <translation>Sakrij PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>Sakrij program OpenBoard</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>Sakrij program PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1858"/>
@@ -1651,8 +1651,8 @@ Do you wish to override the security check and continue ?   </source>
     <name>UBDesktopPalette</name>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>Prikaži OpenBoard</translation>
+        <source>Show PenBoard</source>
+        <translation>Prikaži PenBoard</translation>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="69"/>
@@ -1793,8 +1793,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>Dokument „%1” je generiran s novijom verzijom OpenBoarda (%2). Otvaranjem dokumenta ćeš možda izgubiti neke informacije. Želiš li nastaviti?</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>Dokument „%1” je generiran s novijom verzijom PenBoarda (%2). Otvaranjem dokumenta ćeš možda izgubiti neke informacije. Želiš li nastaviti?</translation>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3630"/>
@@ -2260,8 +2260,8 @@ Davanjem novog imena stvorit će se novi dokument.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>Izvezi u OpenBoard format</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>Izvezi u PenBoard format</translation>
     </message>
 </context>
 <context>
@@ -2295,8 +2295,8 @@ Davanjem novog imena stvorit će se novi dokument.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
-        <translation>Izvezi u OpenBoard UBX format</translation>
+        <source>Export to PenBoard UBX Format</source>
+        <translation>Izvezi u PenBoard UBX format</translation>
     </message>
 </context>
 <context>
@@ -2314,7 +2314,7 @@ Davanjem novog imena stvorit će se novi dokument.</translation>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2717,8 +2717,8 @@ Davanjem novog imena stvorit će se novi dokument.</translation>
     <name>UBImportDocument</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="180"/>
@@ -2743,8 +2743,8 @@ Davanjem novog imena stvorit će se novi dokument.</translation>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
-        <translation>Openboard (komplet dokumenata) (*.ubx)</translation>
+        <source>PenBoard (set of documents) (*.ubx)</source>
+        <translation>PenBoard (komplet dokumenata) (*.ubx)</translation>
     </message>
 </context>
 <context>
@@ -2880,16 +2880,16 @@ Do you want to ignore these errors for this host?</source>
         <translation type="vanished">Otkriveni su Open-Sankoré dokumenti</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
-        <translation type="vanished">Na tvom računalu su prisutni Open-Sankoré dokumenti. Možeš ih uvesti u OpenBoard pritiskom na gumb „Nastavi” za pokretanje programa za uvoz.</translation>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <translation type="vanished">Na tvom računalu su prisutni Open-Sankoré dokumenti. Možeš ih uvesti u PenBoard pritiskom na gumb „Nastavi” za pokretanje programa za uvoz.</translation>
     </message>
     <message>
         <source>Show this panel next time</source>
         <translation type="vanished">Prikaži ovu ploču sljedeći put</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">OpenBoard uvozniku dokumenata možeš pristupiti u svakom trenutku putem ploče „Postavke” u kartici „Informacije”. Upozorenje: ako si već uvezao/uvezla svoje Open-Sankoré podatke, možda ćeš izgubiti tvoje trenutačne OpenBoard dokumente.</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">PenBoard uvozniku dokumenata možeš pristupiti u svakom trenutku putem ploče „Postavke” u kartici „Informacije”. Upozorenje: ako si već uvezao/uvezla svoje Open-Sankoré podatke, možda ćeš izgubiti tvoje trenutačne PenBoard dokumente.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2914,8 +2914,8 @@ Do you want to ignore these errors for this host?</source>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
-        <translation>OpenBoard je izgubio pristup repozitoriju dokumenata „%1”. Nažalost, program se mora zatvoriti kako bi se izbjeglo oštećenje podataka. Zadnje promjene će se možda također izgubiti.</translation>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <translation>PenBoard je izgubio pristup repozitoriju dokumenata „%1”. Nažalost, program se mora zatvoriti kako bi se izbjeglo oštećenje podataka. Zadnje promjene će se možda također izgubiti.</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1161"/>
@@ -2965,8 +2965,8 @@ Do you want to ignore these errors for this host?</source>
     <name>UBPodcastController</name>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
-        <translation>OpenBoard Cast</translation>
+        <source>PenBoard Cast</source>
+        <translation>PenBoard Cast</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="399"/>
@@ -3733,8 +3733,8 @@ Za pristup aktualiziranim dokumentima ponovo pokreni program.</translation>
 <context>
     <name>WBWebPage</name>
     <message>
-        <source>Download PDF Document: would you prefer to download the PDF file or add it to the current OpenBoard document?</source>
-        <translation type="vanished">Preuzmi PDF dokument: želiš li radije preuzeti PDF datoteku ili je dodati trenutačnom OpenBoard dokumentu?</translation>
+        <source>Download PDF Document: would you prefer to download the PDF file or add it to the current PenBoard document?</source>
+        <translation type="vanished">Preuzmi PDF dokument: želiš li radije preuzeti PDF datoteku ili je dodati trenutačnom PenBoard dokumentu?</translation>
     </message>
     <message>
         <source>Download</source>
@@ -3908,8 +3908,8 @@ Do you want to reload the page ?</source>
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="79"/>
@@ -4030,8 +4030,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>OpenBoard dokumenti</translation>
+        <source>PenBoard Documents</source>
+        <translation>PenBoard dokumenti</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>

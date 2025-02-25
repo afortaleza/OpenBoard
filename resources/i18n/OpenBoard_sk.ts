@@ -395,8 +395,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>Schovať aplikáciu OpenBoard</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>Schovať aplikáciu PenBoard</translation>
     </message>
     <message>
         <source>Import an External Page</source>
@@ -411,8 +411,8 @@ Do you wish to override the security check and continue ?   </source>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1405"/>
@@ -583,8 +583,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>Skončiť OpenBoard</translation>
+        <source>Quit PenBoard</source>
+        <translation>Skončiť PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1087"/>
@@ -658,8 +658,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>Schovať OpenBoard</translation>
+        <source>Hide PenBoard</source>
+        <translation>Schovať PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1381"/>
@@ -1619,8 +1619,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>Zobraziť OpenBoard</translation>
+        <source>Show PenBoard</source>
+        <translation>Zobraziť PenBoard</translation>
     </message>
 </context>
 <context>
@@ -1754,8 +1754,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>Dokument &apos;%1&apos; bol vytvorený v novšej verzii OpenBoardu (%2). Ak ho otvoríte v tejto, aktuálnej verzii, môže dôjsť k strate údajov. Chcete napriek tomu pokračovať?</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>Dokument &apos;%1&apos; bol vytvorený v novšej verzii PenBoardu (%2). Ak ho otvoríte v tejto, aktuálnej verzii, môže dôjsť k strate údajov. Chcete napriek tomu pokračovať?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/document/UBDocumentController.cpp" line="2556"/>
@@ -2177,8 +2177,8 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>Exportovať do formátu OpenBoard</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>Exportovať do formátu PenBoard</translation>
     </message>
 </context>
 <context>
@@ -2212,7 +2212,7 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
+        <source>Export to PenBoard UBX Format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2231,7 +2231,7 @@ Providing a new name will create a new document.</source>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2648,15 +2648,15 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
 </context>
 <context>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
+        <source>PenBoard (set of documents) (*.ubx)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2797,8 +2797,8 @@ Chcete ignorovať tieto chyby na tomto serveri?</translation>
         <translation type="vanished">Tento panel zobraziť aj nabudúce</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">Nahrávanie dokumentov môžete kedykoľvek spustiť z karty O programe na paneli Predvoľby. Pozor, ak ste už nahrali dáta z Open-Sankoré, môžete ich spúšťať ako dokumenty vytvorené v OpenBoarde.</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">Nahrávanie dokumentov môžete kedykoľvek spustiť z karty O programe na paneli Predvoľby. Pozor, ak ste už nahrali dáta z Open-Sankoré, môžete ich spúšťať ako dokumenty vytvorené v PenBoarde.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2809,8 +2809,8 @@ Chcete ignorovať tieto chyby na tomto serveri?</translation>
         <translation type="vanished">Pokračovať</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
-        <translation type="vanished">Vo vašom počítači sa nachádzajú dokumenty Open-Sankoré. Do OpenBoardu ich môžete nahrať stlačením tlačidla Pokračovať, ktorým sa spustí aplikácia na nahrávanie.</translation>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <translation type="vanished">Vo vašom počítači sa nachádzajú dokumenty Open-Sankoré. Do PenBoardu ich môžete nahrať stlačením tlačidla Pokračovať, ktorým sa spustí aplikácia na nahrávanie.</translation>
     </message>
 </context>
 <context>
@@ -2827,7 +2827,7 @@ Chcete ignorovať tieto chyby na tomto serveri?</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2949,9 +2949,9 @@ Chcete ignorovať tieto chyby na tomto serveri?</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
+        <source>PenBoard Cast</source>
         <translatorcomment>Názov súboru podcastu</translatorcomment>
-        <translation>Film OpenBoardu</translation>
+        <translation>Film PenBoardu</translation>
     </message>
 </context>
 <context>
@@ -3650,8 +3650,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="156"/>
@@ -3744,8 +3744,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>Dokumenty OpenBoardu</translation>
+        <source>PenBoard Documents</source>
+        <translation>Dokumenty PenBoardu</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>
