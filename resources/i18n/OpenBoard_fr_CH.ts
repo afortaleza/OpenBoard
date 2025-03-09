@@ -1061,23 +1061,23 @@ Voulez-vous continuer quand-même ?   </translation>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>Quitter OpenBoard</translation>
+        <source>Quit PenBoard</source>
+        <translation>Quitter PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>Cacher OpenBoard</translation>
+        <source>Hide PenBoard</source>
+        <translation>Cacher PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>Masquer OpenBoard</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>Masquer PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1871"/>
@@ -1630,8 +1630,8 @@ Voulez-vous continuer quand-même ?   </translation>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>Afficher OpenBoard</translation>
+        <source>Show PenBoard</source>
+        <translation>Afficher PenBoard</translation>
     </message>
 </context>
 <context>
@@ -1765,8 +1765,8 @@ Voulez-vous continuer quand-même ?   </translation>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>Le document &apos;%1&apos; a été créé avec une nouvelle version d&apos;OpenBoard (%2). En l&apos;ouvrant vous pourriez perdre des informations. Voulez-vous continuer ?</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>Le document &apos;%1&apos; a été créé avec une nouvelle version d&apos;PenBoard (%2). En l&apos;ouvrant vous pourriez perdre des informations. Voulez-vous continuer ?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/document/UBDocumentController.cpp" line="2556"/>
@@ -2217,8 +2217,8 @@ Un nouveau nom vous permettra de conserver l&apos;ancien document.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>Exporter au format OpenBoard</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>Exporter au format PenBoard</translation>
     </message>
 </context>
 <context>
@@ -2252,8 +2252,8 @@ Un nouveau nom vous permettra de conserver l&apos;ancien document.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
-        <translation>Exporter au format OpenBoard UBX</translation>
+        <source>Export to PenBoard UBX Format</source>
+        <translation>Exporter au format PenBoard UBX</translation>
     </message>
 </context>
 <context>
@@ -2271,8 +2271,8 @@ Un nouveau nom vous permettra de conserver l&apos;ancien document.</translation>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
-        <translation>Le PDF original importé dans OpenBoard semble invalide et n’a pas pu être fusionné avec vos annotations. Réparez-le puis réimportez-le dans OpenBoard. L’exportation en cours sera effectuée avec des images détaillées (lourdes) des pages du PDF original, afin d’éviter un échec de l’exportation.</translation>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <translation>Le PDF original importé dans PenBoard semble invalide et n’a pas pu être fusionné avec vos annotations. Réparez-le puis réimportez-le dans PenBoard. L’exportation en cours sera effectuée avec des images détaillées (lourdes) des pages du PDF original, afin d’éviter un échec de l’exportation.</translation>
     </message>
 </context>
 <context>
@@ -2690,16 +2690,16 @@ Un nouveau nom vous permettra de conserver l&apos;ancien document.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
 </context>
 <context>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
-        <translation>Openboard (set of documents) (*.ubx)</translation>
+        <source>PenBoard (set of documents) (*.ubx)</source>
+        <translation>PenBoard (set of documents) (*.ubx)</translation>
     </message>
 </context>
 <context>
@@ -2839,8 +2839,8 @@ Voulez-vous ignorer les erreurs pour ce serveur ?</translation>
         <translation type="vanished">Afficher ce panneau à la prochaine ouverture du logiciel</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">Vous pouvez accéder à nouveau à ce panneau au travers des Préférences dans l’onglet A propos. Attention, si vous avez déjà importé les données d’Open-Sankoré vous risquez de perdre les documents courants dans OpenBoard.</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">Vous pouvez accéder à nouveau à ce panneau au travers des Préférences dans l’onglet A propos. Attention, si vous avez déjà importé les données d’Open-Sankoré vous risquez de perdre les documents courants dans PenBoard.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2851,8 +2851,8 @@ Voulez-vous ignorer les erreurs pour ce serveur ?</translation>
         <translation type="vanished">Procéder</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
-        <translation type="vanished">Des documents Open-Sankoré sont présents sur votre ordinateur. Il est possible de les importer dans OpenBoard en cliquant le bouton &quot;Continuer&quot; pour lancer l&apos;application d&apos;import.</translation>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <translation type="vanished">Des documents Open-Sankoré sont présents sur votre ordinateur. Il est possible de les importer dans PenBoard en cliquant le bouton &quot;Continuer&quot; pour lancer l&apos;application d&apos;import.</translation>
     </message>
 </context>
 <context>
@@ -2869,8 +2869,8 @@ Voulez-vous ignorer les erreurs pour ce serveur ?</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
-        <translation>OpenBoard a perdu l&apos;accès au répertoire des documents &apos;%1&apos;. Malheureusement, l&apos;application sera fermée afin d&apos;éviter la corruption des données. Les dernières modifications pourraient être également perdues.</translation>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <translation>PenBoard a perdu l&apos;accès au répertoire des documents &apos;%1&apos;. Malheureusement, l&apos;application sera fermée afin d&apos;éviter la corruption des données. Les dernières modifications pourraient être également perdues.</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1161"/>
@@ -2994,8 +2994,8 @@ Voulez-vous ignorer les erreurs pour ce serveur ?</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
-        <translation>OpenBoard Cast</translation>
+        <source>PenBoard Cast</source>
+        <translation>PenBoard Cast</translation>
     </message>
 </context>
 <context>
@@ -3707,8 +3707,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
 </context>
 <context>
@@ -3796,8 +3796,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>Documents OpenBoard</translation>
+        <source>PenBoard Documents</source>
+        <translation>Documents PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>

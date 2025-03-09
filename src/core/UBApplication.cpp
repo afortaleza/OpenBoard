@@ -103,9 +103,9 @@ UBApplication::UBApplication(const QString &id, int &argc, char **argv) : Single
     Q_UNUSED(id)
     staticMemoryCleaner = new QObject(0); // deleted in UBApplication destructor
 
-    setOrganizationName("Open Education Foundation");
-    setOrganizationDomain("oe-f.org");
-    setApplicationName("OpenBoard");
+    setOrganizationName("PenBoard");
+    setOrganizationDomain("penboard.com.br");
+    setApplicationName("PenBoard");
 
     QString version = UBVERSION;
     if(version.endsWith("."))

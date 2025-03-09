@@ -1,4 +1,4 @@
-TARGET = "OpenBoard"
+TARGET = "PenBoard"
 TEMPLATE = app
 
 CONFIG += c++17

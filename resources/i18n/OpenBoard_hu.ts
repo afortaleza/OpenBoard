@@ -1066,23 +1066,23 @@ Felülírja a biztonsági ellenőrzést, és folytatja?</translation>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>Kilépés az OpenBoardból</translation>
+        <source>Quit PenBoard</source>
+        <translation>Kilépés az PenBoardból</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>OpenBoard elrejtése</translation>
+        <source>Hide PenBoard</source>
+        <translation>PenBoard elrejtése</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>OpenBoard alkalmazás elrejtése</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>PenBoard alkalmazás elrejtése</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1871"/>
@@ -1625,8 +1625,8 @@ Felülírja a biztonsági ellenőrzést, és folytatja?</translation>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>OpenBoard megjelenítése</translation>
+        <source>Show PenBoard</source>
+        <translation>PenBoard megjelenítése</translation>
     </message>
 </context>
 <context>
@@ -1804,8 +1804,8 @@ Felülírja a biztonsági ellenőrzést, és folytatja?</translation>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>A(z) „%1” dokumentum az OpenBoard újabb verziójával (%2) készült. Megnyitásával néhány információ elveszhet. Szeretné folytatni?</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>A(z) „%1” dokumentum az PenBoard újabb verziójával (%2) készült. Megnyitásával néhány információ elveszhet. Szeretné folytatni?</translation>
     </message>
     <message>
         <source>Are you sure you want to remove all selected documents?</source>
@@ -2267,8 +2267,8 @@ Ennek a névnek a megtartása helyettesíti a dokumentumot.
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>Exportálás OpenBoard formátumba</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>Exportálás PenBoard formátumba</translation>
     </message>
 </context>
 <context>
@@ -2302,8 +2302,8 @@ Ennek a névnek a megtartása helyettesíti a dokumentumot.
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
-        <translation>Exportálás OpenBoard UBX-formátumként</translation>
+        <source>Export to PenBoard UBX Format</source>
+        <translation>Exportálás PenBoard UBX-formátumként</translation>
     </message>
 </context>
 <context>
@@ -2321,8 +2321,8 @@ Ennek a névnek a megtartása helyettesíti a dokumentumot.
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
-        <translation>Úgy tűnik, hogy az OpenBoardba importált eredeti PDF érvénytelen, és nem egyesíthető a megjegyzésekkel. Kérjük, javítsa meg, majd importálja újra az OpenBoardba. A teljes exportálási hiba elkerülése érdekében az aktuális exportálás az eredeti PDF oldalainak részletes (súlyos) képeivel történik.</translation>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <translation>Úgy tűnik, hogy az PenBoardba importált eredeti PDF érvénytelen, és nem egyesíthető a megjegyzésekkel. Kérjük, javítsa meg, majd importálja újra az PenBoardba. A teljes exportálási hiba elkerülése érdekében az aktuális exportálás az eredeti PDF oldalainak részletes (súlyos) képeivel történik.</translation>
     </message>
 </context>
 <context>
@@ -2738,16 +2738,16 @@ Ennek a névnek a megtartása helyettesíti a dokumentumot.
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
 </context>
 <context>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
-        <translation>OpenBoard (dokumentumkészlet) (*.ubx)</translation>
+        <source>PenBoard (set of documents) (*.ubx)</source>
+        <translation>PenBoard (dokumentumkészlet) (*.ubx)</translation>
     </message>
 </context>
 <context>
@@ -2887,8 +2887,8 @@ Figyelmen kívül hagyja ezeket a hibákat ennél a hosztnál?</translation>
         <translation type="vanished">Ezen ablak megjelenítése a következő alkalommal</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">Mindig elérheti az OpenBoard Importálót a Tulajdonságok panelen a Rólunk fülön. Figyelem, ha már importálta az Open-Sankoré adatait, elveszítheti az aktuális OpenBoard dokuemntumait.</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">Mindig elérheti az PenBoard Importálót a Tulajdonságok panelen a Rólunk fülön. Figyelem, ha már importálta az Open-Sankoré adatait, elveszítheti az aktuális PenBoard dokuemntumait.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2899,8 +2899,8 @@ Figyelmen kívül hagyja ezeket a hibákat ennél a hosztnál?</translation>
         <translation type="vanished">Folytatás</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
-        <translation type="vanished">Open-Sankoré dokumentumok vannak a számítógépén. Importálásuk az OpenBoardba, a &quot;FOLYTATÁS&quot; gombra kattintva, az elinduló importáló alkalmazással lehetséges.</translation>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <translation type="vanished">Open-Sankoré dokumentumok vannak a számítógépén. Importálásuk az PenBoardba, a &quot;FOLYTATÁS&quot; gombra kattintva, az elinduló importáló alkalmazással lehetséges.</translation>
     </message>
 </context>
 <context>
@@ -2925,8 +2925,8 @@ Figyelmen kívül hagyja ezeket a hibákat ennél a hosztnál?</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
-        <translation>Az OpenBoard elvesztette a hozzáférést a(z) „%1” dokumentumtárához. Sajnos az alkalmazást le kell állítani az adatvesztés elkerülése érdekében. A legújabb változások is elveszhetnek.</translation>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <translation>Az PenBoard elvesztette a hozzáférést a(z) „%1” dokumentumtárához. Sajnos az alkalmazást le kell állítani az adatvesztés elkerülése érdekében. A legújabb változások is elveszhetnek.</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1161"/>
@@ -3046,8 +3046,8 @@ Figyelmen kívül hagyja ezeket a hibákat ennél a hosztnál?</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
-        <translation>OpenBoard cast</translation>
+        <source>PenBoard Cast</source>
+        <translation>PenBoard cast</translation>
     </message>
 </context>
 <context>
@@ -3754,8 +3754,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
 </context>
 <context>
@@ -3843,8 +3843,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>OpenBoard Dokumentumok</translation>
+        <source>PenBoard Documents</source>
+        <translation>PenBoard Dokumentumok</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>

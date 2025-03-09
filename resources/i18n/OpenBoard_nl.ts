@@ -1059,23 +1059,23 @@ Do you wish to override the security check and continue ?   </source>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation type="unfinished">OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation type="unfinished">PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>Verlaat OpenBoard</translation>
+        <source>Quit PenBoard</source>
+        <translation>Verlaat PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>Verberg OpenBoard</translation>
+        <source>Hide PenBoard</source>
+        <translation>Verberg PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>Verberg OpenBoard Toepassing</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>Verberg PenBoard Toepassing</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1871"/>
@@ -1612,7 +1612,7 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
+        <source>Show PenBoard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1756,7 +1756,7 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2163,7 +2163,7 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
+        <source>Export to PenBoard Format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2198,7 +2198,7 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
+        <source>Export to PenBoard UBX Format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2217,7 +2217,7 @@ Providing a new name will create a new document.</source>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2634,7 +2634,7 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
+        <source>PenBoard (*.ubz)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2642,7 +2642,7 @@ Providing a new name will create a new document.</source>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
+        <source>PenBoard (set of documents) (*.ubx)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2787,7 +2787,7 @@ Do you want to ignore these errors for this host?</source>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2908,7 +2908,7 @@ Do you want to ignore these errors for this host?</source>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
+        <source>PenBoard Cast</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3606,7 +3606,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
+        <source>PenBoard</source>
         <translation type="unfinished">Sankoré openen</translation>
     </message>
     <message>
@@ -3700,7 +3700,7 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
+        <source>PenBoard Documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

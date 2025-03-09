@@ -1066,23 +1066,23 @@ Güvenlik denetimini geçersiz kılmak ve devam etmek istiyor musunuz?   </trans
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>OpenBoardʼdan Çık</translation>
+        <source>Quit PenBoard</source>
+        <translation>PenBoardʼdan Çık</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>OpenBoardʼu Gizle</translation>
+        <source>Hide PenBoard</source>
+        <translation>PenBoardʼu Gizle</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>OpenBoard Uygulamasını Gizle</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>PenBoard Uygulamasını Gizle</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1871"/>
@@ -1618,8 +1618,8 @@ Güvenlik denetimini geçersiz kılmak ve devam etmek istiyor musunuz?   </trans
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>OpenBoardʼu Göster</translation>
+        <source>Show PenBoard</source>
+        <translation>PenBoardʼu Göster</translation>
     </message>
 </context>
 <context>
@@ -1761,8 +1761,8 @@ Güvenlik denetimini geçersiz kılmak ve devam etmek istiyor musunuz?   </trans
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>&apos;%1&apos; belgesi, OpenBoard&apos;un (%2) daha yeni bir sürümüyle oluşturuldu. Açtığınızda bazı bilgileri kaybedebilirsiniz. Devam etmek istiyor musunuz?</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>&apos;%1&apos; belgesi, PenBoard&apos;un (%2) daha yeni bir sürümüyle oluşturuldu. Açtığınızda bazı bilgileri kaybedebilirsiniz. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="4183"/>
@@ -2181,8 +2181,8 @@ Yeni bir ad sağlamak yeni belge oluşturur.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>OpenBoard Biçimine Dışa Aktar</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>PenBoard Biçimine Dışa Aktar</translation>
     </message>
 </context>
 <context>
@@ -2216,8 +2216,8 @@ Yeni bir ad sağlamak yeni belge oluşturur.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
-        <translation>OpenBoard UBX Biçimine Dışa Aktar</translation>
+        <source>Export to PenBoard UBX Format</source>
+        <translation>PenBoard UBX Biçimine Dışa Aktar</translation>
     </message>
 </context>
 <context>
@@ -2235,8 +2235,8 @@ Yeni bir ad sağlamak yeni belge oluşturur.</translation>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
-        <translation>OpenBoard&apos;a içe aktarılan özgün PDF geçerli görünmüyor ve açıklamalarınızla birleştirilemedi. Lütfen belgeyi onarın ve ardından OpenBoard&apos;da yeniden içe aktarın. Geçerli dışa aktarma, tamamen dışa aktarma hatasını önlemek için özgün PDF&apos;nin sayfalarının ayrıntılı (ağır) resimleriyle yapılacak.</translation>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <translation>PenBoard&apos;a içe aktarılan özgün PDF geçerli görünmüyor ve açıklamalarınızla birleştirilemedi. Lütfen belgeyi onarın ve ardından PenBoard&apos;da yeniden içe aktarın. Geçerli dışa aktarma, tamamen dışa aktarma hatasını önlemek için özgün PDF&apos;nin sayfalarının ayrıntılı (ağır) resimleriyle yapılacak.</translation>
     </message>
 </context>
 <context>
@@ -2652,16 +2652,16 @@ Yeni bir ad sağlamak yeni belge oluşturur.</translation>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
 </context>
 <context>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
-        <translation>Openboard (belge kümesi) (*.ubx)</translation>
+        <source>PenBoard (set of documents) (*.ubx)</source>
+        <translation>PenBoard (belge kümesi) (*.ubx)</translation>
     </message>
 </context>
 <context>
@@ -2800,17 +2800,17 @@ Bu ana bilgisayar için yukarıdaki hatalar yok sayılsın mı?</translation>
         <translation type="vanished">Open-Sankore Belgeleri Algılandı</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
         <translatorcomment>İkinci cümle çok karışık olduğu için ikiye bölündü.</translatorcomment>
-        <translation type="vanished">Open-Sankore belgeleri bilgisayarınızda bulunuyor. Bunları OpenBoard&apos;a içe aktarmak mümkündür. İçe aktarma uygulamasını başlatmak için “Devam” düğmesine basınız.</translation>
+        <translation type="vanished">Open-Sankore belgeleri bilgisayarınızda bulunuyor. Bunları PenBoard&apos;a içe aktarmak mümkündür. İçe aktarma uygulamasını başlatmak için “Devam” düğmesine basınız.</translation>
     </message>
     <message>
         <source>Show this panel next time</source>
         <translation type="vanished">Bir dahaki sefere bu paneli göster</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">OpenBoard Belge İçe Aktarıcı&apos;ya her zaman Hakkında sekmesindeki Tercihler panelinden erişebilirsiniz. Uyarı, Open-Sankore verilerinizi zaten içe aktardıysanız, mevcut OpenBoard belgelerinizi kaybedebilirsiniz.</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">PenBoard Belge İçe Aktarıcı&apos;ya her zaman Hakkında sekmesindeki Tercihler panelinden erişebilirsiniz. Uyarı, Open-Sankore verilerinizi zaten içe aktardıysanız, mevcut PenBoard belgelerinizi kaybedebilirsiniz.</translation>
     </message>
     <message>
         <source>Proceed</source>
@@ -2831,8 +2831,8 @@ Bu ana bilgisayar için yukarıdaki hatalar yok sayılsın mı?</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
-        <translation>OpenBoard, &apos;%1&apos; belge deposuna erişimini kaybetti. Ne yazık ki, veri bozulmasını önlemek için uygulamanın kapatılması gerekiyor. Son değişiklikler de kaybolabilir.</translation>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <translation>PenBoard, &apos;%1&apos; belge deposuna erişimini kaybetti. Ne yazık ki, veri bozulmasını önlemek için uygulamanın kapatılması gerekiyor. Son değişiklikler de kaybolabilir.</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1161"/>
@@ -2898,19 +2898,19 @@ Bu ana bilgisayar için yukarıdaki hatalar yok sayılsın mı?</translation>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="682"/>
         <source>on your desktop ...</source>
-        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/OpenBoard-org/OpenBoard/issues/721</translatorcomment>
+        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/PenBoard-org/PenBoard/issues/721</translatorcomment>
         <translation>masa üstünüzde...</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="686"/>
         <source>in folder %1</source>
-        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/OpenBoard-org/OpenBoard/issues/721</translatorcomment>
+        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/PenBoard-org/PenBoard/issues/721</translatorcomment>
         <translation>%1 klasöründe</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="689"/>
         <source>Podcast created %1</source>
-        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/OpenBoard-org/OpenBoard/issues/721</translatorcomment>
+        <translatorcomment>Ayrık cümle. Hata bildirildi: https://github.com/PenBoard-org/PenBoard/issues/721</translatorcomment>
         <translation>Ekran kaydı %1 oluşturuldu</translation>
     </message>
     <message>
@@ -2955,8 +2955,8 @@ Bu ana bilgisayar için yukarıdaki hatalar yok sayılsın mı?</translation>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
-        <translation>OpenBoard Yayını</translation>
+        <source>PenBoard Cast</source>
+        <translation>PenBoard Yayını</translation>
     </message>
 </context>
 <context>
@@ -3282,7 +3282,7 @@ Bu ana bilgisayar için yukarıdaki hatalar yok sayılsın mı?</translation>
     <message>
         <location filename="../../src/gui/UBUpdateDlg.cpp" line="69"/>
         <source> files require an update.</source>
-        <translatorcomment>Ayrık cümle, cümlenin başında %1 şeklindeki sayıyı getiren kısım eklenmemiş. Hata bildirildi. https://github.com/OpenBoard-org/OpenBoard/issues/721</translatorcomment>
+        <translatorcomment>Ayrık cümle, cümlenin başında %1 şeklindeki sayıyı getiren kısım eklenmemiş. Hata bildirildi. https://github.com/PenBoard-org/PenBoard/issues/721</translatorcomment>
         <translation> güncelleme gerektiriyor.</translation>
     </message>
     <message>
@@ -3325,7 +3325,7 @@ Güncellenen belgelere erişmek için uygulamayı yeniden başlatın.</translati
     <message>
         <location filename="../../src/gui/UBUpdateDlg.cpp" line="216"/>
         <source>Updating file </source>
-        <translatorcomment>Ayrık cümle hatası. Doğrusu x dosyası güncelleniyor olmalıydı. Hata bildirildi. https://github.com/OpenBoard-org/OpenBoard/issues/721</translatorcomment>
+        <translatorcomment>Ayrık cümle hatası. Doğrusu x dosyası güncelleniyor olmalıydı. Hata bildirildi. https://github.com/PenBoard-org/PenBoard/issues/721</translatorcomment>
         <translation>Dosya güncelleniyor </translation>
     </message>
     <message>
@@ -3663,8 +3663,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="156"/>
@@ -3757,8 +3757,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>OpenBoard Belgeleri</translation>
+        <source>PenBoard Documents</source>
+        <translation>PenBoard Belgeleri</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>

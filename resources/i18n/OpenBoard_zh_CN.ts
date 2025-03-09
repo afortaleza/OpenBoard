@@ -1061,23 +1061,23 @@ Do you wish to override the security check and continue ?   </source>
         <location filename="../forms/mainWindow.ui" line="14"/>
         <location filename="../forms/mainWindow.ui" line="727"/>
         <location filename="../forms/mainWindow.ui" line="730"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="411"/>
-        <source>Quit OpenBoard</source>
-        <translation>退出 OpenBoard</translation>
+        <source>Quit PenBoard</source>
+        <translation>退出 PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1852"/>
-        <source>Hide OpenBoard</source>
-        <translation>隐藏 OpenBoard</translation>
+        <source>Hide PenBoard</source>
+        <translation>隐藏 PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1855"/>
-        <source>Hide OpenBoard Application</source>
-        <translation>隐藏 OpenBoard 应用程序</translation>
+        <source>Hide PenBoard Application</source>
+        <translation>隐藏 PenBoard 应用程序</translation>
     </message>
     <message>
         <location filename="../forms/mainWindow.ui" line="1871"/>
@@ -1625,8 +1625,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/desktop/UBDesktopPalette.cpp" line="55"/>
-        <source>Show OpenBoard</source>
-        <translation>显示 OpenBoard</translation>
+        <source>Show PenBoard</source>
+        <translation>显示 PenBoard</translation>
     </message>
 </context>
 <context>
@@ -1776,8 +1776,8 @@ Do you wish to override the security check and continue ?   </source>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="3575"/>
-        <source>The document &apos;%1&apos; has been generated with a newer version of OpenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
-        <translation>已使用较新版本的 OpenBoard (%2) 生成文档“%1”。打开它，可能会丢失一些信息。 想要继续吗？</translation>
+        <source>The document &apos;%1&apos; has been generated with a newer version of PenBoard (%2). By opening it, you may lose some information. Do you want to proceed?</source>
+        <translation>已使用较新版本的 PenBoard (%2) 生成文档“%1”。打开它，可能会丢失一些信息。 想要继续吗？</translation>
     </message>
     <message>
         <location filename="../../src/document/UBDocumentController.cpp" line="4183"/>
@@ -2203,8 +2203,8 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocument.cpp" line="116"/>
-        <source>Export to OpenBoard Format</source>
-        <translation>导出为 OpenBoard 格式</translation>
+        <source>Export to PenBoard Format</source>
+        <translation>导出为 PenBoard 格式</translation>
     </message>
 </context>
 <context>
@@ -2238,8 +2238,8 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBExportDocumentSetAdaptor.cpp" line="153"/>
-        <source>Export to OpenBoard UBX Format</source>
-        <translation>导出为 OpenBoard UBX 格式</translation>
+        <source>Export to PenBoard UBX Format</source>
+        <translation>导出为 PenBoard UBX 格式</translation>
     </message>
 </context>
 <context>
@@ -2257,8 +2257,8 @@ Providing a new name will create a new document.</source>
     <message>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="313"/>
         <location filename="../../src/adaptors/UBExportFullPDF.cpp" line="327"/>
-        <source>The original PDF imported in OpenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in OpenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
-        <translation>导入的PDF文件似乎无效，不能与您的批注合并。请修复后将其重新导入 OpenBoard。当前的导出将以原PDF页面的详细（重）图像代替页面文本，以避免导出失败。</translation>
+        <source>The original PDF imported in PenBoard seems not valid and could not be merged with your annotations. Please repair it and then reimport it in PenBoard. The current export will be done with detailed (heavy) images of the pages of the original PDF instead, to avoid complete export failure.</source>
+        <translation>导入的PDF文件似乎无效，不能与您的批注合并。请修复后将其重新导入 PenBoard。当前的导出将以原PDF页面的详细（重）图像代替页面文本，以避免导出失败。</translation>
     </message>
 </context>
 <context>
@@ -2674,16 +2674,16 @@ Providing a new name will create a new document.</source>
     </message>
     <message>
         <location filename="../../src/adaptors/UBImportDocument.cpp" line="73"/>
-        <source>OpenBoard (*.ubz)</source>
-        <translation>OpenBoard (*.ubz)</translation>
+        <source>PenBoard (*.ubz)</source>
+        <translation>PenBoard (*.ubz)</translation>
     </message>
 </context>
 <context>
     <name>UBImportDocumentSetAdaptor</name>
     <message>
         <location filename="../../src/adaptors/UBImportDocumentSetAdaptor.cpp" line="71"/>
-        <source>Openboard (set of documents) (*.ubx)</source>
-        <translation>Openboard (文件集) (*.ubx)</translation>
+        <source>PenBoard (set of documents) (*.ubx)</source>
+        <translation>PenBoard (文件集) (*.ubx)</translation>
     </message>
 </context>
 <context>
@@ -2823,16 +2823,16 @@ Do you want to ignore these errors for this host?</source>
         <translation type="vanished">检测到 Open-Sankore 文档</translation>
     </message>
     <message>
-        <source>Open-Sankoré documents are present on your computer. It is possible to import them to OpenBoard by pressing the “Proceed” button to launch the importer application.</source>
-        <translation type="vanished">Open-Sankoré 文档存在于您的计算机上。点击“继续“按钮可启动导入器程序，将其导入 OpenBoard。</translation>
+        <source>Open-Sankoré documents are present on your computer. It is possible to import them to PenBoard by pressing the “Proceed” button to launch the importer application.</source>
+        <translation type="vanished">Open-Sankoré 文档存在于您的计算机上。点击“继续“按钮可启动导入器程序，将其导入 PenBoard。</translation>
     </message>
     <message>
         <source>Show this panel next time</source>
         <translation type="vanished">下次显示此面板</translation>
     </message>
     <message>
-        <source>You can always access the OpenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current OpenBoard documents.</source>
-        <translation type="vanished">通过“关于”选项卡中的“首选项”面板，可随时访问 OpenBoard 文档导入器。 警告，如果已经导入了 Open-Sankore 数据，可能会丢失当前的 OpenBoard 文档。</translation>
+        <source>You can always access the PenBoard Document Importer through the Preferences panel in the About tab. Warning, if you have already imported your Open-Sankore datas, you might loose your current PenBoard documents.</source>
+        <translation type="vanished">通过“关于”选项卡中的“首选项”面板，可随时访问 PenBoard 文档导入器。 警告，如果已经导入了 Open-Sankore 数据，可能会丢失当前的 PenBoard 文档。</translation>
     </message>
     <message>
         <source>Proceed</source>
@@ -2853,8 +2853,8 @@ Do you want to ignore these errors for this host?</source>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1408"/>
-        <source>OpenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
-        <translation>OpenBoard 已失去对文档库“%1”的访问权限。 不幸的是，为避免数据损坏，应用程序必须关闭。 最新的更改也可能会丢失。</translation>
+        <source>PenBoard has lost access to the document repository &apos;%1&apos;. Unfortunately the application must shut down to avoid data corruption. Latest changes may be lost as well.</source>
+        <translation>PenBoard 已失去对文档库“%1”的访问权限。 不幸的是，为避免数据损坏，应用程序必须关闭。 最新的更改也可能会丢失。</translation>
     </message>
     <message>
         <location filename="../../src/core/UBPersistenceManager.cpp" line="1161"/>
@@ -2974,8 +2974,8 @@ Do you want to ignore these errors for this host?</source>
     </message>
     <message>
         <location filename="../../src/podcast/UBPodcastController.cpp" line="371"/>
-        <source>OpenBoard Cast</source>
-        <translation>OpenBoard 演示表</translation>
+        <source>PenBoard Cast</source>
+        <translation>PenBoard 演示表</translation>
     </message>
 </context>
 <context>
@@ -3678,8 +3678,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="72"/>
-        <source>OpenBoard</source>
-        <translation>OpenBoard</translation>
+        <source>PenBoard</source>
+        <translation>PenBoard</translation>
     </message>
     <message>
         <location filename="../forms/youTubePublishingDialog.ui" line="156"/>
@@ -3772,8 +3772,8 @@ p, li { white-space: pre-wrap; }
     <name>documents</name>
     <message>
         <location filename="../forms/documents.ui" line="26"/>
-        <source>OpenBoard Documents</source>
-        <translation>OpenBoard 文档</translation>
+        <source>PenBoard Documents</source>
+        <translation>PenBoard 文档</translation>
     </message>
     <message>
         <location filename="../forms/documents.ui" line="90"/>
