@@ -70,6 +70,9 @@ include(src/pdf-merger/pdfMerger.pri)
 include(plugins/plugins.pri)
 INCLUDEPATH += plugins/cffadaptor/src
 
+#pen
+include(src/pen/pen.pri)
+
 FORMS += resources/forms/mainWindow.ui \
    resources/forms/preferences.ui \
    resources/forms/brushProperties.ui \

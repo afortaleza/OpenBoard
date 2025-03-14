@@ -24,25 +24,23 @@ UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
         // Calculate the original (logical) resolution by dividing by the scaling factor
         QSize originalSize(scaledSize.width() * devicePixelRatio, scaledSize.height() * devicePixelRatio);
 
-        // Set the virtual desktop size to 50% of the original screen width and height
-        m_width = originalSize.width() / 2;
-        m_height = originalSize.height() / 2;
+        // Set the virtual desktop size to 1/3 of the original screen width and height
+        m_width = originalSize.width() / 3;
+        m_height = originalSize.height() / 3;
+
+        setPos(m_width * -0.5, m_height * -0.5);
     }
     else {
         // If only one screen, set the virtual desktop size to 50% of the primary screen's width and height
         QScreen *primaryScreen = screens.at(0);
         QSize screenSize = primaryScreen->size();
 
-        m_width = screenSize.width() / 2;
-        m_height = screenSize.height() / 2;
+        m_width = screenSize.width() / 3;
+        m_height = screenSize.height() / 3;
     }
 
     // Delegate setup with flags
-    setDelegate(new UBGraphicsItemDelegate(this, 0, GF_COMMON
-                                                        | GF_FLIPPABLE_ALL_AXIS
-                                                        | GF_REVOLVABLE
-                                                        | GF_RESPECT_RATIO
-                                                        | GF_TOOLBAR_USED));
+    setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_Y_AXIS | GF_RESPECT_RATIO));
 
     // Set the data layer types
     setData(UBGraphicsItemData::ItemLayerType, UBItemLayerType::Object);
@@ -70,7 +68,7 @@ void UBGraphicsVirtualDesktop::paint(QPainter *painter, const QStyleOptionGraphi
     // Paint the captured secondary screen content (QImage)
     if (!m_screenImage.isNull()) {
         QRectF target = this->boundingRect();
-        QRectF source(0, 0, m_width * 2, m_height * 2);
+        QRectF source(0, 0, m_width * 3, m_height * 3);
 
         painter->drawImage(target, m_screenImage, source);
     }
