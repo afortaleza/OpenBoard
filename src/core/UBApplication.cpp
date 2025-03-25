@@ -52,6 +52,7 @@
 #include "board/UBBoardView.h"
 #include "board/UBBoardPaletteManager.h"
 #include "web/UBWebController.h"
+#include "pen/UBPen.h"
 
 #include "document/UBDocumentController.h"
 #include "document/UBDocumentProxy.h"
@@ -76,6 +77,7 @@ UBApplicationController* UBApplication::applicationController = 0;
 UBBoardController* UBApplication::boardController = 0;
 UBWebController* UBApplication::webController = 0;
 UBDocumentController* UBApplication::documentController = 0;
+UBPen* UBApplication::pen = nullptr;
 
 UBMainWindow* UBApplication::mainWindow = 0;
 
@@ -420,6 +422,19 @@ int UBApplication::exec(const QString& pFileToImport)
 
     onScreenCountChanged(displayManager->numScreens());
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
+
+    // Load Pen
+    pen = new UBPen();
+
+    if (pen->loadPenSDK())
+    {
+        showMessage("Pen SDK loaded sucessfully");
+    }
+    else
+    {
+        showMessage("Unable to load pen SDK.");
+    }
+
     return QApplication::exec();
 }
 

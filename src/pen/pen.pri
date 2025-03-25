@@ -1,6 +1,12 @@
 
 HEADERS      += src/pen/xb.h \
-    $$PWD/UBPen.h
+    $$PWD/UBMouseOperations.h \
+    $$PWD/UBPen.h \
+    $$PWD/UBPenCalibration.h \
+    $$PWD/UBVirtualScreen.h
 
 SOURCES      +=  \
-    $$PWD/UBPen.cpp
+    $$PWD/UBMouseOperations.cpp \
+    $$PWD/UBPen.cpp \
+    $$PWD/UBPenCalibration.cpp \
+    $$PWD/UBVirtualScreen.cpp
