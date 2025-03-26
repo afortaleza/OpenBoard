@@ -4,16 +4,32 @@
 #include "UBPen.h"
 #include "xb.h"
 #include "UBPenCalibration.h"
+#include "../core/UBApplication.h"
+
+// Initialize the static instance pointer
+UBPen* UBPen::instance = nullptr;
 
 UBPen::UBPen() {
     if (loadPenSDK()) {
-        showCalibrationScreen();
+        pAFScanStart();
+        // showCalibrationScreen();
     }
 }
 
-UBPen::~UBPen()
-{
-    this->pAFUnInit();
+UBPen* UBPen::getInstance() {
+    if (instance == nullptr) {
+        instance = new UBPen();
+    }
+    return instance;
+}
+
+UBPen::~UBPen() {
+    UBPen::getInstance()->pAFUnInit();
+    if (hPenSDK) {
+        FreeLibrary(hPenSDK);
+        hPenSDK = nullptr;
+    }
+    instance = nullptr;  // Reset instance pointer when destroyed
 }
 
 bool UBPen::loadPenSDK()
@@ -64,6 +80,7 @@ bool UBPen::loadPenSDK()
     pAFSetBleEventListener(bleEventCallback);
     pAFSetPenEventListener(penEventCallback);
     qInfo() << "SDK successfully initialized";
+    UBApplication::showMessage("SDK successfully initialized");
     return true;
 }
 
@@ -73,9 +90,48 @@ void UBPen::showCalibrationScreen()
     penCalibration->show();
 }
 
+QString UBPen::safeCharToQString(const char *str, size_t length)
+{
+    if (!str || length == 0) {
+        return QString();
+    }
+    return QString::fromUtf8(str, static_cast<int>(length));
+}
+
 bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len)
 {
-    return false;
+    switch (evtType) {
+    case BLE_EVENT_FIND_DEVICE: {
+        AFBLEFindDevice* device = (AFBLEFindDevice*)data;
+        if (device->name && device->namelen > 0) {
+            QString deviceName = safeCharToQString(device->name, device->namelen);
+            qInfo() << "Found device: " + deviceName + ". Connecting";
+            UBPen::getInstance()->pAFConnect(deviceName.toStdWString().c_str());
+        }
+        break;
+    }
+    case BLE_EVENT_STATUS: {
+        AFBLEDeviceStatus* status = (AFBLEDeviceStatus*)data;
+        switch (status->status) {
+        case PEN_CONNECTION_SUCCESS:
+            qInfo() << "Connected!";
+            break;
+        case PEN_CONNECTION_FAILURE:
+            qInfo() << "Connection failed";
+            break;
+        case PEN_DISCONNECTED:
+            qInfo() << "Disconnected from device";
+            break;
+        case PEN_CONNECTION_TRY:
+        case PEN_CONNECTING:
+        case PEN_DISCONNECTING:
+        case PEN_CONNECTION_UNKNOWN:
+            break;
+        }
+        break;
+    }
+    }
+    return true;
 }
 
 bool __cdecl UBPen::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len)

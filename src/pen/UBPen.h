@@ -2,18 +2,26 @@
 #define UBPEN_H
 
 #include <Windows.h>
+#include <QString>
 #include "xb.h"
 
 class UBPen
 {
 public:
-    UBPen();
     ~UBPen();
+    static UBPen* getInstance();  // Method to get the singleton instance
+
+private:
+    UBPen();
+    UBPen(const UBPen&) = delete;
+    UBPen& operator=(const UBPen&) = delete;
+
     bool loadPenSDK();
     void showCalibrationScreen();
 
-private:
+    static UBPen* instance;
 
+    static QString safeCharToQString(const char* str, size_t length);
 
     static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);
     static bool __stdcall penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len);

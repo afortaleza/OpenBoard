@@ -424,16 +424,7 @@ int UBApplication::exec(const QString& pFileToImport)
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
 
     // Load Pen
-    pen = new UBPen();
-
-    if (pen->loadPenSDK())
-    {
-        showMessage("Pen SDK loaded sucessfully");
-    }
-    else
-    {
-        showMessage("Unable to load pen SDK.");
-    }
+    pen = UBPen::getInstance();
 
     return QApplication::exec();
 }
