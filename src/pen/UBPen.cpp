@@ -136,5 +136,53 @@ bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int 
 
 bool __cdecl UBPen::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len)
 {
-    return false;
+    switch (evtType) {
+    case PEN_EVENT_GetVersion: {
+        AFEGetVersion* version = (AFEGetVersion*)data;
+        if (version->version && version->length > 0) {
+            QString versionStr = QString::fromUtf8(reinterpret_cast<char*>(version->version), version->length);
+            qInfo() << "Firmware version: " + versionStr;
+        }
+        break;
+    }
+    case PEN_EVENT_GetStorageSize: {
+        AFEGetStorageSize* storage = (AFEGetStorageSize*)data;
+        qInfo() << QString("Storage size: %1 bytes").arg(storage->size);
+        break;
+    }
+    case PEN_EVENT_GetBattery: {
+        AFEGetBattery* battery = (AFEGetBattery*)data;
+        if (battery->val == 32676) {
+            qInfo() << "Battery: Charging";
+        }
+        else {
+            qInfo() << QString("Battery level: %1/10").arg(battery->val);
+        }
+        break;
+    }
+    case PEN_EVENT_GetDotsCount: {
+        AFEGetDotsCount* dotsCount = (AFEGetDotsCount*)data;
+        qInfo() << QString("Total dots count: %1").arg(dotsCount->count);
+        break;
+    }
+    case PEN_EVENT_ClearStorage: {
+        AFEClearStorage* clearResult = (AFEClearStorage*)data;
+        qInfo() << "Clear storage " + QString(clearResult->bSuccess ? "successful" : "failed");
+        break;
+    }
+    case PEN_EVENT_Dot: {
+        AFEDot* dot = (AFEDot*)data;
+        qInfo() << QString("Dot received: x=%1, y=%2, page=%3 tyoe=%4").arg(dot->x).arg(dot->y).arg(dot->page).arg(dot->type);
+        break;
+    }
+    case PEN_EVENT_CmdTimeout: {
+        qInfo() << "Command timeout occurred";
+        break;
+    }
+    case PEN_EVENT_Undefine:
+    case PEN_EVENT_GetDots:
+        break;
+    }
+    return true;
+
 }
