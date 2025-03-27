@@ -5,11 +5,15 @@
 #include <QString>
 #include "xb.h"
 
+// PenStatus
+enum PenStatus { PenUp, PenDown, PenMove };
+
 class UBPen
 {
 public:
     ~UBPen();
     static UBPen* getInstance();  // Method to get the singleton instance
+    PenStatus penStatus = PenUp;
 
 private:
     UBPen();
@@ -20,7 +24,6 @@ private:
     void showCalibrationScreen();
 
     static UBPen* instance;
-
     static QString safeCharToQString(const char* str, size_t length);
 
     static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);

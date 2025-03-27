@@ -1,12 +1,13 @@
 #include "UBVirtualScreen.h"
 #include "UBMouseOperations.h"
+#include "UBPen.h"
 #include <cmath>
 
+// Private constructor implementation
 VirtualScreen::VirtualScreen() {
-    pen_status_ = PenStatus::Up;
-    calibration_status_ = CalibrationStatus::NOT_CALIBRATED;
+    calibrationStatus = CalibrationStatus::NOT_CALIBRATED;
     drag_threshold_ = 100;
-    connected_ = false;
+    connected = false;
     p1x_ = p1y_ = p2x_ = p2y_ = 0;
     p0x_ = p0y_ = 0;
     qx_ = qy_ = 0.0;
@@ -15,35 +16,35 @@ VirtualScreen::VirtualScreen() {
     screen_height_ = screen_width_ = 0;
 }
 
-void VirtualScreen::Calibrate() {
-    calibration_status_ = CalibrationStatus::CALIBRATING_P1;
+void VirtualScreen::calibrate() {
+    calibrationStatus = CalibrationStatus::CALIBRATING_P1;
 }
 
-void VirtualScreen::SetScreenDimensions(int width, int height) {
+void VirtualScreen::setScreenDimensions(int width, int height) {
     screen_width_ = width;
     screen_height_ = height;
 }
 
-void VirtualScreen::CalibrationSetFirstPoint(int pX, int pY) {
+void VirtualScreen::calibrationSetFirstPoint(int pX, int pY) {
     p1x_ = pX;
     p1y_ = pY;
-    calibration_status_ = CalibrationStatus::CALIBRATING_P2;
+    calibrationStatus = CalibrationStatus::CALIBRATING_P2;
 }
 
-void VirtualScreen::CalibrationSetSecondPoint(int pX, int pY) {
+void VirtualScreen::calibrationSetSecondPoint(int pX, int pY) {
     p2x_ = pX;
     p2y_ = pY;
-    SetCalibration();
-    calibration_status_ = CalibrationStatus::CALIBRATED;
+    setCalibration();
+    calibrationStatus = CalibrationStatus::CALIBRATED;
 }
 
-bool VirtualScreen::IsInvertedAxis() {
+bool VirtualScreen::isInvertedAxis() {
     bool screenIsWide = (screen_width_ / screen_height_) >= 1;
     bool paperIsWide = (std::abs(p1x_ - p2x_) / std::abs(p1y_ - p2y_)) >= 1;
     return screenIsWide && !paperIsWide;
 }
 
-void VirtualScreen::SetCalibration() {
+void VirtualScreen::setCalibration() {
     // Calculate virtual screen width and height using the offset p1
     int offsetWidth = (p2x_ - p1x_) * 2;
     int offsetHeight = (p1y_ - p2y_) * 2;
@@ -69,36 +70,36 @@ void VirtualScreen::SetCalibration() {
     qy_ = static_cast<double>(screen_height_) / v_height_;
 }
 
-void VirtualScreen::DotToMouse(int pX, int pY) {
-    switch (pen_status_) {
-    case PenStatus::Down:
+void VirtualScreen::dotToMouse(int pX, int pY) {
+    switch (UBPen::getInstance()->penStatus) {
+    case PenDown:
         down_px_ = pX;
         down_py_ = pY;
         MouseOperations::IsDragging = false;
         break;
-    case PenStatus::Move:
+    case PenMove:
         if (!MouseOperations::IsDragging) {
-            if (EnteredDragMode(pX, pY)) {
-                auto [screenX, screenY] = GetComputerScreenDot(pX, pY);
+            if (enteredDragMode(pX, pY)) {
+                auto [screenX, screenY] = getComputerScreenDot(pX, pY);
                 MouseOperations::DragStart(screenX, screenY);
             }
         } else {
-            auto [screenX, screenY] = GetComputerScreenDot(pX, pY);
+            auto [screenX, screenY] = getComputerScreenDot(pX, pY);
             MouseOperations::Drag(screenX, screenY, screen_width_, screen_height_);
         }
         break;
-    case PenStatus::Up:
+    case PenUp:
         if (MouseOperations::IsDragging) {
             MouseOperations::DragEnd();
         } else {
-            auto [screenX, screenY] = GetComputerScreenDot(pX, pY);
+            auto [screenX, screenY] = getComputerScreenDot(pX, pY);
             MouseOperations::LeftClick(screenX, screenY);
         }
         break;
     }
 }
 
-std::tuple<int, int> VirtualScreen::GetComputerScreenDot(int pX, int pY) {
+std::tuple<int, int> VirtualScreen::getComputerScreenDot(int pX, int pY) {
     if ((pX > p0x_ && pX < p0x_ + v_width_) &&
         (pY > p0y_ && pY < p0y_ + v_height_)) {
         int pScreenX = static_cast<int>((pX - p0x_) * qx_);
@@ -108,7 +109,7 @@ std::tuple<int, int> VirtualScreen::GetComputerScreenDot(int pX, int pY) {
     return std::make_tuple(-1, -1);
 }
 
-bool VirtualScreen::EnteredDragMode(int pX, int pY) {
+bool VirtualScreen::enteredDragMode(int pX, int pY) {
     return (std::abs(down_px_ - pX) > drag_threshold_ ||
             std::abs(down_py_ - pY) > drag_threshold_);
 }

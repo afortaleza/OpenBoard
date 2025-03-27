@@ -5,34 +5,35 @@
 
 enum class CalibrationStatus { NOT_CALIBRATED, CALIBRATING_P1, CALIBRATING_P2, CALIBRATED };
 enum class DotType { PEN_MOVE, PEN_UP };
-enum class PenStatus { Down, Move, Up };
 
 class VirtualScreen {
 public:
-    // Constructor
-    VirtualScreen();
+    // Static method to get the singleton instance
+    static VirtualScreen& getInstance() {
+        static VirtualScreen instance; // Created only once, thread-safe in C++11
+        return instance;
+    }
 
     // Public methods
-    void Calibrate();
-    void SetScreenDimensions(int width, int height);
-    void CalibrationSetFirstPoint(int pX, int pY);
-    void CalibrationSetSecondPoint(int pX, int pY);
-    bool IsInvertedAxis();
-    void SetCalibration();
-    void DotToMouse(int pX, int pY);
+    void calibrate();
+    void setScreenDimensions(int width, int height);
+    void calibrationSetFirstPoint(int pX, int pY);
+    void calibrationSetSecondPoint(int pX, int pY);
+    bool isInvertedAxis();
+    void setCalibration();
+    void dotToMouse(int pX, int pY);
 
-    // Getters and setters
-    bool GetConnected() const { return connected_; }
-    void SetConnected(bool value) { connected_ = value; }
-    CalibrationStatus GetCalibrationStatus() const { return calibration_status_; }
-    void SetCalibrationStatus(CalibrationStatus status) { calibration_status_ = status; }
-    PenStatus GetPenStatus() const { return pen_status_; }
-    void SetPenStatus(PenStatus status) { pen_status_ = status; }
+    // Public variables (replacing getters and setters)
+    bool connected;
+    CalibrationStatus calibrationStatus;
+
+    // Delete copy constructor and assignment operator to prevent copying
+    VirtualScreen(const VirtualScreen&) = delete;
+    VirtualScreen& operator=(const VirtualScreen&) = delete;
 
 private:
-    bool connected_;
-    CalibrationStatus calibration_status_;
-    PenStatus pen_status_;
+    // Private constructor to prevent direct instantiation
+    VirtualScreen();
 
     int p1x_;
     int p1y_;
@@ -51,8 +52,8 @@ private:
     int screen_width_;
 
     // Private methods
-    std::tuple<int, int> GetComputerScreenDot(int pX, int pY);
-    bool EnteredDragMode(int pX, int pY);
+    std::tuple<int, int> getComputerScreenDot(int pX, int pY);
+    bool enteredDragMode(int pX, int pY);
 };
 
 #endif // VIRTUAL_SCREEN_HPP

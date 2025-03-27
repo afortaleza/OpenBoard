@@ -5,6 +5,7 @@
 #include "xb.h"
 #include "UBPenCalibration.h"
 #include "../core/UBApplication.h"
+#include "UBVirtualScreen.h"
 
 // Initialize the static instance pointer
 UBPen* UBPen::instance = nullptr;
@@ -136,53 +137,51 @@ bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int 
 
 bool __cdecl UBPen::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len)
 {
-    switch (evtType) {
-    case PEN_EVENT_GetVersion: {
-        AFEGetVersion* version = (AFEGetVersion*)data;
-        if (version->version && version->length > 0) {
-            QString versionStr = QString::fromUtf8(reinterpret_cast<char*>(version->version), version->length);
-            qInfo() << "Firmware version: " + versionStr;
-        }
-        break;
-    }
-    case PEN_EVENT_GetStorageSize: {
-        AFEGetStorageSize* storage = (AFEGetStorageSize*)data;
-        qInfo() << QString("Storage size: %1 bytes").arg(storage->size);
-        break;
-    }
-    case PEN_EVENT_GetBattery: {
-        AFEGetBattery* battery = (AFEGetBattery*)data;
-        if (battery->val == 32676) {
-            qInfo() << "Battery: Charging";
+    if (evtType == PEN_EVENT_TYPE::PEN_EVENT_Dot) {
+        // Convert raw pointer to structure
+        AFEDot* dot = (AFEDot*)data;
+
+        if (VirtualScreen::getInstance().calibrationStatus == CalibrationStatus::CALIBRATED) {
+
+            // Set pen status
+            if (dot->type == 1) {
+                getInstance()->penStatus = (getInstance()->penStatus == PenUp) ? PenDown : PenMove;
+            }
+            else if (dot->type == 2) {
+                getInstance()->penStatus = PenUp;
+            }
+
+            // Converts dot to mouse action
+            VirtualScreen::getInstance().dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
         }
         else {
-            qInfo() << QString("Battery level: %1/10").arg(battery->val);
+            switch (VirtualScreen::getInstance().calibrationStatus) {
+            case CalibrationStatus::NOT_CALIBRATED:
+                break;
+            case CalibrationStatus::CALIBRATING_P1:
+                if (dot->type == 2) {
+                    VirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                    // Set calibration window state
+                    // _calibrationForm->FirstTargetClicked = true;
+                    // _calibrationForm->Invalidate();
+                }
+                break;
+            case CalibrationStatus::CALIBRATING_P2:
+                if (dot->type == 2) {
+                    VirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                    // Set calibration window state
+                    //_calibrationForm->Close();
+                    //_calibrationForm = nullptr;
+                    //this->TopMost = false;  // Note: this assumes a window class context
+                    //this->WindowState = FormWindowState::Minimized;  // Need to adapt to C++ window handling
+                    getInstance()->pAFScanStop();  // Assuming this is a global function
+                }
+                break;
+            default:
+                break;
+            }
         }
-        break;
     }
-    case PEN_EVENT_GetDotsCount: {
-        AFEGetDotsCount* dotsCount = (AFEGetDotsCount*)data;
-        qInfo() << QString("Total dots count: %1").arg(dotsCount->count);
-        break;
-    }
-    case PEN_EVENT_ClearStorage: {
-        AFEClearStorage* clearResult = (AFEClearStorage*)data;
-        qInfo() << "Clear storage " + QString(clearResult->bSuccess ? "successful" : "failed");
-        break;
-    }
-    case PEN_EVENT_Dot: {
-        AFEDot* dot = (AFEDot*)data;
-        qInfo() << QString("Dot received: x=%1, y=%2, page=%3 tyoe=%4").arg(dot->x).arg(dot->y).arg(dot->page).arg(dot->type);
-        break;
-    }
-    case PEN_EVENT_CmdTimeout: {
-        qInfo() << "Command timeout occurred";
-        break;
-    }
-    case PEN_EVENT_Undefine:
-    case PEN_EVENT_GetDots:
-        break;
-    }
-    return true;
 
+    return true;
 }
