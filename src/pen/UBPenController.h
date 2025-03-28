@@ -22,11 +22,10 @@ private:
     UBPenController& operator=(const UBPenController&) = delete;
 
     bool loadPenSDK();
-    static void showCalibrationWindow();
-    static void hideCalibrationWindow();
+    void showCalibrationWindow();
+    void hideCalibrationWindow();
 
     static UBPenController* instance;
-    static UBCalibrationWindow* penCalibrationWindow;
     static QString safeCharToQString(const char* str, size_t length);
 
     static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);
