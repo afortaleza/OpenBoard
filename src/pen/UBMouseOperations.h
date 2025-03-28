@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-class MouseOperations {
+class UBMouseOperations {
 
 public:
     static void LeftClick(int screenX, int screenY);

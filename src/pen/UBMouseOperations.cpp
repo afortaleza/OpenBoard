@@ -1,8 +1,8 @@
 #include "UBMouseOperations.h"
 
-bool MouseOperations::IsDragging = false;
+bool UBMouseOperations::IsDragging = false;
 
-void MouseOperations::LeftClick(int screenX, int screenY) {
+void UBMouseOperations::LeftClick(int screenX, int screenY) {
     SetCursorPos(screenX, screenY);
 
     INPUT input = {0};
@@ -14,7 +14,7 @@ void MouseOperations::LeftClick(int screenX, int screenY) {
     SendInput(1, &input, sizeof(INPUT));
 }
 
-void MouseOperations::DragStart(int screenX, int screenY) {
+void UBMouseOperations::DragStart(int screenX, int screenY) {
     SetCursorPos(screenX, screenY);
 
     IsDragging = true;
@@ -25,7 +25,7 @@ void MouseOperations::DragStart(int screenX, int screenY) {
     SendInput(1, &input, sizeof(INPUT));
 }
 
-void MouseOperations::Drag(int screenX, int screenY, int screenWidth, int screenHeight) {
+void UBMouseOperations::Drag(int screenX, int screenY, int screenWidth, int screenHeight) {
     INPUT input = {0};
     input.type = INPUT_MOUSE;
     input.mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
@@ -34,7 +34,7 @@ void MouseOperations::Drag(int screenX, int screenY, int screenWidth, int screen
     SendInput(1, &input, sizeof(INPUT));
 }
 
-void MouseOperations::DragEnd() {
+void UBMouseOperations::DragEnd() {
     IsDragging = false;
 
     INPUT input = {0};
@@ -43,6 +43,6 @@ void MouseOperations::DragEnd() {
     SendInput(1, &input, sizeof(INPUT));
 }
 
-void MouseOperations::MouseMove(int screenX, int screenY) {
+void UBMouseOperations::MouseMove(int screenX, int screenY) {
     SetCursorPos(screenX, screenY);
 }

@@ -1,40 +1,76 @@
 #include <QCoreApplication>
 #include <QString>
 #include <QFileInfo>
-#include "UBPen.h"
+#include <QObject> // For the helper class
+#include "UBPenController.h"
 #include "xb.h"
-#include "UBPenCalibration.h"
+#include "UBCalibrationWindow.h"
 #include "../core/UBApplication.h"
 #include "UBVirtualScreen.h"
 
-// Initialize the static instance pointer
-UBPen* UBPen::instance = nullptr;
+// Helper class to handle GUI operations on the main thread
+class UBGuiHelper : public QObject {
+    Q_OBJECT
+public:
+    UBGuiHelper(QObject* parent = nullptr) : QObject(parent) {}
+    static UBGuiHelper* instance();
 
-UBPen::UBPen() {
+public slots:
+    void showCalibrationWindow() {
+        if (UBPenController::penCalibrationWindow == nullptr)
+            UBPenController::penCalibrationWindow = new UBCalibrationWindow();
+        UBPenController::penCalibrationWindow->show();
+    }
+
+signals:
+    void signalShowCalibrationWindow();
+
+private:
+    static UBGuiHelper* guiInstance;
+};
+
+UBGuiHelper* UBGuiHelper::guiInstance = nullptr;
+
+UBGuiHelper* UBGuiHelper::instance() {
+    if (guiInstance == nullptr) {
+        guiInstance = new UBGuiHelper();
+        // Connect signal to slot in the helper itself
+        QObject::connect(guiInstance, &UBGuiHelper::signalShowCalibrationWindow,
+                         guiInstance, &UBGuiHelper::showCalibrationWindow);
+    }
+    return guiInstance;
+}
+
+// Initialize static members of UBPenController
+UBPenController* UBPenController::instance = nullptr;
+UBCalibrationWindow* UBPenController::penCalibrationWindow = nullptr;
+
+UBPenController::UBPenController() {
     if (loadPenSDK()) {
         pAFScanStart();
-        // showCalibrationScreen();
     }
 }
 
-UBPen* UBPen::getInstance() {
+UBPenController* UBPenController::getInstance() {
     if (instance == nullptr) {
-        instance = new UBPen();
+        instance = new UBPenController();
+        // Ensure the GUI helper is initialized
+        UBGuiHelper::instance();
     }
     return instance;
 }
 
-UBPen::~UBPen() {
-    UBPen::getInstance()->pAFUnInit();
+UBPenController::~UBPenController() {
+    UBPenController::getInstance()->pAFUnInit();
     if (hPenSDK) {
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
-    instance = nullptr;  // Reset instance pointer when destroyed
+    instance = nullptr;
+    // Note: penCalibrationWindow is deleted in hideCalibrationWindow()
 }
 
-bool UBPen::loadPenSDK()
-{
+bool UBPenController::loadPenSDK() {
     QString dllPath = QCoreApplication::applicationDirPath() + "/xbc.dll";
     if (!QFileInfo::exists(dllPath)) {
         qWarning() << "Error: xbc.dll not found in application directory";
@@ -85,29 +121,31 @@ bool UBPen::loadPenSDK()
     return true;
 }
 
-void UBPen::showCalibrationScreen()
-{
-    UBPenCalibration* penCalibration = new UBPenCalibration();
-    penCalibration->show();
+void UBPenController::showCalibrationWindow() {
+    // Emit the signal instead of creating the widget directly
+    emit UBGuiHelper::instance()->signalShowCalibrationWindow();
 }
 
-QString UBPen::safeCharToQString(const char *str, size_t length)
-{
+void UBPenController::hideCalibrationWindow() {
+    delete penCalibrationWindow;
+    penCalibrationWindow = nullptr;
+}
+
+QString UBPenController::safeCharToQString(const char *str, size_t length) {
     if (!str || length == 0) {
         return QString();
     }
     return QString::fromUtf8(str, static_cast<int>(length));
 }
 
-bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len)
-{
+bool __stdcall UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len) {
     switch (evtType) {
     case BLE_EVENT_FIND_DEVICE: {
         AFBLEFindDevice* device = (AFBLEFindDevice*)data;
         if (device->name && device->namelen > 0) {
             QString deviceName = safeCharToQString(device->name, device->namelen);
             qInfo() << "Found device: " + deviceName + ". Connecting";
-            UBPen::getInstance()->pAFConnect(deviceName.toStdWString().c_str());
+            UBPenController::getInstance()->pAFConnect(deviceName.toStdWString().c_str());
         }
         break;
     }
@@ -115,12 +153,17 @@ bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int 
         AFBLEDeviceStatus* status = (AFBLEDeviceStatus*)data;
         switch (status->status) {
         case PEN_CONNECTION_SUCCESS:
+            if (UBVirtualScreen::getInstance().calibrationStatus == NOT_CALIBRATED) {
+                UBVirtualScreen::getInstance().calibrationStatus = CALIBRATING_P1;
+                UBPenController::showCalibrationWindow(); // Call the static method
+            }
             qInfo() << "Connected!";
             break;
         case PEN_CONNECTION_FAILURE:
             qInfo() << "Connection failed";
             break;
         case PEN_DISCONNECTED:
+            UBPenController::hideCalibrationWindow();
             qInfo() << "Disconnected from device";
             break;
         case PEN_CONNECTION_TRY:
@@ -135,46 +178,32 @@ bool __cdecl UBPen::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int 
     return true;
 }
 
-bool __cdecl UBPen::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len)
-{
+bool __stdcall UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len) {
     if (evtType == PEN_EVENT_TYPE::PEN_EVENT_Dot) {
-        // Convert raw pointer to structure
         AFEDot* dot = (AFEDot*)data;
 
-        if (VirtualScreen::getInstance().calibrationStatus == CalibrationStatus::CALIBRATED) {
-
-            // Set pen status
+        if (UBVirtualScreen::getInstance().calibrationStatus == CALIBRATED) {
             if (dot->type == 1) {
-                getInstance()->penStatus = (getInstance()->penStatus == PenUp) ? PenDown : PenMove;
+                UBPenController::getInstance()->penStatus = (UBPenController::getInstance()->penStatus == PenUp) ? PenDown : PenMove;
+            } else if (dot->type == 2) {
+                UBPenController::getInstance()->penStatus = PenUp;
             }
-            else if (dot->type == 2) {
-                getInstance()->penStatus = PenUp;
-            }
-
-            // Converts dot to mouse action
-            VirtualScreen::getInstance().dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
-        }
-        else {
-            switch (VirtualScreen::getInstance().calibrationStatus) {
-            case CalibrationStatus::NOT_CALIBRATED:
+            UBVirtualScreen::getInstance().dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
+        } else {
+            switch (UBVirtualScreen::getInstance().calibrationStatus) {
+            case NOT_CALIBRATED:
                 break;
-            case CalibrationStatus::CALIBRATING_P1:
+            case CALIBRATING_P1:
                 if (dot->type == 2) {
-                    VirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
-                    // Set calibration window state
-                    // _calibrationForm->FirstTargetClicked = true;
-                    // _calibrationForm->Invalidate();
+                    UBVirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                    UBPenController::penCalibrationWindow->update();
                 }
                 break;
-            case CalibrationStatus::CALIBRATING_P2:
+            case CALIBRATING_P2:
                 if (dot->type == 2) {
-                    VirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
-                    // Set calibration window state
-                    //_calibrationForm->Close();
-                    //_calibrationForm = nullptr;
-                    //this->TopMost = false;  // Note: this assumes a window class context
-                    //this->WindowState = FormWindowState::Minimized;  // Need to adapt to C++ window handling
-                    getInstance()->pAFScanStop();  // Assuming this is a global function
+                    UBVirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                    UBPenController::hideCalibrationWindow();
+                    UBPenController::getInstance()->pAFScanStop();
                 }
                 break;
             default:
@@ -182,6 +211,5 @@ bool __cdecl UBPen::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int 
             }
         }
     }
-
     return true;
 }

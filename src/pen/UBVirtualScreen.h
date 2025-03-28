@@ -3,18 +3,16 @@
 
 #include <tuple>
 
-enum class CalibrationStatus { NOT_CALIBRATED, CALIBRATING_P1, CALIBRATING_P2, CALIBRATED };
-enum class DotType { PEN_MOVE, PEN_UP };
+enum CalibrationStatus { NOT_CALIBRATED, CALIBRATING_P1, CALIBRATING_P2, CALIBRATED };
 
-class VirtualScreen {
+class UBVirtualScreen {
 public:
     // Static method to get the singleton instance
-    static VirtualScreen& getInstance() {
-        static VirtualScreen instance; // Created only once, thread-safe in C++11
+    static UBVirtualScreen& getInstance() {
+        static UBVirtualScreen instance; // Created only once, thread-safe in C++11
         return instance;
     }
 
-    // Public methods
     void calibrate();
     void setScreenDimensions(int width, int height);
     void calibrationSetFirstPoint(int pX, int pY);
@@ -23,17 +21,16 @@ public:
     void setCalibration();
     void dotToMouse(int pX, int pY);
 
-    // Public variables (replacing getters and setters)
     bool connected;
-    CalibrationStatus calibrationStatus;
+    CalibrationStatus calibrationStatus = NOT_CALIBRATED;
 
     // Delete copy constructor and assignment operator to prevent copying
-    VirtualScreen(const VirtualScreen&) = delete;
-    VirtualScreen& operator=(const VirtualScreen&) = delete;
+    UBVirtualScreen(const UBVirtualScreen&) = delete;
+    UBVirtualScreen& operator=(const UBVirtualScreen&) = delete;
 
 private:
     // Private constructor to prevent direct instantiation
-    VirtualScreen();
+    UBVirtualScreen();
 
     int p1x_;
     int p1y_;

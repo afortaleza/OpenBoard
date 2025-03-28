@@ -54,7 +54,7 @@ class UBApplicationController;
 class UBDisplayManager;
 class UBDocumentController;
 class UBMainWindow;
-class UBPen;
+class UBPenController;
 
 class UBApplication : public SingleApplication
 {
@@ -76,7 +76,7 @@ class UBApplication : public SingleApplication
         static UBBoardController* boardController;
         static UBWebController* webController;
         static UBDocumentController* documentController;
-        static UBPen* pen;
+        static UBPenController* pen;
 
         static UBMainWindow* mainWindow;
 

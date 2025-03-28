@@ -1,29 +1,32 @@
-#ifndef UBPEN_H
-#define UBPEN_H
+#ifndef UBPENCONTROLLER_H
+#define UBPENCONTROLLER_H
 
 #include <Windows.h>
 #include <QString>
 #include "xb.h"
+#include "UBCalibrationWindow.h"
 
 // PenStatus
 enum PenStatus { PenUp, PenDown, PenMove };
 
-class UBPen
+class UBPenController
 {
 public:
-    ~UBPen();
-    static UBPen* getInstance();  // Method to get the singleton instance
+    ~UBPenController();
+    static UBPenController* getInstance();  // Method to get the singleton instance
     PenStatus penStatus = PenUp;
 
 private:
-    UBPen();
-    UBPen(const UBPen&) = delete;
-    UBPen& operator=(const UBPen&) = delete;
+    UBPenController();
+    UBPenController(const UBPenController&) = delete;
+    UBPenController& operator=(const UBPenController&) = delete;
 
     bool loadPenSDK();
-    void showCalibrationScreen();
+    static void showCalibrationWindow();
+    static void hideCalibrationWindow();
 
-    static UBPen* instance;
+    static UBPenController* instance;
+    static UBCalibrationWindow* penCalibrationWindow;
     static QString safeCharToQString(const char* str, size_t length);
 
     static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);
@@ -61,4 +64,4 @@ private:
     HMODULE hPenSDK = nullptr;
 };
 
-#endif // UBPEN_H
+#endif // UBPENCONTROLLER_H
