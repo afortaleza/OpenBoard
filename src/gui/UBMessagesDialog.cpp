@@ -46,7 +46,7 @@ void UBMessagesDialog::setMessages(const QList<QString> messages)
     mMessages = messages;
 
     if (mMessages.count())
-    {        
+    {
         QVBoxLayout *messagesLayout = new QVBoxLayout(this);
         foreach (QString message, mMessages)
         {

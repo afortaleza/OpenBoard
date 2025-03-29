@@ -687,6 +687,9 @@
    </property>
   </action>  
   <action name="actionPenBluetooth">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
      <normaloff>:/images/toolbar/pen-disconnected.png</normaloff>:/images/toolbar/pen-disconnected.png</iconset>

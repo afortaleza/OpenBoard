@@ -262,7 +262,6 @@ class UBBoardController : public UBDocumentContainer
         void saveData(SaveFlags fls = sf_none);
 
         //void regenerateThumbnails();
-        void showVirtualDesktop(bool enabled);
 
     signals:
         void newPageAdded();
@@ -295,6 +294,9 @@ class UBBoardController : public UBDocumentContainer
     private slots:
         void autosaveTimeout();
         void appMainModeChanged(UBApplicationController::MainMode);
+        void showVirtualDesktop(bool enabled);
+        void showPenBluetoothDialog(bool enabled);
+        void enablePenBluetoothButton();
 
     private:
         void initBackgroundGridSize();

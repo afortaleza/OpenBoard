@@ -67,6 +67,7 @@
 
 #include "gui/UBFeaturesWidget.h"
 
+#include "pen/UBPenController.h"
 #include "tools/UBToolsManager.h"
 
 #include "document/UBDocumentProxy.h"
@@ -469,6 +470,8 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionVirtualKeyboard, SIGNAL(triggered(bool)), this, SLOT(showKeyboard(bool)));
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
+    connect(mMainWindow->actionPenBluetooth, SIGNAL(triggered(bool)), this, SLOT(showPenBluetoothDialog(bool)));
+    connect(UBApplication::penController, SIGNAL(sdkLoaded()), this, SLOT(enablePenBluetoothButton()));
 }
 
 void UBBoardController::startScript()
@@ -506,6 +509,16 @@ void UBBoardController::showVirtualDesktop(bool enabled)
         delete mVirtualDesktop;
         mVirtualDesktop = nullptr;
     }
+}
+
+void UBBoardController::showPenBluetoothDialog(bool enabled)
+{
+    UBApplication::penController->showMessageDialog();
+}
+
+void UBBoardController::enablePenBluetoothButton()
+{
+    mMainWindow->actionPenBluetooth->setEnabled(true);
 }
 
 void UBBoardController::initToolbarTexts()

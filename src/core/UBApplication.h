@@ -76,7 +76,7 @@ class UBApplication : public SingleApplication
         static UBBoardController* boardController;
         static UBWebController* webController;
         static UBDocumentController* documentController;
-        static UBPenController* pen;
+        static UBPenController* penController;
 
         static UBMainWindow* mainWindow;
 
