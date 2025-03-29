@@ -137,10 +137,9 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
             {
                 UBVirtualScreen::getInstance().calibrationStatus = CALIBRATING_P1;
 
-                // Show calibration window on the GUI thread
                 QMetaObject::invokeMethod(QApplication::instance(), []() {
                     emit getInstance()->connected();
-                    // getInstance()->showCalibrationWindow();
+                    getInstance()->showCalibrationWindow();
                 }, Qt::QueuedConnection);
             }
             qInfo() << "Connected!";
@@ -189,18 +188,21 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
             case CALIBRATING_P1:
                 if (dot->type == 2) {
                     UBVirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
-                    // Update UI
-                    // getInstance()->penCalibrationWindow->update();
+                    QMetaObject::invokeMethod(QApplication::instance(), []() {
+                        // Update UI
+                        penCalibrationWindow->update();
+                    }, Qt::QueuedConnection);
                 }
                 break;
             case CALIBRATING_P2:
                 if (dot->type == 2) {
                     UBVirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
 
-                    // Update UI
-                    // delete getInstance()->penCalibrationWindow;
-                    // getInstance()->penCalibrationWindow = nullptr;
-                    // getInstance()->pAFScanStop();
+                    QMetaObject::invokeMethod(QApplication::instance(), []() {
+                        // Hide calibration window
+                        getInstance()->hideCalibrationWindow();
+                        UBApplication::showMessage("Caneta calibrada");
+                    }, Qt::QueuedConnection);
                 }
                 break;
             default:
