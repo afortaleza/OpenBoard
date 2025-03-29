@@ -479,7 +479,6 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
 
-    connect(UBApplication::penController, SIGNAL(sdkLoaded()), this, SLOT(penBluetoothEnabled()));
     connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
 }
@@ -521,13 +520,9 @@ void UBBoardController::showVirtualDesktop(bool enabled)
     }
 }
 
-void UBBoardController::penBluetoothEnabled()
-{
-    mMainWindow->actionPenBluetooth->setEnabled(true);
-}
-
 void UBBoardController::penBluetoothConnecting()
 {
+    mMainWindow->actionPenBluetooth->setEnabled(true);
     penBluetoothConnectingIcon->start();
 }
 

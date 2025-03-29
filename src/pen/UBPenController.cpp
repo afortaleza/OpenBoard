@@ -6,6 +6,7 @@
 #include "UBCalibrationWindow.h"
 #include "../core/UBApplication.h"
 #include "UBVirtualScreen.h"
+#include <QMessageBox>
 
 // Initialize the static instance pointer
 UBPenController* UBPenController::instance = nullptr;
@@ -72,20 +73,26 @@ void UBPenController::loadPenSDK()
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
+    else {
+        pAFSetBleEventListener(bleEventCallback);
+        pAFSetPenEventListener(penEventCallback);
 
-    pAFSetBleEventListener(bleEventCallback);
-    pAFSetPenEventListener(penEventCallback);
-
-    qInfo() << "SDK successfully initialized";
-
-    emit sdkLoaded();
+        qInfo() << "SDK successfully initialized";
+    }
 }
 
 void UBPenController::connect()
 {
     getInstance()->pAFScanStop();
-    getInstance()->pAFScanStart();
-    emit scanningAndConnecting();
+
+    try {
+        int ret = getInstance()->pAFScanStart();
+        if (ret != -1) {
+            emit scanningAndConnecting();
+        }
+    } catch (...) {
+        QMessageBox::critical(nullptr, "Bluetooth desativado", "O bluetooth está desativado.");
+    }
 }
 
 void UBPenController::showCalibrationWindow()

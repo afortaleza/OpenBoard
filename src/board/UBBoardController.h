@@ -297,7 +297,6 @@ class UBBoardController : public UBDocumentContainer
         void showVirtualDesktop(bool enabled);
 
         // Pen bluetooth slots
-        void penBluetoothEnabled();
         void penBluetoothConnecting();
         void penBluetoothConnected();
 
