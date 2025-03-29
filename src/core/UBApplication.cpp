@@ -428,6 +428,7 @@ int UBApplication::exec(const QString& pFileToImport)
 
     // Load pen SDK
     penController->loadPenSDK();
+    penController->connect();
 
     return QApplication::exec();
 }
@@ -747,11 +748,13 @@ void UBApplication::cleanup()
     if (boardController) delete boardController;
     if (webController) delete webController;
     if (documentController) delete documentController;
+    if (penController) delete penController;
 
     applicationController = NULL;
     boardController = NULL;
     webController = NULL;
     documentController = NULL;
+    penController = NULL;
 }
 
 QString UBApplication::urlFromHtml(QString html)

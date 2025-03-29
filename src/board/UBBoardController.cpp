@@ -114,6 +114,7 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     , mActionUngroupText(tr("Ungroup"))
     , mAutosaveTimer(0)
     , mVirtualDesktop(nullptr)
+    , penBluetoothConnectingIcon(nullptr)
 {
     mZoomFactor = UBSettings::settings()->boardZoomFactor->get().toDouble();
 
@@ -124,7 +125,6 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     mPenColorOnLightBackground = UBSettings::settings()->penColors(false).at(penColorIndex);
     mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(true).at(markerColorIndex);
     mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(false).at(markerColorIndex);
-
 }
 
 
@@ -169,6 +169,7 @@ void UBBoardController::init()
 
 UBBoardController::~UBBoardController()
 {
+    delete penBluetoothConnectingIcon;
     delete mDisplayView;
 }
 
@@ -437,6 +438,13 @@ void UBBoardController::setupToolbar()
     initToolbarTexts();
 
     UBApplication::app()->toolBarDisplayTextChanged(QVariant(settings->appToolBarDisplayText->get().toBool()));
+
+    // Pen connecting icon
+    penBluetoothConnectingIcon = new QMovie();
+    penBluetoothConnectingIcon->setFileName(":/images/toolbar/pen-connecting.gif");
+    connect(penBluetoothConnectingIcon, &QMovie::frameChanged, [=]{
+        mMainWindow->actionPenBluetooth->setIcon(penBluetoothConnectingIcon->currentPixmap());
+    });
 }
 
 
@@ -470,8 +478,10 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionVirtualKeyboard, SIGNAL(triggered(bool)), this, SLOT(showKeyboard(bool)));
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
-    connect(mMainWindow->actionPenBluetooth, SIGNAL(triggered(bool)), this, SLOT(showPenBluetoothDialog(bool)));
-    connect(UBApplication::penController, SIGNAL(sdkLoaded()), this, SLOT(enablePenBluetoothButton()));
+
+    connect(UBApplication::penController, SIGNAL(sdkLoaded()), this, SLOT(penBluetoothEnabled()));
+    connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
+    connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
 }
 
 void UBBoardController::startScript()
@@ -511,14 +521,21 @@ void UBBoardController::showVirtualDesktop(bool enabled)
     }
 }
 
-void UBBoardController::showPenBluetoothDialog(bool enabled)
-{
-    UBApplication::penController->showMessageDialog();
-}
-
-void UBBoardController::enablePenBluetoothButton()
+void UBBoardController::penBluetoothEnabled()
 {
     mMainWindow->actionPenBluetooth->setEnabled(true);
+}
+
+void UBBoardController::penBluetoothConnecting()
+{
+    penBluetoothConnectingIcon->start();
+}
+
+void UBBoardController::penBluetoothConnected()
+{
+    penBluetoothConnectingIcon->stop();
+    QIcon icon(":/images/toolbar/pen-connected.png");
+    mMainWindow->actionPenBluetooth->setIcon(icon);
 }
 
 void UBBoardController::initToolbarTexts()

@@ -18,10 +18,15 @@ class UBPenController: public QObject
         static UBPenController* getInstance();  // Method to get the singleton instance
         PenStatus penStatus = PenUp;
         void showMessageDialog();
+        void hideMessageDialog();
         void loadPenSDK();
+        void connect();
 
     signals:
         void sdkLoaded();
+        void scanningAndConnecting();
+        void connected();
+        void disconnected();
 
     private:
         UBPenController();
@@ -33,8 +38,6 @@ class UBPenController: public QObject
 
         static UBPenController* instance;
         static QString safeCharToQString(const char* str, size_t length);
-        UBMessagesDialog* messagesDialog;
-        QList<QString>* dialogMessages;
 
         static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);
         static bool __stdcall penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len);

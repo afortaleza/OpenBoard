@@ -295,8 +295,11 @@ class UBBoardController : public UBDocumentContainer
         void autosaveTimeout();
         void appMainModeChanged(UBApplicationController::MainMode);
         void showVirtualDesktop(bool enabled);
-        void showPenBluetoothDialog(bool enabled);
-        void enablePenBluetoothButton();
+
+        // Pen bluetooth slots
+        void penBluetoothEnabled();
+        void penBluetoothConnecting();
+        void penBluetoothConnected();
 
     private:
         void initBackgroundGridSize();
@@ -334,6 +337,7 @@ class UBBoardController : public UBDocumentContainer
 
         QTimer *mAutosaveTimer;
         UBGraphicsVirtualDesktop *mVirtualDesktop;
+        QMovie *penBluetoothConnectingIcon;
 
     private slots:
         void stylusToolDoubleClicked(int tool);

@@ -402,5 +402,6 @@
         <file>images/moveTool.svg</file>
         <file>images/toolbar/pen-connected.png</file>
         <file>images/toolbar/pen-disconnected.png</file>
+        <file>images/toolbar/pen-connecting.gif</file>
     </qresource>
 </RCC>

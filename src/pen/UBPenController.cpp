@@ -12,7 +12,6 @@ UBPenController* UBPenController::instance = nullptr;
 UBCalibrationWindow* penCalibrationWindow = nullptr;
 
 UBPenController::UBPenController() {
-    dialogMessages = new QList<QString>();
 }
 
 UBPenController* UBPenController::getInstance() {
@@ -20,15 +19,6 @@ UBPenController* UBPenController::getInstance() {
         instance = new UBPenController();
     }
     return instance;
-}
-
-void UBPenController::showMessageDialog()
-{
-    if (messagesDialog == nullptr)
-        messagesDialog = new UBMessagesDialog("Mensagens da Caneta");
-
-    messagesDialog->setMessages(*dialogMessages);
-    messagesDialog->show();
 }
 
 UBPenController::~UBPenController() {
@@ -39,30 +29,19 @@ UBPenController::~UBPenController() {
         hPenSDK = nullptr;
     }
 
-    delete instance;
-    instance = nullptr;  // Reset instance pointer when destroyed
-
-    delete messagesDialog;
-    messagesDialog = nullptr;
-
-    delete dialogMessages;
-    dialogMessages = nullptr;
+    instance = nullptr;
 }
 
 void UBPenController::loadPenSDK()
 {
     QString dllPath = QCoreApplication::applicationDirPath() + "/xbc.dll";
     if (!QFileInfo::exists(dllPath)) {
-        QString message = "Error: xbc.dll not found in application directory";
-        dialogMessages->append(message);
-        qWarning() << message;
+        qWarning() << "Error: xbc.dll not found in application directory";
     }
 
     hPenSDK = LoadLibrary(L"xbc.dll");
     if (!hPenSDK) {
-        QString message = "Failed to load xbc.dll. Error: %1";
-        dialogMessages->append(message);
-        qWarning() << message;
+        qWarning() << "Failed to load xbc.dll. Error: %1";
     }
 
     pAFInit = (PFN_AFInit)GetProcAddress(hPenSDK, "AFInit");
@@ -83,17 +62,13 @@ void UBPenController::loadPenSDK()
         !pAFScanStop || !pAFSetPenEventListener || !pAFSetBleEventListener ||
         !pAFGetFWInfo || !pAFGetStorageSize || !pAFGetBatteryInfo ||
         !pAFUnInit || !pAFGetDotsCount || !pAFClearDots) {
-        QString message = "Failed to load one or more SDK functions";
-        dialogMessages->append(message);
-        qWarning() << message;
+        qWarning() << "Failed to load one or more SDK functions";
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
 
     if (pAFInit() != 0) {
-        QString message = "Failed to initialize SDK";
-        dialogMessages->append(message);
-        qWarning() << message;
+        qWarning() << "Failed to initialize SDK";
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
@@ -101,11 +76,16 @@ void UBPenController::loadPenSDK()
     pAFSetBleEventListener(bleEventCallback);
     pAFSetPenEventListener(penEventCallback);
 
-    QString message = "SDK successfully initialized";
-    dialogMessages->append(message);
-    qInfo() << message;
+    qInfo() << "SDK successfully initialized";
 
     emit sdkLoaded();
+}
+
+void UBPenController::connect()
+{
+    getInstance()->pAFScanStop();
+    getInstance()->pAFScanStart();
+    emit scanningAndConnecting();
 }
 
 void UBPenController::showCalibrationWindow()
@@ -152,7 +132,8 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
 
                 // Show calibration window on the GUI thread
                 QMetaObject::invokeMethod(QApplication::instance(), []() {
-                    getInstance()->showCalibrationWindow();
+                    emit getInstance()->connected();
+                    // getInstance()->showCalibrationWindow();
                 }, Qt::QueuedConnection);
             }
             qInfo() << "Connected!";
@@ -161,7 +142,6 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
             qInfo() << "Connection failed";
             break;
         case PEN_DISCONNECTED:
-            getInstance()->hideCalibrationWindow();
             qInfo() << "Disconnected from device";
             break;
         case PEN_CONNECTION_TRY:
