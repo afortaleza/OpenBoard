@@ -12,6 +12,12 @@ UBPenController* UBPenController::instance = nullptr;
 UBCalibrationWindow* penCalibrationWindow = nullptr;
 
 UBPenController::UBPenController() {
+    messagesDialog = new UBMessagesDialog(nullptr);
+    QList<QString> localMessages = *new QList<QString>();
+    localMessages.append("Hello my name is Anderson");
+    messagesDialog->setMessages(localMessages);
+    messagesDialog->show();
+
     if (loadPenSDK()) {
         pAFScanStart();
     }

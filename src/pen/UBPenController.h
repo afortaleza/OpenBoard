@@ -3,8 +3,8 @@
 
 #include <Windows.h>
 #include <QString>
+#include "gui/UBMessagesDialog.h"
 #include "xb.h"
-#include "UBCalibrationWindow.h"
 
 // PenStatus
 enum PenStatus { PenUp, PenDown, PenMove };
@@ -27,6 +27,7 @@ private:
 
     static UBPenController* instance;
     static QString safeCharToQString(const char* str, size_t length);
+    UBMessagesDialog* messagesDialog;
 
     static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);
     static bool __stdcall penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* data, int len);
