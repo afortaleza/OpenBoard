@@ -305,6 +305,7 @@ class UBBoardController : public UBDocumentContainer
         void updatePageSizeState();
         void saveViewState();
         int autosaveTimeoutFromSettings();
+        QMimeData* convertOfficeToPdf(const QMimeData* inputMimeData);
 
         UBMainWindow *mMainWindow;
         std::shared_ptr<UBGraphicsScene> mActiveScene;

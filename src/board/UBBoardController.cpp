@@ -90,6 +90,8 @@
 
 #include "core/memcheck.h"
 
+#include <QAxObject>
+
 UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     : UBDocumentContainer(mainWindow->centralWidget())
     , mMainWindow(mainWindow)
@@ -479,8 +481,8 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
 
-    connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
-    connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
+    connect(UBPenController::getInstance(), SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
+    connect(UBPenController::getInstance(), SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
 }
 
 void UBBoardController::startScript()
@@ -1890,6 +1892,141 @@ int UBBoardController::autosaveTimeoutFromSettings()
     return value * minute;
 }
 
+QMimeData *UBBoardController::convertOfficeToPdf(const QMimeData *inputMimeData)
+{
+    QMimeData* outputMimeData = new QMimeData();
+
+    if (!inputMimeData || !inputMimeData->hasUrls()) {
+        return outputMimeData;
+    }
+
+    const QStringList wordExtensions = {".doc", ".docx", ".dot", ".dotx"};
+    const QStringList excelExtensions = {".xls", ".xlsx", ".xlsm", ".xlt", ".xltx"};
+    const QStringList powerpointExtensions = {".ppt", ".pptx", ".pps", ".ppsx", ".pot", ".potx"};
+
+    QString tempDir = QDir::tempPath();
+    QList<QUrl> inputUrls = inputMimeData->urls();
+    QList<QUrl> outputUrls;
+
+    for (const QUrl& url : inputUrls) {
+        QString filePath = url.toLocalFile();
+        if (filePath.isEmpty()) {
+            outputUrls << url;
+            continue;
+        }
+
+        QFileInfo fileInfo(filePath);
+        QString extension = fileInfo.suffix().toLower();
+        QString outputPdfPath;
+
+        bool isOfficeFile = (wordExtensions.contains("." + extension) ||
+                             excelExtensions.contains("." + extension) ||
+                             powerpointExtensions.contains("." + extension));
+
+        if (!isOfficeFile) {
+            outputUrls << url;
+            continue;
+        }
+
+        QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss_zzz");
+        outputPdfPath = tempDir + "/converted_" + timestamp + ".pdf";
+
+        QString appName;
+        if (wordExtensions.contains("." + extension)) {
+            appName = "Word.Application";
+        } else if (excelExtensions.contains("." + extension)) {
+            appName = "Excel.Application";
+        } else if (powerpointExtensions.contains("." + extension)) {
+            appName = "PowerPoint.Application";
+        }
+
+        QAxObject* officeApp = new QAxObject(appName);
+        if (!officeApp || officeApp->isNull()) {
+            qWarning() << "Failed to create" << appName << "object. Skipping:" << filePath;
+            outputUrls << url;
+            delete officeApp;
+            continue;
+        }
+
+        try {
+            if (appName == "Word.Application") {
+                officeApp->setProperty("Visible", false);
+                QAxObject* documents = officeApp->querySubObject("Documents");
+                // Open with ReadOnly=false, AddToRecentFiles=false, and bypass Protected View
+                QAxObject* doc = documents->querySubObject("Open(const QString&,bool,bool)",
+                                                           filePath, false, false);
+                if (doc) {
+                    doc->dynamicCall("SaveAs2(const QString&, int)", outputPdfPath, 17);
+                    doc->dynamicCall("Close()");
+                    delete doc;
+                }
+                delete documents;
+            }
+            else if (appName == "Excel.Application") {
+                officeApp->setProperty("Visible", false);
+                QAxObject* workbooks = officeApp->querySubObject("Workbooks");
+                // Open with UpdateLinks=0, ReadOnly=false
+                QAxObject* book = workbooks->querySubObject("Open(const QString&,int,bool)",
+                                                            filePath, 0, false);
+                if (book) {
+                    book->dynamicCall("ExportAsFixedFormat(int, const QString&)", 0, outputPdfPath);
+                    book->dynamicCall("Close()");
+                    delete book;
+                }
+                delete workbooks;
+            }
+            else if (appName == "PowerPoint.Application") {
+                QAxObject* presentations = officeApp->querySubObject("Presentations");
+                if (presentations) {
+                    // Using QVariant list for multiple parameters
+                    QVariantList params;
+                    params << QDir::toNativeSeparators(filePath)  // FileName
+                           << false                       // ReadOnly (msoFalse)
+                           << false                       // Untitled (msoFalse)
+                           << false;                      // WithWindow (msoFalse)
+
+                    QAxObject* presentation = presentations->querySubObject(
+                        "Open(const QString&, const bool&, const bool&, const bool&)",
+                        params
+                        );
+
+                    if (!presentation) {
+                        qDebug() << "Failed to open presentation";
+                    }
+                    else {
+                        // Save as PDF (32 is the PpSaveAsFileType enumeration for PDF)
+                        presentation->dynamicCall(
+                            "SaveAs(const QString&, int)",
+                            QDir::toNativeSeparators(outputPdfPath),
+                            32
+                            );
+
+                        // Close presentation
+                        presentation->dynamicCall("Close()");
+                        delete presentation;
+
+                        qDebug() << "Conversion completed successfully. PDF saved to:" << outputPdfPath;
+                    }
+
+                    delete presentations;
+                }
+            }
+
+            outputUrls << QUrl::fromLocalFile(outputPdfPath);
+        }
+        catch (const std::exception& e) {
+            qWarning() << "Conversion failed for" << filePath << ":" << e.what();
+            outputUrls << url;
+        }
+
+        officeApp->dynamicCall("Quit()");
+        delete officeApp;
+    }
+
+    outputMimeData->setUrls(outputUrls);
+    return outputMimeData;
+}
+
 void UBBoardController::changeBackground(bool isDark, UBPageBackground pageBackground)
 {
     bool currentIsDark = mActiveScene->isDarkBackground();
@@ -2597,11 +2734,13 @@ void UBBoardController::processMimeData(const QMimeData* pMimeData, const QPoint
 
     if (pMimeData->hasUrls())
     {
-        QList<QUrl> urls = pMimeData->urls();
+        QMimeData* oMimeData = convertOfficeToPdf(pMimeData);
+
+        QList<QUrl> urls = oMimeData->urls();
 
         int index = 0;
 
-        const UBFeaturesMimeData *internalMimeData = qobject_cast<const UBFeaturesMimeData*>(pMimeData);
+        const UBFeaturesMimeData *internalMimeData = qobject_cast<const UBFeaturesMimeData*>(oMimeData);
         bool internalData = false;
         if (internalMimeData) {
             internalData = true;

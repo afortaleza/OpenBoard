@@ -77,7 +77,6 @@ UBApplicationController* UBApplication::applicationController = 0;
 UBBoardController* UBApplication::boardController = 0;
 UBWebController* UBApplication::webController = 0;
 UBDocumentController* UBApplication::documentController = 0;
-UBPenController* UBApplication::penController = nullptr;
 
 UBMainWindow* UBApplication::mainWindow = 0;
 
@@ -337,9 +336,6 @@ int UBApplication::exec(const QString& pFileToImport)
     connect(mainWindow->actionQuit, SIGNAL(triggered()), this, SLOT(closing()));
     connect(mainWindow, SIGNAL(closeEvent_Signal(QCloseEvent*)), this, SLOT(closeEvent(QCloseEvent*)));
 
-    // Load Pen
-    penController = UBPenController::getInstance();
-
     boardController = new UBBoardController(mainWindow);
     boardController->init();
 
@@ -427,8 +423,8 @@ int UBApplication::exec(const QString& pFileToImport)
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
 
     // Load pen SDK
-    penController->loadPenSDK();
-    penController->connect();
+    // UBPenController::getInstance()->loadPenSDK();
+    // UBPenController::getInstance()->connect();
 
     return QApplication::exec();
 }
@@ -748,13 +744,11 @@ void UBApplication::cleanup()
     if (boardController) delete boardController;
     if (webController) delete webController;
     if (documentController) delete documentController;
-    if (penController) delete penController;
 
     applicationController = NULL;
     boardController = NULL;
     webController = NULL;
     documentController = NULL;
-    penController = NULL;
 }
 
 QString UBApplication::urlFromHtml(QString html)

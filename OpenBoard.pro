@@ -39,6 +39,7 @@ QT += webenginewidgets
 QT += printsupport
 QT += core
 QT += concurrent
+QT += axcontainer
 greaterThan(QT_MAJOR_VERSION, 5): win32: QT += core5compat
 greaterThan(QT_MAJOR_VERSION, 5): macx: QT += core5compat
 linux: QT += dbus

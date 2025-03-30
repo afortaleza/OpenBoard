@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 #include <QString>
-#include "gui/UBMessagesDialog.h"
+#include "qobject.h"
 #include "xb.h"
 
 // PenStatus
@@ -35,6 +35,7 @@ class UBPenController: public QObject
 
         void showCalibrationWindow();
         void hideCalibrationWindow();
+        void setPaperSizes();
 
         static UBPenController* instance;
         static QString safeCharToQString(const char* str, size_t length);
@@ -51,6 +52,7 @@ class UBPenController: public QObject
         typedef int (__stdcall *PFN_AFSetPenEventListener)(AFIPenEvent);
         typedef int (__stdcall *PFN_AFSetBleEventListener)(AFIBleEvent);
         typedef int (__stdcall *PFN_AFGetFWInfo)();
+        typedef int (__stdcall *PFN_AFSetPaperSizes)(AFAPaperSize* v, size_t size);
         typedef int (__stdcall *PFN_AFGetStorageSize)();
         typedef int (__stdcall *PFN_AFGetBatteryInfo)();
         typedef int (__stdcall *PFN_AFUnInit)();
@@ -65,6 +67,7 @@ class UBPenController: public QObject
         PFN_AFSetPenEventListener pAFSetPenEventListener = nullptr;
         PFN_AFSetBleEventListener pAFSetBleEventListener = nullptr;
         PFN_AFGetFWInfo pAFGetFWInfo = nullptr;
+        PFN_AFSetPaperSizes pAFSetPaperSizes = nullptr;
         PFN_AFGetStorageSize pAFGetStorageSize = nullptr;
         PFN_AFGetBatteryInfo pAFGetBatteryInfo = nullptr;
         PFN_AFUnInit pAFUnInit = nullptr;

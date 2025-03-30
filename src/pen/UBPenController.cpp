@@ -53,6 +53,7 @@ void UBPenController::loadPenSDK()
     pAFSetPenEventListener = (PFN_AFSetPenEventListener)GetProcAddress(hPenSDK, "AFSetPenEventListener");
     pAFSetBleEventListener = (PFN_AFSetBleEventListener)GetProcAddress(hPenSDK, "AFSetBleEventListener");
     pAFGetFWInfo = (PFN_AFGetFWInfo)GetProcAddress(hPenSDK, "AFGetFWInfo");
+    pAFSetPaperSizes = (PFN_AFSetPaperSizes)GetProcAddress(hPenSDK, "AFSetPaperSizes");
     pAFGetStorageSize = (PFN_AFGetStorageSize)GetProcAddress(hPenSDK, "AFGetStorageSize");
     pAFGetBatteryInfo = (PFN_AFGetBatteryInfo)GetProcAddress(hPenSDK, "AFGetBatteryInfo");
     pAFUnInit = (PFN_AFUnInit)GetProcAddress(hPenSDK, "AFUnInit");
@@ -61,23 +62,24 @@ void UBPenController::loadPenSDK()
 
     if (!pAFInit || !pAFConnect || !pAFDisConnect || !pAFScanStart ||
         !pAFScanStop || !pAFSetPenEventListener || !pAFSetBleEventListener ||
-        !pAFGetFWInfo || !pAFGetStorageSize || !pAFGetBatteryInfo ||
+        !pAFGetFWInfo || !pAFSetPaperSizes || !pAFGetStorageSize || !pAFGetBatteryInfo ||
         !pAFUnInit || !pAFGetDotsCount || !pAFClearDots) {
         qWarning() << "Failed to load one or more SDK functions";
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
-
-    if (pAFInit() != 0) {
-        qWarning() << "Failed to initialize SDK";
-        FreeLibrary(hPenSDK);
-        hPenSDK = nullptr;
-    }
     else {
-        pAFSetBleEventListener(bleEventCallback);
-        pAFSetPenEventListener(penEventCallback);
-
-        qInfo() << "SDK successfully initialized";
+        if (pAFInit() != 0) {
+            qWarning() << "Failed to initialize SDK";
+            FreeLibrary(hPenSDK);
+            hPenSDK = nullptr;
+        }
+        else {
+            pAFSetBleEventListener(bleEventCallback);
+            pAFSetPenEventListener(penEventCallback);
+            setPaperSizes();
+            qInfo() << "SDK successfully initialized";
+        }
     }
 }
 
@@ -107,6 +109,41 @@ void UBPenController::hideCalibrationWindow()
 {
     delete penCalibrationWindow;
     penCalibrationWindow = nullptr;
+}
+
+void UBPenController::setPaperSizes()
+{
+    // Create paper size structures
+    AFAPaperSize a5p = {1, 10000, 4960, 7040, 1};
+    AFAPaperSize aboard = {65600, 65601, 28913, 22772, 1};
+    AFAPaperSize sp = {77649, 77650, 25080 * 3, 30096 * 2, 2};
+
+    // Create vector of paper sizes
+    std::vector<AFAPaperSize> paperSizes;
+    paperSizes.push_back(a5p);
+    paperSizes.push_back(sp);
+    paperSizes.push_back(aboard);
+
+    // Set flipmode if necessary (equivalent to C# aboard.flipmode = 1)
+    // Note: AFAPaperSize doesn't have a flipmode field in the provided xb.h
+    // If this is needed, the struct would need to be extended
+
+    try {
+        // Call AFSetPaperSizes with the vector data
+        int ret = getInstance()->pAFSetPaperSizes(
+            paperSizes.data(),          // Pointer to the array of AFAPaperSize structs
+            paperSizes.size()           // Number of elements in the array
+        );
+
+        if (ret != RTN_CODE_OK) {
+            // Handle error if needed
+            qCritical() << "Failed to set paper sizes";
+        }
+    }
+    catch (const std::exception& e) {
+        // Error handling equivalent to C# MessageBox
+        qCritical() << "Error setting paper sizes: " << e.what();
+    }
 }
 
 QString UBPenController::safeCharToQString(const char *str, size_t length)
@@ -139,7 +176,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
 
                 QMetaObject::invokeMethod(QApplication::instance(), []() {
                     emit getInstance()->connected();
-                    getInstance()->showCalibrationWindow();
+                    // getInstance()->showCalibrationWindow();
                 }, Qt::QueuedConnection);
             }
             qInfo() << "Connected!";
