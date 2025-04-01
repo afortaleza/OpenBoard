@@ -3,20 +3,23 @@
 
 #include <Windows.h>
 #include <QString>
+#include "pen/UBVirtualScreen.h"
 #include "qobject.h"
 #include "xb.h"
 
 // PenTipStatus
 enum PenTipStatus { PenUp, PenDown, PenMove };
+enum CalibrationStatus { NotCalibrated, CalibratingP1, CalibratingP2, Calibrated };
 
 class UBPenController: public QObject
 {
     Q_OBJECT
 
     public:
+        UBPenController();
         ~UBPenController();
-        static UBPenController* getInstance();  // Method to get the singleton instance
         PenTipStatus penTipStatus = PenUp;
+        CalibrationStatus calibrationStatus = NotCalibrated;
         void showMessageDialog();
         void hideMessageDialog();
         void loadPenSDK();
@@ -29,15 +32,8 @@ class UBPenController: public QObject
         void disconnected();
 
     private:
-        UBPenController();
-        UBPenController(const UBPenController&) = delete;
-        UBPenController& operator=(const UBPenController&) = delete;
-
-        void showCalibrationWindow();
-        void hideCalibrationWindow();
         void setPaperSizes();
 
-        static UBPenController* instance;
         static QString safeCharToQString(const char* str, size_t length);
 
         static bool __stdcall bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* data, int len);

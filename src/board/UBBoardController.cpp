@@ -481,9 +481,9 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
 
-    connect(UBPenController::getInstance(), SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
-    connect(UBPenController::getInstance(), SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
-    connect(UBPenController::getInstance(), SIGNAL(disconnected()), this, SLOT(penBluetoothDisconnected()));
+    connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
+    connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
+    connect(UBApplication::penController, SIGNAL(disconnected()), this, SLOT(penBluetoothDisconnected()));
 }
 
 void UBBoardController::startScript()

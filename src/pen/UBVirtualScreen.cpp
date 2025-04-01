@@ -1,80 +1,67 @@
 #include "UBVirtualScreen.h"
 #include "UBMouseOperations.h"
 #include "UBPenController.h"
+#include "../core/UBApplication.h"
 #include <cmath>
 
 // Private constructor implementation
 UBVirtualScreen::UBVirtualScreen() {
-    calibrationStatus = CalibrationStatus::NOT_CALIBRATED;
-    drag_threshold_ = 100;
-    connected = false;
-    p1x_ = p1y_ = p2x_ = p2y_ = 0;
-    p0x_ = p0y_ = 0;
-    qx_ = qy_ = 0.0;
-    v_width_ = v_height_ = 0;
-    down_px_ = down_py_ = 0;
-    screen_height_ = screen_width_ = 0;
-}
-
-void UBVirtualScreen::calibrate() {
-    calibrationStatus = CalibrationStatus::CALIBRATING_P1;
+    drag_threshold = 100;
+    p1x = p1y = p2x = p2y = 0;
+    p0x = p0y = 0;
+    qx = qy = 0.0;
+    v_width = v_height = 0;
+    down_px = down_py = 0;
+    screen_height = screen_width = 0;
 }
 
 void UBVirtualScreen::setScreenDimensions(int width, int height) {
-    screen_width_ = width;
-    screen_height_ = height;
+    screen_width = width;
+    screen_height = height;
 }
 
 void UBVirtualScreen::calibrationSetFirstPoint(int pX, int pY) {
-    p1x_ = pX;
-    p1y_ = pY;
-    calibrationStatus = CalibrationStatus::CALIBRATING_P2;
+    p1x = pX;
+    p1y = pY;
 }
 
 void UBVirtualScreen::calibrationSetSecondPoint(int pX, int pY) {
-    p2x_ = pX;
-    p2y_ = pY;
+    p2x = pX;
+    p2y = pY;
     setCalibration();
-    calibrationStatus = CalibrationStatus::CALIBRATED;
-}
-
-bool UBVirtualScreen::isInvertedAxis() {
-    bool screenIsWide = (screen_width_ / screen_height_) >= 1;
-    bool paperIsWide = (std::abs(p1x_ - p2x_) / std::abs(p1y_ - p2y_)) >= 1;
-    return screenIsWide && !paperIsWide;
 }
 
 void UBVirtualScreen::setCalibration() {
     // Calculate virtual screen width and height using the offset p1
-    int offsetWidth = (p2x_ - p1x_) * 2;
-    int offsetHeight = (p1y_ - p2y_) * 2;
+    int offsetWidth = (p2x - p1x) * 2;
+    int offsetHeight = (p1y - p2y) * 2;
 
     // Calculate 10% of vWidth and vHeight
     int tenPercentOfWidth = static_cast<int>(std::round(static_cast<double>(offsetWidth) / 8));
     int tenPercentOfHeight = static_cast<int>(std::round(static_cast<double>(offsetHeight) / 8));
 
     // Calculate vWidth and vHeight adding 20% to compensate for offset
-    v_width_ = offsetWidth + (tenPercentOfWidth * 2);
-    v_height_ = offsetHeight + (tenPercentOfHeight * 2);
+    v_width = offsetWidth + (tenPercentOfWidth * 2);
+    v_height = offsetHeight + (tenPercentOfHeight * 2);
 
     // Remove the offset from p1
-    p1x_ = p1x_ - tenPercentOfWidth;
-    p1y_ = p1y_ + tenPercentOfHeight;
+    p1x = p1x - tenPercentOfWidth;
+    p1y = p1y + tenPercentOfHeight;
 
     // Set virtual screen p0 (origin)
-    p0x_ = p1x_;
-    p0y_ = p1y_ - v_height_;
+    p0x = p1x;
+    p0y = p1y - v_height;
 
     // Calculate proportion quotients between real and virtual screen
-    qx_ = static_cast<double>(screen_width_) / v_width_;
-    qy_ = static_cast<double>(screen_height_) / v_height_;
+    qx = static_cast<double>(screen_width) / v_width;
+    qy = static_cast<double>(screen_height) / v_height;
 }
 
 void UBVirtualScreen::dotToMouse(int pX, int pY) {
-    switch (UBPenController::getInstance()->penTipStatus) {
+    switch (UBApplication::penController->penTipStatus) {
     case PenDown:
-        down_px_ = pX;
-        down_py_ = pY;
+        down_px = pX;
+        down_py = pY;
         UBMouseOperations::IsDragging = false;
         break;
     case PenMove:
@@ -85,7 +72,7 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
             }
         } else {
             auto [screenX, screenY] = getComputerScreenDot(pX, pY);
-            UBMouseOperations::Drag(screenX, screenY, screen_width_, screen_height_);
+            UBMouseOperations::Drag(screenX, screenY, screen_width, screen_height);
         }
         break;
     case PenUp:
@@ -100,16 +87,16 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
 }
 
 std::tuple<int, int> UBVirtualScreen::getComputerScreenDot(int pX, int pY) {
-    if ((pX > p0x_ && pX < p0x_ + v_width_) &&
-        (pY > p0y_ && pY < p0y_ + v_height_)) {
-        int pScreenX = static_cast<int>((pX - p0x_) * qx_);
-        int pScreenY = static_cast<int>((pY - p0y_) * qy_);
+    if ((pX > p0x && pX < p0x + v_width) &&
+        (pY > p0y && pY < p0y + v_height)) {
+        int pScreenX = static_cast<int>((pX - p0x) * qx);
+        int pScreenY = static_cast<int>((pY - p0y) * qy);
         return std::make_tuple(pScreenX, pScreenY);
     }
     return std::make_tuple(-1, -1);
 }
 
 bool UBVirtualScreen::enteredDragMode(int pX, int pY) {
-    return (std::abs(down_px_ - pX) > drag_threshold_ ||
-            std::abs(down_py_ - pY) > drag_threshold_);
+    return (std::abs(down_px - pX) > drag_threshold ||
+            std::abs(down_py - pY) > drag_threshold);
 }

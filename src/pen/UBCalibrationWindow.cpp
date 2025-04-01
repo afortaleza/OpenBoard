@@ -2,7 +2,8 @@
 #include <QPainter>
 #include <QScreen>
 #include <QGuiApplication>
-#include "UBVirtualScreen.h"
+#include "UBPenController.h"
+#include "../core/UBApplication.h"
 
 UBCalibrationWindow::UBCalibrationWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,11 +23,11 @@ void UBCalibrationWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    if (UBVirtualScreen::getInstance().calibrationStatus == CalibrationStatus::CALIBRATING_P1)
+    if (UBApplication::penController->calibrationStatus == CalibratingP1)
     {
         drawBottomLeftCross(painter);
     }
-    else if (UBVirtualScreen::getInstance().calibrationStatus == CalibrationStatus::CALIBRATING_P2)
+    else if (UBApplication::penController->calibrationStatus == CalibratingP2)
     {
         drawCenterCross(painter);
     }

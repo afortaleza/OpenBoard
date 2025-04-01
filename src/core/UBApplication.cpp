@@ -77,6 +77,7 @@ UBApplicationController* UBApplication::applicationController = 0;
 UBBoardController* UBApplication::boardController = 0;
 UBWebController* UBApplication::webController = 0;
 UBDocumentController* UBApplication::documentController = 0;
+UBPenController* UBApplication::penController = nullptr;
 
 UBMainWindow* UBApplication::mainWindow = 0;
 
@@ -423,8 +424,9 @@ int UBApplication::exec(const QString& pFileToImport)
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
 
     // Load pen SDK
-    UBPenController::getInstance()->loadPenSDK();
-    UBPenController::getInstance()->connect();
+    penController = new UBPenController();
+    penController->loadPenSDK();
+    penController->connect();
 
     return QApplication::exec();
 }

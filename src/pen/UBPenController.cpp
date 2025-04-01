@@ -8,33 +8,29 @@
 #include "UBVirtualScreen.h"
 #include <QMessageBox>
 
-// Initialize the static instance pointer
-UBPenController* UBPenController::instance = nullptr;
 UBCalibrationWindow* penCalibrationWindow = nullptr;
+UBVirtualScreen* virtualScreen = nullptr;
 
 UBPenController::UBPenController() {
-}
-
-UBPenController* UBPenController::getInstance() {
-    if (instance == nullptr) {
-        instance = new UBPenController();
-    }
-    return instance;
+    virtualScreen = new UBVirtualScreen();
 }
 
 UBPenController::~UBPenController() {
-    UBPenController::getInstance()->pAFUnInit();
+    pAFUnInit();
+
+    if (penCalibrationWindow) delete penCalibrationWindow;
+    penCalibrationWindow = nullptr;
+
+    if (virtualScreen) delete virtualScreen;
+    virtualScreen = nullptr;
 
     if (hPenSDK) {
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
-
-    instance = nullptr;
 }
 
-void UBPenController::loadPenSDK()
-{
+void UBPenController::loadPenSDK() {
     QString dllPath = QCoreApplication::applicationDirPath() + "/xbc.dll";
     if (!QFileInfo::exists(dllPath)) {
         qWarning() << "Error: xbc.dll not found in application directory";
@@ -85,10 +81,10 @@ void UBPenController::loadPenSDK()
 
 void UBPenController::connect()
 {
-    getInstance()->pAFScanStop();
+    pAFScanStop();
 
     try {
-        int ret = getInstance()->pAFScanStart();
+        int ret = pAFScanStart();
         if (ret != -1) {
             emit scanningAndConnecting();
         }
@@ -97,7 +93,7 @@ void UBPenController::connect()
     }
 }
 
-void UBPenController::showCalibrationWindow()
+void showCalibrationWindow()
 {
     if (penCalibrationWindow == nullptr)
         penCalibrationWindow = new UBCalibrationWindow();
@@ -105,9 +101,9 @@ void UBPenController::showCalibrationWindow()
     penCalibrationWindow->show();
 }
 
-void UBPenController::hideCalibrationWindow()
+void hideCalibrationWindow()
 {
-    delete penCalibrationWindow;
+    if (penCalibrationWindow) delete penCalibrationWindow;
     penCalibrationWindow = nullptr;
 }
 
@@ -173,47 +169,48 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         if (device->name && device->namelen > 0) {
             QString deviceName = safeCharToQString(device->name, device->namelen);
             qInfo() << "Found device: " + deviceName + ". Connecting";
-            UBPenController::getInstance()->pAFConnect(deviceName.toStdWString().c_str());
+            UBApplication::penController->pAFConnect(deviceName.toStdWString().c_str());
         }
         break;
     }
     case BLE_EVENT_STATUS: {
-        AFBLEDeviceStatus* status = (AFBLEDeviceStatus*)data;
-        switch (status->status) {
-        case PEN_CONNECTION_SUCCESS:
-            emit getInstance()->connected();
-            qInfo() << "Connected!";
+        AFBLEDeviceStatus* deviceStatus = (AFBLEDeviceStatus*)data;
 
-            if (UBVirtualScreen::getInstance().calibrationStatus == NOT_CALIBRATED)
-            {
-                UBVirtualScreen::getInstance().calibrationStatus = CALIBRATING_P1;
+        switch (deviceStatus->status) {
+            case PEN_CONNECTION_SUCCESS:
+                emit UBApplication::penController->connected();
+                qInfo() << "Connected!";
 
-                // Show calibration window on GUI thread
-                QMetaObject::invokeMethod(QApplication::instance(), []() {
-                    getInstance()->showCalibrationWindow();
-                }, Qt::QueuedConnection);
+                if (UBApplication::penController->calibrationStatus == NotCalibrated)
+                {
+                    UBApplication::penController->calibrationStatus = CalibratingP1;
+
+                    // Show calibration window on GUI thread
+                    QMetaObject::invokeMethod(QApplication::instance(), []() {
+                        showCalibrationWindow();
+                    }, Qt::QueuedConnection);
+                }
+                break;
+            case PEN_CONNECTION_FAILURE:
+                qInfo() << "Connection failed";
+                break;
+            case PEN_DISCONNECTED:
+                emit UBApplication::penController->disconnected();
+                qInfo() << "Disconnected from device";
+                break;
+            case PEN_CONNECTION_TRY:
+                qInfo() << "Connection try";
+                break;
+            case PEN_CONNECTING:
+                qInfo() << "Pen connecting";
+                break;
+            case PEN_DISCONNECTING:
+                qInfo() << "Pen disconnecting";
+                break;
+            case PEN_CONNECTION_UNKNOWN:
+                UBApplication::penController->pAFDisConnect();
+                break;
             }
-            break;
-        case PEN_CONNECTION_FAILURE:
-            qInfo() << "Connection failed";
-            break;
-        case PEN_DISCONNECTED:
-            emit getInstance()->disconnected();
-            qInfo() << "Disconnected from device";
-            break;
-        case PEN_CONNECTION_TRY:
-            qInfo() << "Connection try";
-            break;
-        case PEN_CONNECTING:
-            qInfo() << "Pen connecting";
-            break;
-        case PEN_DISCONNECTING:
-            qInfo() << "Pen disconnecting";
-            break;
-        case PEN_CONNECTION_UNKNOWN:
-            getInstance()->pAFDisConnect();
-            break;
-        }
         break;
     }
     }
@@ -228,54 +225,56 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
 
         qInfo() << "Dot at X: " << dot->x << ", Y: " << dot->y;
 
-        if (UBVirtualScreen::getInstance().calibrationStatus == CALIBRATED) {
+        if (UBApplication::penController->calibrationStatus == Calibrated) {
 
             // Set pen status
             if (dot->type == 1) {
-                getInstance()->penTipStatus = (getInstance()->penTipStatus == PenUp) ? PenDown : PenMove;
+                UBApplication::penController->penTipStatus = (UBApplication::penController->penTipStatus == PenUp) ? PenDown : PenMove;
             }
             else if (dot->type == 2) {
-                getInstance()->penTipStatus = PenUp;
+                UBApplication::penController->penTipStatus = PenUp;
             }
 
+            qInfo() << "[PEN] - Mouse input";
             // Converts dot to mouse action
-            UBVirtualScreen::getInstance().dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
+            virtualScreen->dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
         }
         else {
             qInfo() << "[PEN] - Calibrating";
-            switch (UBVirtualScreen::getInstance().calibrationStatus) {
-            case NOT_CALIBRATED:
-                qInfo() << "[PEN] - Not calibrated";
-                break;
-            case CALIBRATING_P1:
-                qInfo() << "[PEN] - P1 - Calibrating";
-                if (dot->type == 2) {
-                    qInfo() << "[PEN] - P1 - At x: " << dot->x << ", y: " << dot->y;
-                    UBVirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+            // For calibration only considers pen up
+            if (dot->type == 2)
+            {
+                switch (UBApplication::penController->calibrationStatus) {
+                    case CalibratingP1:
+                        qInfo() << "[PEN] - P1 - At x: " << dot->x << ", y: " << dot->y;
+                        virtualScreen->calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                        UBApplication::penController->calibrationStatus = CalibratingP2;
 
-                    QMetaObject::invokeMethod(QApplication::instance(), []() {
-                        qInfo() << "[PEN] - P1 - Calibrated, updating UI";
-                        // Update UI
-                        penCalibrationWindow->update();
-                    }, Qt::QueuedConnection);
-                }
-                break;
-            case CALIBRATING_P2:
-                qInfo() << "[PEN] - P2 - Calibrating";
-                if (dot->type == 2) {
-                    qInfo() << "[PEN] - P2 - At x: " << dot->x << ", y: " << dot->y;
-                    UBVirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                        QMetaObject::invokeMethod(QApplication::instance(), []() {
+                            qInfo() << "[PEN] - P1 - Updating UI";
+                            // Update UI
+                            penCalibrationWindow->update();
+                        }, Qt::QueuedConnection);
+                        break;
+                    case CalibratingP2:
+                        qInfo() << "[PEN] - P2 - Calibrating";
+                        if (dot->type == 2) {
+                            qInfo() << "[PEN] - P2 - At x: " << dot->x << ", y: " << dot->y;
+                            virtualScreen->calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+                            UBApplication::penController->calibrationStatus = Calibrated;
 
-                    QMetaObject::invokeMethod(QApplication::instance(), []() {
-                        qInfo() << "[PEN] - P2 - Calibrated, updating UI";
-                        // Hide calibration window
-                        getInstance()->hideCalibrationWindow();
-                        UBApplication::showMessage("Caneta calibrada");
-                    }, Qt::QueuedConnection);
+                            QMetaObject::invokeMethod(QApplication::instance(), []() {
+                                qInfo() << "[PEN] - P2 - Updating UI";
+                                // Hide calibration window
+                                hideCalibrationWindow();
+                                UBApplication::showMessage("Caneta calibrada");
+                            }, Qt::QueuedConnection);
+                        }
+                        break;
+                    default:
+                        qInfo() << "[PEN] - Ignoring calibration dot";
+                        break;
                 }
-                break;
-            default:
-                break;
             }
         }
     }
