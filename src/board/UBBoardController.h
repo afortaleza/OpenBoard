@@ -299,6 +299,7 @@ class UBBoardController : public UBDocumentContainer
         // Pen bluetooth slots
         void penBluetoothConnecting();
         void penBluetoothConnected();
+        void penBluetoothDisconnected();
 
     private:
         void initBackgroundGridSize();

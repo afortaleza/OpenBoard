@@ -483,6 +483,7 @@ void UBBoardController::connectToolbar()
 
     connect(UBPenController::getInstance(), SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBPenController::getInstance(), SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
+    connect(UBPenController::getInstance(), SIGNAL(disconnected()), this, SLOT(penBluetoothDisconnected()));
 }
 
 void UBBoardController::startScript()
@@ -529,6 +530,13 @@ void UBBoardController::penBluetoothConnecting()
 }
 
 void UBBoardController::penBluetoothConnected()
+{
+    penBluetoothConnectingIcon->stop();
+    QIcon icon(":/images/toolbar/pen-connected.png");
+    mMainWindow->actionPenBluetooth->setIcon(icon);
+}
+
+void UBBoardController::penBluetoothDisconnected()
 {
     penBluetoothConnectingIcon->stop();
     QIcon icon(":/images/toolbar/pen-connected.png");

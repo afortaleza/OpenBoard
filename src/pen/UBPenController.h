@@ -6,8 +6,8 @@
 #include "qobject.h"
 #include "xb.h"
 
-// PenStatus
-enum PenStatus { PenUp, PenDown, PenMove };
+// PenTipStatus
+enum PenTipStatus { PenUp, PenDown, PenMove };
 
 class UBPenController: public QObject
 {
@@ -16,7 +16,7 @@ class UBPenController: public QObject
     public:
         ~UBPenController();
         static UBPenController* getInstance();  // Method to get the singleton instance
-        PenStatus penStatus = PenUp;
+        PenTipStatus penTipStatus = PenUp;
         void showMessageDialog();
         void hideMessageDialog();
         void loadPenSDK();

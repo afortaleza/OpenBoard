@@ -113,35 +113,46 @@ void UBPenController::hideCalibrationWindow()
 
 void UBPenController::setPaperSizes()
 {
-    // Create paper size structures
-    AFAPaperSize a5p = {1, 10000, 4960, 7040, 1};
-    AFAPaperSize aboard = {65600, 65601, 28913, 22772, 1};
-    AFAPaperSize sp = {77649, 77650, 25080 * 3, 30096 * 2, 2};
+    AFAPaperSize* pArrs;
+    int count = 3;
+    pArrs = new AFAPaperSize[count];
 
-    // Create vector of paper sizes
-    std::vector<AFAPaperSize> paperSizes;
-    paperSizes.push_back(a5p);
-    paperSizes.push_back(sp);
-    paperSizes.push_back(aboard);
+    AFAPaperSize a5p;
+    a5p.pageFrom = 1;
+    a5p.pageTo = 10000;
+    a5p.width = 4960;
+    a5p.height = 7040;
+    a5p.bookNum = 1;
+    a5p.flipmode = 0;
+    pArrs[0] = a5p;
 
-    // Set flipmode if necessary (equivalent to C# aboard.flipmode = 1)
-    // Note: AFAPaperSize doesn't have a flipmode field in the provided xb.h
-    // If this is needed, the struct would need to be extended
+    AFAPaperSize sp;
+    sp.pageFrom = 77649;
+    sp.pageTo = 77650;
+    sp.width = 25080 * 3;
+    sp.height = 30096 * 2;
+    sp.bookNum = 2;
+    sp.flipmode = 0;
+    pArrs[1] = sp;
+
+    AFAPaperSize aboard;
+    aboard.pageFrom = 65600;
+    aboard.pageTo = 65601;
+    aboard.width = 28913;
+    aboard.height = 22772;
+    aboard.bookNum = 1;
+    aboard.flipmode = 1;
+    pArrs[2] = aboard;
 
     try {
-        // Call AFSetPaperSizes with the vector data
-        int ret = getInstance()->pAFSetPaperSizes(
-            paperSizes.data(),          // Pointer to the array of AFAPaperSize structs
-            paperSizes.size()           // Number of elements in the array
-        );
+        int ret = this->pAFSetPaperSizes(pArrs, count);
 
-        if (ret != RTN_CODE_OK) {
+        if (ret != 0) {
             // Handle error if needed
             qCritical() << "Failed to set paper sizes";
         }
     }
     catch (const std::exception& e) {
-        // Error handling equivalent to C# MessageBox
         qCritical() << "Error setting paper sizes: " << e.what();
     }
 }
@@ -170,27 +181,37 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         AFBLEDeviceStatus* status = (AFBLEDeviceStatus*)data;
         switch (status->status) {
         case PEN_CONNECTION_SUCCESS:
+            emit getInstance()->connected();
+            qInfo() << "Connected!";
+
             if (UBVirtualScreen::getInstance().calibrationStatus == NOT_CALIBRATED)
             {
                 UBVirtualScreen::getInstance().calibrationStatus = CALIBRATING_P1;
 
+                // Show calibration window on GUI thread
                 QMetaObject::invokeMethod(QApplication::instance(), []() {
-                    emit getInstance()->connected();
-                    // getInstance()->showCalibrationWindow();
+                    getInstance()->showCalibrationWindow();
                 }, Qt::QueuedConnection);
             }
-            qInfo() << "Connected!";
             break;
         case PEN_CONNECTION_FAILURE:
             qInfo() << "Connection failed";
             break;
         case PEN_DISCONNECTED:
+            emit getInstance()->disconnected();
             qInfo() << "Disconnected from device";
             break;
         case PEN_CONNECTION_TRY:
+            qInfo() << "Connection try";
+            break;
         case PEN_CONNECTING:
+            qInfo() << "Pen connecting";
+            break;
         case PEN_DISCONNECTING:
+            qInfo() << "Pen disconnecting";
+            break;
         case PEN_CONNECTION_UNKNOWN:
+            getInstance()->pAFDisConnect();
             break;
         }
         break;
@@ -205,37 +226,48 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
         // Convert raw pointer to structure
         AFEDot* dot = (AFEDot*)data;
 
+        qInfo() << "Dot at X: " << dot->x << ", Y: " << dot->y;
+
         if (UBVirtualScreen::getInstance().calibrationStatus == CALIBRATED) {
 
             // Set pen status
             if (dot->type == 1) {
-                getInstance()->penStatus = (getInstance()->penStatus == PenUp) ? PenDown : PenMove;
+                getInstance()->penTipStatus = (getInstance()->penTipStatus == PenUp) ? PenDown : PenMove;
             }
             else if (dot->type == 2) {
-                getInstance()->penStatus = PenUp;
+                getInstance()->penTipStatus = PenUp;
             }
 
             // Converts dot to mouse action
             UBVirtualScreen::getInstance().dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
         }
         else {
+            qInfo() << "[PEN] - Calibrating";
             switch (UBVirtualScreen::getInstance().calibrationStatus) {
             case NOT_CALIBRATED:
+                qInfo() << "[PEN] - Not calibrated";
                 break;
             case CALIBRATING_P1:
+                qInfo() << "[PEN] - P1 - Calibrating";
                 if (dot->type == 2) {
+                    qInfo() << "[PEN] - P1 - At x: " << dot->x << ", y: " << dot->y;
                     UBVirtualScreen::getInstance().calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
+
                     QMetaObject::invokeMethod(QApplication::instance(), []() {
+                        qInfo() << "[PEN] - P1 - Calibrated, updating UI";
                         // Update UI
                         penCalibrationWindow->update();
                     }, Qt::QueuedConnection);
                 }
                 break;
             case CALIBRATING_P2:
+                qInfo() << "[PEN] - P2 - Calibrating";
                 if (dot->type == 2) {
+                    qInfo() << "[PEN] - P2 - At x: " << dot->x << ", y: " << dot->y;
                     UBVirtualScreen::getInstance().calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
 
                     QMetaObject::invokeMethod(QApplication::instance(), []() {
+                        qInfo() << "[PEN] - P2 - Calibrated, updating UI";
                         // Hide calibration window
                         getInstance()->hideCalibrationWindow();
                         UBApplication::showMessage("Caneta calibrada");

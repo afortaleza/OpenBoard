@@ -71,7 +71,7 @@ void UBVirtualScreen::setCalibration() {
 }
 
 void UBVirtualScreen::dotToMouse(int pX, int pY) {
-    switch (UBPenController::getInstance()->penStatus) {
+    switch (UBPenController::getInstance()->penTipStatus) {
     case PenDown:
         down_px_ = pX;
         down_py_ = pY;
