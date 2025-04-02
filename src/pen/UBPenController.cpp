@@ -16,7 +16,6 @@ UBPenController::UBPenController() {
 }
 
 UBPenController::~UBPenController() {
-    pAFUnInit();
 
     if (penCalibrationWindow) delete penCalibrationWindow;
     penCalibrationWindow = nullptr;
@@ -25,7 +24,8 @@ UBPenController::~UBPenController() {
     virtualScreen = nullptr;
 
     if (hPenSDK) {
-        FreeLibrary(hPenSDK);
+        pAFUnInit();
+        // FreeLibrary(hPenSDK); // Crashing when exiting
         hPenSDK = nullptr;
     }
 }

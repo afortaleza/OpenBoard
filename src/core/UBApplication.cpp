@@ -337,6 +337,7 @@ int UBApplication::exec(const QString& pFileToImport)
     connect(mainWindow->actionQuit, SIGNAL(triggered()), this, SLOT(closing()));
     connect(mainWindow, SIGNAL(closeEvent_Signal(QCloseEvent*)), this, SLOT(closeEvent(QCloseEvent*)));
 
+    penController = new UBPenController();
     boardController = new UBBoardController(mainWindow);
     boardController->init();
 
@@ -423,8 +424,6 @@ int UBApplication::exec(const QString& pFileToImport)
     onScreenCountChanged(displayManager->numScreens());
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
 
-    // Load pen SDK
-    penController = new UBPenController();
     penController->loadPenSDK();
     penController->connect();
 
@@ -746,11 +745,13 @@ void UBApplication::cleanup()
     if (boardController) delete boardController;
     if (webController) delete webController;
     if (documentController) delete documentController;
+    if (penController) delete penController;
 
     applicationController = NULL;
     boardController = NULL;
     webController = NULL;
     documentController = NULL;
+    penController = NULL;
 }
 
 QString UBApplication::urlFromHtml(QString html)
