@@ -1,8 +1,8 @@
 #include "UBVirtualScreen.h"
-#include "UBMouseOperations.h"
 #include "UBPenController.h"
 #include "../core/UBApplication.h"
 #include <cmath>
+#include "UBMouseOperations.h"
 
 // Private constructor implementation
 UBVirtualScreen::UBVirtualScreen() {
@@ -58,31 +58,47 @@ void UBVirtualScreen::setCalibration() {
 }
 
 void UBVirtualScreen::dotToMouse(int pX, int pY) {
+    int screenX, screenY;
     switch (UBApplication::penController->penTipStatus) {
-    case PenDown:
-        down_px = pX;
-        down_py = pY;
-        UBMouseOperations::IsDragging = false;
-        break;
-    case PenMove:
-        if (!UBMouseOperations::IsDragging) {
-            if (enteredDragMode(pX, pY)) {
+        case PenDown:
+            qInfo() << "[Pen] Pen Down";
+            /*
+            down_px = pX;
+            down_py = pY;
+            UBMouseOperations::IsDragging = false;
+            */
+            break;
+        case PenMove:
+            qInfo() << "[PEN] Pen Move";
+            std::tuple(screenX, screenY) = getComputerScreenDot(pX, pY);
+            UBMouseOperations::MouseMove(screenX, screenY);
+            /*
+            if (!UBMouseOperations::IsDragging) {
+                if (enteredDragMode(pX, pY)) {
+                    qInfo() << "[PEN] Entered drag mode";
+                    auto [screenX, screenY] = getComputerScreenDot(pX, pY);
+                    // UBMouseOperations::DragStart(screenX, screenY);
+                }
+            } else {
+                qInfo() << "[PEN] Dragging";
                 auto [screenX, screenY] = getComputerScreenDot(pX, pY);
-                UBMouseOperations::DragStart(screenX, screenY);
+                // UBMouseOperations::Drag(screenX, screenY, screen_width, screen_height);
             }
-        } else {
-            auto [screenX, screenY] = getComputerScreenDot(pX, pY);
-            UBMouseOperations::Drag(screenX, screenY, screen_width, screen_height);
-        }
-        break;
-    case PenUp:
-        if (UBMouseOperations::IsDragging) {
-            UBMouseOperations::DragEnd();
-        } else {
-            auto [screenX, screenY] = getComputerScreenDot(pX, pY);
-            UBMouseOperations::LeftClick(screenX, screenY);
-        }
-        break;
+            */
+            break;
+        case PenUp:
+            qInfo() << "[PEN] Drag end";
+            /*
+            if (UBMouseOperations::IsDragging) {
+                qInfo() << "[PEN] Drag end";
+                // UBMouseOperations::DragEnd();
+            } else {
+                auto [screenX, screenY] = getComputerScreenDot(pX, pY);
+                qInfo() << "[PEN] Left click";
+                // UBMouseOperations::LeftClick(screenX, screenY);
+            }
+            */
+            break;
     }
 }
 

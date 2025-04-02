@@ -3,7 +3,6 @@
 
 #include <Windows.h>
 #include <QString>
-#include "pen/UBVirtualScreen.h"
 #include "qobject.h"
 #include "xb.h"
 

@@ -5,6 +5,7 @@
 #include "xb.h"
 #include "UBCalibrationWindow.h"
 #include "../core/UBApplication.h"
+#include "../gui/UBMainWindow.h"
 #include "UBVirtualScreen.h"
 #include <QMessageBox>
 
@@ -13,6 +14,9 @@ UBVirtualScreen* virtualScreen = nullptr;
 
 UBPenController::UBPenController() {
     virtualScreen = new UBVirtualScreen();
+
+    QRect screenGeometry = UBApplication::mainWindow->screen()->geometry();
+    virtualScreen->setScreenDimensions(screenGeometry.width(), screenGeometry.height());
 }
 
 UBPenController::~UBPenController() {
@@ -223,10 +227,7 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
         // Convert raw pointer to structure
         AFEDot* dot = (AFEDot*)data;
 
-        qInfo() << "Dot at X: " << dot->x << ", Y: " << dot->y;
-
         if (UBApplication::penController->calibrationStatus == Calibrated) {
-
             // Set pen status
             if (dot->type == 1) {
                 UBApplication::penController->penTipStatus = (UBApplication::penController->penTipStatus == PenUp) ? PenDown : PenMove;
@@ -235,44 +236,38 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
                 UBApplication::penController->penTipStatus = PenUp;
             }
 
-            qInfo() << "[PEN] - Mouse input";
             // Converts dot to mouse action
             virtualScreen->dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
         }
         else {
-            qInfo() << "[PEN] - Calibrating";
-            // For calibration only considers pen up
+            // Only considers pen up when calibrating
             if (dot->type == 2)
             {
                 switch (UBApplication::penController->calibrationStatus) {
                     case CalibratingP1:
-                        qInfo() << "[PEN] - P1 - At x: " << dot->x << ", y: " << dot->y;
                         virtualScreen->calibrationSetFirstPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
                         UBApplication::penController->calibrationStatus = CalibratingP2;
 
                         QMetaObject::invokeMethod(QApplication::instance(), []() {
-                            qInfo() << "[PEN] - P1 - Updating UI";
                             // Update UI
                             penCalibrationWindow->update();
                         }, Qt::QueuedConnection);
                         break;
                     case CalibratingP2:
-                        qInfo() << "[PEN] - P2 - Calibrating";
                         if (dot->type == 2) {
-                            qInfo() << "[PEN] - P2 - At x: " << dot->x << ", y: " << dot->y;
                             virtualScreen->calibrationSetSecondPoint(static_cast<int>(dot->x), static_cast<int>(dot->y));
                             UBApplication::penController->calibrationStatus = Calibrated;
 
                             QMetaObject::invokeMethod(QApplication::instance(), []() {
-                                qInfo() << "[PEN] - P2 - Updating UI";
-                                // Hide calibration window
                                 hideCalibrationWindow();
-                                UBApplication::showMessage("Caneta calibrada");
+
+                                if (UBApplication::penController->calibrationStatus == Calibrated)
+                                    UBApplication::showMessage("Caneta calibrada");
                             }, Qt::QueuedConnection);
                         }
                         break;
                     default:
-                        qInfo() << "[PEN] - Ignoring calibration dot";
+                        qWarning() << "[PEN] - Ignoring calibration dot";
                         break;
                 }
             }
