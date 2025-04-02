@@ -37,8 +37,8 @@ void UBVirtualScreen::setCalibration() {
     int offsetHeight = (p1y - p2y) * 2;
 
     // Calculate 10% of vWidth and vHeight
-    int tenPercentOfWidth = static_cast<int>(std::round(static_cast<double>(offsetWidth) / 8));
-    int tenPercentOfHeight = static_cast<int>(std::round(static_cast<double>(offsetHeight) / 8));
+    int tenPercentOfWidth = offsetWidth / 8;
+    int tenPercentOfHeight = offsetHeight / 8;
 
     // Calculate vWidth and vHeight adding 20% to compensate for offset
     v_width = offsetWidth + (tenPercentOfWidth * 2);
@@ -53,15 +53,14 @@ void UBVirtualScreen::setCalibration() {
     p0y = p1y - v_height;
 
     // Calculate proportion quotients between real and virtual screen
-    qx = static_cast<double>(screen_width) / v_width;
-    qy = static_cast<double>(screen_height) / v_height;
+    qx = (double)screen_width / v_width;
+    qy = (double)screen_height / v_height;
 }
 
 void UBVirtualScreen::dotToMouse(int pX, int pY) {
     int screenX, screenY;
     switch (UBApplication::penController->penTipStatus) {
         case PenDown:
-            qInfo() << "[Pen] Pen Down";
             /*
             down_px = pX;
             down_py = pY;
@@ -69,7 +68,6 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
             */
             break;
         case PenMove:
-            qInfo() << "[PEN] Pen Move";
             std::tuple(screenX, screenY) = getComputerScreenDot(pX, pY);
             UBMouseOperations::MouseMove(screenX, screenY);
             /*
@@ -87,7 +85,6 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
             */
             break;
         case PenUp:
-            qInfo() << "[PEN] Drag end";
             /*
             if (UBMouseOperations::IsDragging) {
                 qInfo() << "[PEN] Drag end";
@@ -105,8 +102,10 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
 std::tuple<int, int> UBVirtualScreen::getComputerScreenDot(int pX, int pY) {
     if ((pX > p0x && pX < p0x + v_width) &&
         (pY > p0y && pY < p0y + v_height)) {
-        int pScreenX = static_cast<int>((pX - p0x) * qx);
-        int pScreenY = static_cast<int>((pY - p0y) * qy);
+        qInfo() << "Board X,Y: " << pX << "," << pY;
+        int pScreenX = (pX - p0x) * qx;
+        int pScreenY = (pY - p0y) * qy;
+        qInfo() << "Screen X,Y: " << pScreenX << "," << pScreenY;
         return std::make_tuple(pScreenX, pScreenY);
     }
     return std::make_tuple(-1, -1);
