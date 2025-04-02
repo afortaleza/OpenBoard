@@ -1,4 +1,6 @@
-    #include "UBMouseOperations.h"
+#include "UBMouseOperations.h"
+#include "../core/UBApplication.h"
+#include "../gui/UBMainWindow.h";
 
 bool UBMouseOperations::IsDragging = false;
 

@@ -32,6 +32,10 @@ private:
     int screen_height;
     int screen_width;
 
+    // Board max bounds
+    int x_max;
+    int y_max;
+
     // Private methods
     std::tuple<int, int> getComputerScreenDot(int pX, int pY);
     bool enteredDragMode(int pX, int pY);

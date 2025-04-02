@@ -13,6 +13,9 @@ UBVirtualScreen::UBVirtualScreen() {
     v_width = v_height = 0;
     down_px = down_py = 0;
     screen_height = screen_width = 0;
+
+    // Board max bounds
+    x_max = y_max = 0;
 }
 
 void UBVirtualScreen::setScreenDimensions(int width, int height) {
@@ -55,22 +58,29 @@ void UBVirtualScreen::setCalibration() {
     // Calculate proportion quotients between real and virtual screen
     qx = (double)screen_width / v_width;
     qy = (double)screen_height / v_height;
+
+    // Set board bounds
+    x_max = p0x + v_width;
+    y_max = p0y + v_height;
 }
 
 void UBVirtualScreen::dotToMouse(int pX, int pY) {
-    int screenX, screenY;
+    if (UBApplication::penController->penTipStatus == PenMove)
+    {
+        auto [x, y] = getComputerScreenDot(pX, pY);
+        UBMouseOperations::MouseMove(x, y);
+    }
+
+    /*
     switch (UBApplication::penController->penTipStatus) {
         case PenDown:
-            /*
             down_px = pX;
             down_py = pY;
             UBMouseOperations::IsDragging = false;
-            */
             break;
         case PenMove:
-            std::tuple(screenX, screenY) = getComputerScreenDot(pX, pY);
-            UBMouseOperations::MouseMove(screenX, screenY);
-            /*
+            auto [x, y] = getComputerScreenDot(pX, pY);
+            UBMouseOperations::MouseMove(x, y);
             if (!UBMouseOperations::IsDragging) {
                 if (enteredDragMode(pX, pY)) {
                     qInfo() << "[PEN] Entered drag mode";
@@ -82,10 +92,8 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
                 auto [screenX, screenY] = getComputerScreenDot(pX, pY);
                 // UBMouseOperations::Drag(screenX, screenY, screen_width, screen_height);
             }
-            */
             break;
         case PenUp:
-            /*
             if (UBMouseOperations::IsDragging) {
                 qInfo() << "[PEN] Drag end";
                 // UBMouseOperations::DragEnd();
@@ -94,21 +102,21 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
                 qInfo() << "[PEN] Left click";
                 // UBMouseOperations::LeftClick(screenX, screenY);
             }
-            */
             break;
     }
+    */
 }
 
 std::tuple<int, int> UBVirtualScreen::getComputerScreenDot(int pX, int pY) {
-    if ((pX > p0x && pX < p0x + v_width) &&
-        (pY > p0y && pY < p0y + v_height)) {
-        qInfo() << "Board X,Y: " << pX << "," << pY;
-        int pScreenX = (pX - p0x) * qx;
-        int pScreenY = (pY - p0y) * qy;
-        qInfo() << "Screen X,Y: " << pScreenX << "," << pScreenY;
-        return std::make_tuple(pScreenX, pScreenY);
+    if ((pX > p0x && pX < x_max) &&
+        (pY > p0y && pY < y_max)) {
+        return std::tuple<int, int>{
+            (pX - p0x) * qx,
+            (pY - p0y) * qy
+        };
     }
-    return std::make_tuple(-1, -1);
+
+    return std::tuple<int, int>{-1, -1};
 }
 
 bool UBVirtualScreen::enteredDragMode(int pX, int pY) {
