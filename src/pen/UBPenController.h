@@ -3,6 +3,8 @@
 
 #include <Windows.h>
 #include <QString>
+#include <QScreen>
+#include "domain/UBGraphicsVirtualDesktop.h"
 #include "qobject.h"
 #include "xb.h"
 
@@ -15,14 +17,14 @@ class UBPenController: public QObject
     Q_OBJECT
 
     public:
-        UBPenController();
-        ~UBPenController();
-        PenTipStatus penTipStatus = PenUp;
-        CalibrationStatus calibrationStatus = NotCalibrated;
-        void showMessageDialog();
-        void hideMessageDialog();
-        void loadPenSDK();
-        void connect();
+    void extracted(QScreen *&mainWindowScreen, QList<QScreen *> &screens);
+    UBPenController();
+    ~UBPenController();
+    PenTipStatus penTipStatus = PenUp;
+    CalibrationStatus calibrationStatus = NotCalibrated;
+    UBGraphicsVirtualDesktop* virtualDesktop = nullptr;
+    void loadPenSDK();
+    void connect();
 
     signals:
         void sdkLoaded();

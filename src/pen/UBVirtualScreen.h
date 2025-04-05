@@ -2,6 +2,7 @@
 #define VIRTUAL_SCREEN_HPP
 
 #include <tuple>
+#include <QPoint>
 
 class UBVirtualScreen {
 public:
@@ -9,11 +10,13 @@ public:
 
     void calibrate();
     void setScreenDimensions(int width, int height);
+    void setSecondaryScreenDimensions(int width, int height);
     void calibrationSetFirstPoint(int pX, int pY);
     void calibrationSetSecondPoint(int pX, int pY);
     void setCalibration();
-    void dotToMouse(int pX, int pY);
+    void dotToMouse(int pX, int pY, bool secondaryScreen = false);
     bool connected;
+    bool hasSecondaryScreen;
 
 private:
     int p1x;
@@ -29,8 +32,11 @@ private:
     int down_px;
     int down_py;
     int drag_threshold;
-    int screen_height;
-    int screen_width;
+    int primaryScreenHeight;
+    int primaryScreenWidth;
+    int secondaryScreenHeight;
+    int secondaryScreenWidth;
+
 
     // Board max bounds
     int x_max;

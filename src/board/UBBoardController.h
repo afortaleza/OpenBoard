@@ -348,7 +348,6 @@ class UBBoardController : public UBDocumentContainer
         void libraryDialogClosed(int ret);
         void lastWindowClosed();
         void onDownloadModalFinished();
-
 };
 
 

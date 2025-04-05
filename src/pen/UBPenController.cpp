@@ -15,8 +15,29 @@ UBVirtualScreen* virtualScreen = nullptr;
 UBPenController::UBPenController() {
     virtualScreen = new UBVirtualScreen();
 
-    QRect screenGeometry = UBApplication::mainWindow->screen()->geometry();
+    // Get the screen the main window is on
+    QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
+    QRect screenGeometry = mainWindowScreen->geometry();
     virtualScreen->setScreenDimensions(screenGeometry.width(), screenGeometry.height());
+
+    // Get the list of available screens
+    QList<QScreen*> screens = QGuiApplication::screens();
+    virtualScreen->hasSecondaryScreen = screens.length() == 2;
+
+    // Look for a screen that is not the main window's screen
+    if (virtualScreen->hasSecondaryScreen)
+    {
+        for (QScreen* screen : screens) {
+            if (screen != mainWindowScreen) {
+                QRect secondScreenGeometry = screen->geometry();
+                virtualScreen->setSecondaryScreenDimensions(secondScreenGeometry.width(), secondScreenGeometry.height());
+                break;
+            }
+        }
+    }
+    else {
+        qInfo() << "[VSCREEN] - Number of screens is different from two: " << screens.length();
+    }
 }
 
 UBPenController::~UBPenController() {
@@ -237,7 +258,12 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
             }
 
             // Converts dot to mouse action
-            virtualScreen->dotToMouse(static_cast<int>(dot->x), static_cast<int>(dot->y));
+            if (UBApplication::penController->virtualDesktop == nullptr) {
+                virtualScreen->dotToMouse(dot->x, dot->y);
+            }
+            else {
+                virtualScreen->dotToMouse(dot->x, dot->y, true);
+            }
         }
         else {
             // Only considers pen up when calibrating

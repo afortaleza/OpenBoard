@@ -12,15 +12,21 @@ UBVirtualScreen::UBVirtualScreen() {
     qx = qy = 0.0;
     v_width = v_height = 0;
     down_px = down_py = 0;
-    screen_height = screen_width = 0;
+    primaryScreenHeight = primaryScreenWidth = 0;
 
     // Board max bounds
     x_max = y_max = 0;
 }
 
 void UBVirtualScreen::setScreenDimensions(int width, int height) {
-    screen_width = width;
-    screen_height = height;
+    primaryScreenWidth = width;
+    primaryScreenHeight = height;
+}
+
+void UBVirtualScreen::setSecondaryScreenDimensions(int width, int height)
+{
+    secondaryScreenWidth = width;
+    secondaryScreenHeight = height;
 }
 
 void UBVirtualScreen::calibrationSetFirstPoint(int pX, int pY) {
@@ -56,15 +62,17 @@ void UBVirtualScreen::setCalibration() {
     p0y = p1y - v_height;
 
     // Calculate proportion quotients between real and virtual screen
-    qx = (double)screen_width / v_width;
-    qy = (double)screen_height / v_height;
+    qx = (double)primaryScreenWidth / v_width;
+    qy = (double)primaryScreenHeight / v_height;
 
     // Set board bounds
     x_max = p0x + v_width;
     y_max = p0y + v_height;
 }
 
-void UBVirtualScreen::dotToMouse(int pX, int pY) {
+void UBVirtualScreen::dotToMouse(int pX, int pY, bool secondaryScreen) {
+
+
     if (UBApplication::penController->penTipStatus == PenDown)
     {
         down_px = pX;
@@ -80,7 +88,7 @@ void UBVirtualScreen::dotToMouse(int pX, int pY) {
             }
         } else {
             auto [x, y] = getComputerScreenDot(pX, pY);
-            UBMouseOperations::Drag(x, y, screen_width, screen_height);
+            UBMouseOperations::Drag(x, y, primaryScreenWidth, primaryScreenHeight);
         }
     }
     else if (UBApplication::penController->penTipStatus == PenUp)

@@ -513,13 +513,13 @@ void UBBoardController::saveData(SaveFlags fls)
 void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
-        mVirtualDesktop = new UBGraphicsVirtualDesktop();
-        mActiveScene->addItem(mVirtualDesktop);
+        UBApplication::penController->virtualDesktop = new UBGraphicsVirtualDesktop();
+        mActiveScene->addItem(UBApplication::penController->virtualDesktop);
     }
     else {
-        mActiveScene->removeItem(mVirtualDesktop);
-        delete mVirtualDesktop;
-        mVirtualDesktop = nullptr;
+        mActiveScene->removeItem(UBApplication::penController->virtualDesktop);
+        delete UBApplication::penController->virtualDesktop;
+        UBApplication::penController->virtualDesktop = nullptr;
     }
 }
 
