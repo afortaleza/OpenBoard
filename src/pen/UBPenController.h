@@ -29,6 +29,7 @@ class UBPenController: public QObject
     signals:
         void sdkLoaded();
         void scanningAndConnecting();
+        void stopScanning();
         void connected();
         void disconnected();
 

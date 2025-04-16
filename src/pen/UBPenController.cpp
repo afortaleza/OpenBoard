@@ -16,9 +16,18 @@ UBPenController::UBPenController() {
     virtualScreen = new UBVirtualScreen();
 
     // Get the screen the main window is on
+    // QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
+    // QRect screenGeometry = mainWindowScreen->geometry();
+
     QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
     QRect screenGeometry = mainWindowScreen->geometry();
-    virtualScreen->setScreenDimensions(screenGeometry.width(), screenGeometry.height());
+    qreal devicePixelRatio = mainWindowScreen->devicePixelRatio();
+
+    // Calculate unscaled (native) resolution
+    int nativeWidth = screenGeometry.width() * devicePixelRatio;
+    int nativeHeight = screenGeometry.height() * devicePixelRatio;
+
+    virtualScreen->setScreenDimensions(nativeWidth, nativeHeight);
 
     // Get the list of available screens
     QList<QScreen*> screens = QGuiApplication::screens();
@@ -58,12 +67,12 @@ UBPenController::~UBPenController() {
 void UBPenController::loadPenSDK() {
     QString dllPath = QCoreApplication::applicationDirPath() + "/xbc.dll";
     if (!QFileInfo::exists(dllPath)) {
-        qWarning() << "Error: xbc.dll not found in application directory";
+        qWarning() << "[PEN] Error: xbc.dll not found in application directory";
     }
 
     hPenSDK = LoadLibrary(L"xbc.dll");
     if (!hPenSDK) {
-        qWarning() << "Failed to load xbc.dll. Error: %1";
+        qWarning() << "[PEN] Failed to load xbc.dll. Error: %1";
     }
 
     pAFInit = (PFN_AFInit)GetProcAddress(hPenSDK, "AFInit");
@@ -85,13 +94,13 @@ void UBPenController::loadPenSDK() {
         !pAFScanStop || !pAFSetPenEventListener || !pAFSetBleEventListener ||
         !pAFGetFWInfo || !pAFSetPaperSizes || !pAFGetStorageSize || !pAFGetBatteryInfo ||
         !pAFUnInit || !pAFGetDotsCount || !pAFClearDots) {
-        qWarning() << "Failed to load one or more SDK functions";
+        qWarning() << "[PEN] Failed to load one or more SDK functions";
         FreeLibrary(hPenSDK);
         hPenSDK = nullptr;
     }
     else {
         if (pAFInit() != 0) {
-            qWarning() << "Failed to initialize SDK";
+            qWarning() << "[PEN] Failed to initialize SDK";
             FreeLibrary(hPenSDK);
             hPenSDK = nullptr;
         }
@@ -99,7 +108,7 @@ void UBPenController::loadPenSDK() {
             pAFSetBleEventListener(bleEventCallback);
             pAFSetPenEventListener(penEventCallback);
             setPaperSizes();
-            qInfo() << "SDK successfully initialized";
+            qInfo() << "[PEN] SDK successfully initialized";
         }
     }
 }
@@ -111,7 +120,13 @@ void UBPenController::connect()
     try {
         int ret = pAFScanStart();
         if (ret != -1) {
+            qInfo() << "[PEN] Scanning and connecting";
             emit scanningAndConnecting();
+        }
+        else {
+            qWarning() << "[PEN] Unable to start scanning";
+            pAFScanStop();
+            emit stopScanning();
         }
     } catch (...) {
         QMessageBox::critical(nullptr, "Bluetooth desativado", "O bluetooth está desativado.");
@@ -193,7 +208,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         AFBLEFindDevice* device = (AFBLEFindDevice*)data;
         if (device->name && device->namelen > 0) {
             QString deviceName = safeCharToQString(device->name, device->namelen);
-            qInfo() << "Found device: " + deviceName + ". Connecting";
+            qInfo() << "[PEN] Found device: " + deviceName + ". Connecting...";
             UBApplication::penController->pAFConnect(deviceName.toStdWString().c_str());
         }
         break;
@@ -204,7 +219,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         switch (deviceStatus->status) {
             case PEN_CONNECTION_SUCCESS:
                 emit UBApplication::penController->connected();
-                qInfo() << "Connected!";
+                qInfo() << "[PEN] Connected!";
 
                 if (UBApplication::penController->calibrationStatus == NotCalibrated)
                 {
@@ -217,22 +232,23 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
                 }
                 break;
             case PEN_CONNECTION_FAILURE:
-                qInfo() << "Connection failed";
+                qInfo() << "[PEN] Connection failed";
                 break;
             case PEN_DISCONNECTED:
                 emit UBApplication::penController->disconnected();
-                qInfo() << "Disconnected from device";
+                qInfo() << "[PEN] Disconnected from device";
                 break;
             case PEN_CONNECTION_TRY:
-                qInfo() << "Connection try";
+                qInfo() << "[PEN] Connection try";
                 break;
             case PEN_CONNECTING:
-                qInfo() << "Pen connecting";
+                qInfo() << "[PEN] Pen connecting";
                 break;
             case PEN_DISCONNECTING:
-                qInfo() << "Pen disconnecting";
+                qInfo() << "[PEN] Pen disconnecting";
                 break;
             case PEN_CONNECTION_UNKNOWN:
+                qInfo() << "[PEN] Connection Unknown";
                 UBApplication::penController->pAFDisConnect();
                 break;
             }
