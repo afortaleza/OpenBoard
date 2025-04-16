@@ -3,41 +3,39 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include "domain/UBGraphicsItemDelegate.h"
-
+#include "../core/UBApplication.h"
+#include "gui/UBMainWindow.h"
 
 UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
     : m_timerId(0)
 {
+    QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
+
     // Get the list of available screens
     QList<QScreen *> screens = QGuiApplication::screens();
+    QScreen *secondaryScreen = nullptr;
 
-    // Check if we have more than one screen, assuming secondary screen is at index 1
-    if (screens.size() > 1) {
-        QScreen *secondaryScreen = screens.at(1);
-
-        // Get the scaled size of the secondary screen
-        QSize scaledSize = secondaryScreen->size();
-
-        // Get the scaling factor (device pixel ratio)
-        qreal devicePixelRatio = secondaryScreen->devicePixelRatio();
-
-        // Calculate the original (logical) resolution by dividing by the scaling factor
-        QSize originalSize(scaledSize.width() * devicePixelRatio, scaledSize.height() * devicePixelRatio);
-
-        // Set the virtual desktop size to 1/3 of the original screen width and height
-        m_width = originalSize.width() / 3;
-        m_height = originalSize.height() / 3;
-
-        setPos(m_width * -0.5, m_height * -0.5);
+    for (QScreen* screen : screens) {
+        if (screen != mainWindowScreen) {
+            secondaryScreen = screen;
+            break;
+        }
     }
-    else {
-        // If only one screen, set the virtual desktop size to 50% of the primary screen's width and height
-        QScreen *primaryScreen = screens.at(0);
-        QSize screenSize = primaryScreen->size();
 
-        m_width = screenSize.width() / 3;
-        m_height = screenSize.height() / 3;
-    }
+    // Get the scaled size of the secondary screen
+    QSize scaledSize = secondaryScreen->size();
+
+    // Get the scaling factor (device pixel ratio)
+    qreal devicePixelRatio = secondaryScreen->devicePixelRatio();
+
+    // Calculate the original (logical) resolution by dividing by the scaling factor
+    QSize originalSize(scaledSize.width() * devicePixelRatio, scaledSize.height() * devicePixelRatio);
+
+    // Set the virtual desktop size to 1/3 of the original screen width and height
+    m_width = originalSize.width() / 3;
+    m_height = originalSize.height() / 3;
+
+    setPos(m_width * -0.5, m_height * -0.5);
 
     // Delegate setup with flags
     setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_Y_AXIS | GF_RESPECT_RATIO));

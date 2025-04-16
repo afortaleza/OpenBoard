@@ -295,11 +295,12 @@ class UBBoardController : public UBDocumentContainer
         void autosaveTimeout();
         void appMainModeChanged(UBApplicationController::MainMode);
         void showVirtualDesktop(bool enabled);
+        void reconnectPen();
 
         // Pen bluetooth slots
         void penBluetoothConnecting();
         void penBluetoothConnected();
-        void penBluetoothDisconnected();
+        void penBluetoothStopScanning();
 
     private:
         void initBackgroundGridSize();

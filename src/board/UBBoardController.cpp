@@ -447,6 +447,8 @@ void UBBoardController::setupToolbar()
     connect(penBluetoothConnectingIcon, &QMovie::frameChanged, [=]{
         mMainWindow->actionPenBluetooth->setIcon(penBluetoothConnectingIcon->currentPixmap());
     });
+
+    mMainWindow->actionVirtualDesktop->setEnabled(QGuiApplication::screens().length() == 2);
 }
 
 
@@ -480,10 +482,11 @@ void UBBoardController::connectToolbar()
     connect(mMainWindow->actionVirtualKeyboard, SIGNAL(triggered(bool)), this, SLOT(showKeyboard(bool)));
     connect(mMainWindow->actionImportPage, SIGNAL(triggered()), this, SLOT(importPage()));
     connect(mMainWindow->actionVirtualDesktop, SIGNAL(triggered(bool)), this, SLOT(showVirtualDesktop(bool)));
+    connect(mMainWindow->actionPenBluetooth, SIGNAL(triggered()), this, SLOT(reconnectPen()));
 
     connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
-    connect(UBApplication::penController, SIGNAL(disconnected()), this, SLOT(penBluetoothDisconnected()));
+    connect(UBApplication::penController, SIGNAL(stopScanning()), this, SLOT(penBluetoothStopScanning()));
 }
 
 void UBBoardController::startScript()
@@ -523,6 +526,14 @@ void UBBoardController::showVirtualDesktop(bool enabled)
     }
 }
 
+void UBBoardController::reconnectPen()
+{
+    if (UBApplication::penController->scanningCanceled)
+    {
+        UBApplication::penController->connect();
+    }
+}
+
 void UBBoardController::penBluetoothConnecting()
 {
     mMainWindow->actionPenBluetooth->setEnabled(true);
@@ -536,10 +547,11 @@ void UBBoardController::penBluetoothConnected()
     mMainWindow->actionPenBluetooth->setIcon(icon);
 }
 
-void UBBoardController::penBluetoothDisconnected()
+void UBBoardController::penBluetoothStopScanning()
 {
+    mMainWindow->actionPenBluetooth->setEnabled(true);
     penBluetoothConnectingIcon->stop();
-    QIcon icon(":/images/toolbar/pen-connected.png");
+    QIcon icon(":/images/toolbar/pen-disconnected.png");
     mMainWindow->actionPenBluetooth->setIcon(icon);
 }
 

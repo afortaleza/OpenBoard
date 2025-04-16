@@ -16,9 +16,6 @@ UBPenController::UBPenController() {
     virtualScreen = new UBVirtualScreen();
 
     // Get the screen the main window is on
-    // QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
-    // QRect screenGeometry = mainWindowScreen->geometry();
-
     QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
     QRect screenGeometry = mainWindowScreen->geometry();
     qreal devicePixelRatio = mainWindowScreen->devicePixelRatio();
@@ -120,13 +117,13 @@ void UBPenController::connect()
     try {
         int ret = pAFScanStart();
         if (ret != -1) {
+            scanningCanceled = false;
             qInfo() << "[PEN] Scanning and connecting";
             emit scanningAndConnecting();
         }
         else {
             qWarning() << "[PEN] Unable to start scanning";
-            pAFScanStop();
-            emit stopScanning();
+            cancelScanning();
         }
     } catch (...) {
         QMessageBox::critical(nullptr, "Bluetooth desativado", "O bluetooth está desativado.");
@@ -193,6 +190,13 @@ void UBPenController::setPaperSizes()
     }
 }
 
+void UBPenController::cancelScanning()
+{
+    scanningCanceled = true;
+    pAFScanStop();
+    emit stopScanning();
+}
+
 QString UBPenController::safeCharToQString(const char *str, size_t length)
 {
     if (!str || length == 0) {
@@ -210,6 +214,10 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
             QString deviceName = safeCharToQString(device->name, device->namelen);
             qInfo() << "[PEN] Found device: " + deviceName + ". Connecting...";
             UBApplication::penController->pAFConnect(deviceName.toStdWString().c_str());
+        }
+        else {
+            qWarning() << "[PEN] Found device but it has no name. Can't connect to a nameless device";
+            UBApplication::penController->cancelScanning();
         }
         break;
     }
@@ -233,23 +241,24 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
                 break;
             case PEN_CONNECTION_FAILURE:
                 qInfo() << "[PEN] Connection failed";
+                UBApplication::penController->cancelScanning();
                 break;
             case PEN_DISCONNECTED:
-                emit UBApplication::penController->disconnected();
-                qInfo() << "[PEN] Disconnected from device";
+                qInfo() << "[PEN] Disconnected from device, restarting scanning.";
+                UBApplication::penController->connect();
                 break;
             case PEN_CONNECTION_TRY:
-                qInfo() << "[PEN] Connection try";
+                qInfo() << "[PEN] Trying to connect";
                 break;
             case PEN_CONNECTING:
-                qInfo() << "[PEN] Pen connecting";
+                qInfo() << "[PEN] Connecting...";
                 break;
             case PEN_DISCONNECTING:
-                qInfo() << "[PEN] Pen disconnecting";
+                qInfo() << "[PEN] Disconnecting...";
                 break;
             case PEN_CONNECTION_UNKNOWN:
                 qInfo() << "[PEN] Connection Unknown";
-                UBApplication::penController->pAFDisConnect();
+                UBApplication::penController->cancelScanning();
                 break;
             }
         break;

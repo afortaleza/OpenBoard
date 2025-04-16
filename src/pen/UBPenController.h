@@ -22,6 +22,7 @@ class UBPenController: public QObject
     ~UBPenController();
     PenTipStatus penTipStatus = PenUp;
     CalibrationStatus calibrationStatus = NotCalibrated;
+    bool scanningCanceled = false;
     UBGraphicsVirtualDesktop* virtualDesktop = nullptr;
     void loadPenSDK();
     void connect();
@@ -31,10 +32,10 @@ class UBPenController: public QObject
         void scanningAndConnecting();
         void stopScanning();
         void connected();
-        void disconnected();
 
     private:
         void setPaperSizes();
+        void cancelScanning();
 
         static QString safeCharToQString(const char* str, size_t length);
 
