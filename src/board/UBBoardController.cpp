@@ -115,7 +115,6 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     , mActionGroupText(tr("Group"))
     , mActionUngroupText(tr("Ungroup"))
     , mAutosaveTimer(0)
-    , mVirtualDesktop(nullptr)
     , penBluetoothConnectingIcon(nullptr)
 {
     mZoomFactor = UBSettings::settings()->boardZoomFactor->get().toDouble();
@@ -517,6 +516,7 @@ void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
         UBApplication::penController->virtualDesktop = new UBGraphicsVirtualDesktop();
+        UBApplication::penController->virtualDesktop->setVirtualDesktopRect();
         mActiveScene->addItem(UBApplication::penController->virtualDesktop);
     }
     else {

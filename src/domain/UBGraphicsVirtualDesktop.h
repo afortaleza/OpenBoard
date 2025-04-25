@@ -26,6 +26,9 @@ public:
     // Override paint() to render the secondary screen content
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+    // New method to get the screen rectangle
+    void setVirtualDesktopRect() const;
+
 protected:
     // Override the timerEvent to handle timer updates for screen capture
     void timerEvent(QTimerEvent *event) override;

@@ -5,6 +5,7 @@
 #include "domain/UBGraphicsItemDelegate.h"
 #include "../core/UBApplication.h"
 #include "gui/UBMainWindow.h"
+#include "../pen/UBPenController.h"
 
 UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
     : m_timerId(0)
@@ -72,6 +73,51 @@ void UBGraphicsVirtualDesktop::paint(QPainter *painter, const QStyleOptionGraphi
     }
 }
 
+void UBGraphicsVirtualDesktop::setVirtualDesktopRect() const
+{
+    // Step 1: Get the bounding rectangle in scene coordinates
+    QRectF bounding = boundingRect(); // Local coordinates (0, 0, m_width, m_height)
+
+    // Map top-left and bottom-right corners to scene coordinates
+    QPointF topLeftScene = mapToScene(bounding.topLeft());
+    QPointF bottomRightScene = mapToScene(bounding.bottomRight());
+
+    // Step 2: Get the QGraphicsScene
+    QGraphicsScene *scene = this->scene();
+    if (!scene) {
+        return; // Return empty QRect if no scene is associated
+    }
+
+    // Step 3: Get the QGraphicsView(s) associated with the scene
+    QList<QGraphicsView *> views = scene->views();
+    if (views.isEmpty()) {
+        return; // Return empty QRect if no views are associated
+    }
+
+    // Use the first view (assumes the item is displayed in the first QGraphicsView)
+    QGraphicsView *view = views.first();
+
+    // Step 4: Map scene coordinates to view coordinates
+    QPoint topLeftView = view->mapFromScene(topLeftScene);
+    QPoint bottomRightView = view->mapFromScene(bottomRightScene);
+
+    // Step 5: Map view coordinates to global (screen) coordinates
+    QPoint topLeftScreen = view->mapToGlobal(topLeftView);
+    QPoint bottomRightScreen = view->mapToGlobal(bottomRightView);
+
+    // Step 6: Construct the QRect with top-left and bottom-right points
+    auto rect = QRect(topLeftScreen, bottomRightScreen);
+
+    QString dimensions = QString("QRect dimensions: X=%1, Y=%2, Width=%3, Height=%4")
+                             .arg(rect.x())
+                             .arg(rect.y())
+                             .arg(rect.width())
+                             .arg(rect.height());
+    UBApplication::showMessage(dimensions);
+
+    UBApplication::penController->virtualDesktopRect = rect;
+}
+
 void UBGraphicsVirtualDesktop::captureSecondaryScreen()
 {
     // Get the list of available screens
@@ -100,5 +146,10 @@ void UBGraphicsVirtualDesktop::timerEvent(QTimerEvent *event)
 
 QVariant UBGraphicsVirtualDesktop::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    // Handle position changes
+    if (change == GraphicsItemChange::ItemTransformHasChanged) {
+        this->setVirtualDesktopRect();
+    }
+
     return Delegate()->itemChange(change, value);
 }

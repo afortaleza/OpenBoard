@@ -17,15 +17,19 @@ class UBPenController: public QObject
     Q_OBJECT
 
     public:
-    void extracted(QScreen *&mainWindowScreen, QList<QScreen *> &screens);
-    UBPenController();
-    ~UBPenController();
-    PenTipStatus penTipStatus = PenUp;
-    CalibrationStatus calibrationStatus = NotCalibrated;
-    bool scanningCanceled = false;
-    UBGraphicsVirtualDesktop* virtualDesktop = nullptr;
-    void loadPenSDK();
-    void connect();
+        void extracted(QScreen *&mainWindowScreen, QList<QScreen *> &screens);
+        UBPenController();
+        ~UBPenController();
+        PenTipStatus penTipStatus = PenUp;
+        CalibrationStatus calibrationStatus = NotCalibrated;
+        bool scanningCanceled = false;
+        UBGraphicsVirtualDesktop* virtualDesktop = nullptr;
+        void loadPenSDK();
+        void connect();
+        QRect virtualDesktopRect;
+
+        QScreen* primaryScreen = nullptr;
+        QScreen* secondaryScreen = nullptr;
 
     signals:
         void sdkLoaded();
@@ -34,8 +38,13 @@ class UBPenController: public QObject
         void connected();
 
     private:
+
         void setPaperSizes();
         void cancelScanning();
+        bool isVirtualDesktopEnabled();
+        bool isVirtualDesktopSelected();
+        bool isInsideVirtualDesktop(int x, int y);
+
 
         static QString safeCharToQString(const char* str, size_t length);
 

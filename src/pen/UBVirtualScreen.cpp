@@ -18,7 +18,7 @@ UBVirtualScreen::UBVirtualScreen() {
     x_max = y_max = 0;
 }
 
-void UBVirtualScreen::setScreenDimensions(int width, int height) {
+void UBVirtualScreen::setPrimaryScreenDimensions(int width, int height) {
     primaryScreenWidth = width;
     primaryScreenHeight = height;
 }
@@ -70,9 +70,7 @@ void UBVirtualScreen::setCalibration() {
     y_max = p0y + v_height;
 }
 
-void UBVirtualScreen::dotToMouse(int pX, int pY, bool secondaryScreen) {
-
-
+void UBVirtualScreen::dotToMouse(int x, int y, int pX, int pY) {
     if (UBApplication::penController->penTipStatus == PenDown)
     {
         down_px = pX;
@@ -83,11 +81,9 @@ void UBVirtualScreen::dotToMouse(int pX, int pY, bool secondaryScreen) {
     {
         if (!UBMouseOperations::IsDragging) {
             if (enteredDragMode(pX, pY)) {
-                auto [x, y] = getComputerScreenDot(pX, pY);
                 UBMouseOperations::DragStart(x, y);
             }
         } else {
-            auto [x, y] = getComputerScreenDot(pX, pY);
             UBMouseOperations::Drag(x, y, primaryScreenWidth, primaryScreenHeight);
         }
     }
@@ -96,13 +92,12 @@ void UBVirtualScreen::dotToMouse(int pX, int pY, bool secondaryScreen) {
         if (UBMouseOperations::IsDragging) {
             UBMouseOperations::DragEnd();
         } else {
-            auto [x, y] = getComputerScreenDot(pX, pY);
             UBMouseOperations::LeftClick(x, y);
         }
     }
 }
 
-std::tuple<int, int> UBVirtualScreen::getComputerScreenDot(int pX, int pY) {
+std::tuple<int, int> UBVirtualScreen::getPrimaryScreenDot(int pX, int pY) {
     if ((pX > p0x && pX < x_max) &&
         (pY > p0y && pY < y_max)) {
         return std::tuple<int, int>{
@@ -112,6 +107,17 @@ std::tuple<int, int> UBVirtualScreen::getComputerScreenDot(int pX, int pY) {
     }
 
     return std::tuple<int, int>{-1, -1};
+}
+
+std::tuple<int, int> UBVirtualScreen::getSecondaryScreenDot(QRect vRect, int pX, int pY)
+{
+    int pRectX = pX - vRect.x();
+    int pRectY = pY - vRect.y();
+
+    qreal propWidth = static_cast<qreal>(secondaryScreenWidth) / vRect.width();
+    qreal propHeight = static_cast<qreal>(secondaryScreenWidth) / vRect.height();
+
+    return std::tuple<int, int> { pRectX * propWidth, pRectY * propHeight };
 }
 
 bool UBVirtualScreen::enteredDragMode(int pX, int pY) {

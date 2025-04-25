@@ -14,17 +14,22 @@ UBVirtualScreen* virtualScreen = nullptr;
 
 UBPenController::UBPenController() {
     virtualScreen = new UBVirtualScreen();
+    virtualDesktopRect = QRect(0, 0, 0, 0);
 
     // Get the screen the main window is on
-    QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
-    QRect screenGeometry = mainWindowScreen->geometry();
-    qreal devicePixelRatio = mainWindowScreen->devicePixelRatio();
+    primaryScreen = UBApplication::mainWindow->screen();
+
+    qInfo() << QString("Primary Monitor Geometry: x=%1, y=%2, width=%3, height=%4")
+        .arg(primaryScreen->geometry().x())
+        .arg(primaryScreen->geometry().y())
+        .arg(static_cast<int>(primaryScreen->devicePixelRatio() * primaryScreen->geometry().width()))
+        .arg(static_cast<int>(primaryScreen->devicePixelRatio() * primaryScreen->geometry().height()));
 
     // Calculate unscaled (native) resolution
-    int nativeWidth = screenGeometry.width() * devicePixelRatio;
-    int nativeHeight = screenGeometry.height() * devicePixelRatio;
+    int pWidth = primaryScreen->geometry().width() * primaryScreen->devicePixelRatio();
+    int pHeight = primaryScreen->geometry().height() * primaryScreen->devicePixelRatio();
 
-    virtualScreen->setScreenDimensions(nativeWidth, nativeHeight);
+    virtualScreen->setPrimaryScreenDimensions(pWidth, pHeight);
 
     // Get the list of available screens
     QList<QScreen*> screens = QGuiApplication::screens();
@@ -34,9 +39,20 @@ UBPenController::UBPenController() {
     if (virtualScreen->hasSecondaryScreen)
     {
         for (QScreen* screen : screens) {
-            if (screen != mainWindowScreen) {
-                QRect secondScreenGeometry = screen->geometry();
-                virtualScreen->setSecondaryScreenDimensions(secondScreenGeometry.width(), secondScreenGeometry.height());
+            if (screen != primaryScreen) {
+                secondaryScreen = screen;
+
+                qInfo() << QString("Secondary Monitor Geometry: x=%1, y=%2, width=%3, height=%4")
+                               .arg(secondaryScreen->geometry().x())
+                               .arg(secondaryScreen->geometry().y())
+                               .arg(static_cast<int>(secondaryScreen->devicePixelRatio() * secondaryScreen->geometry().width()))
+                               .arg(static_cast<int>(secondaryScreen->devicePixelRatio() * secondaryScreen->geometry().height()));
+
+                // Calculate unscaled (native) resolution
+                int sWidth = secondaryScreen->geometry().width() * secondaryScreen->devicePixelRatio();
+                int sHeight = secondaryScreen->geometry().height() * secondaryScreen->devicePixelRatio();
+
+                virtualScreen->setSecondaryScreenDimensions(sWidth, sHeight);
                 break;
             }
         }
@@ -197,6 +213,21 @@ void UBPenController::cancelScanning()
     emit stopScanning();
 }
 
+bool UBPenController::isVirtualDesktopEnabled()
+{
+    return virtualDesktop != nullptr;
+}
+
+bool UBPenController::isVirtualDesktopSelected()
+{
+    return virtualDesktop->isSelected();
+}
+
+bool UBPenController::isInsideVirtualDesktop(int x, int y)
+{
+    return this->virtualDesktopRect.contains(x, y);
+}
+
 QString UBPenController::safeCharToQString(const char *str, size_t length)
 {
     if (!str || length == 0) {
@@ -282,12 +313,27 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
                 UBApplication::penController->penTipStatus = PenUp;
             }
 
+            auto [x, y] = virtualScreen->getPrimaryScreenDot(dot->x, dot->y);
             // Converts dot to mouse action
-            if (UBApplication::penController->virtualDesktop == nullptr) {
-                virtualScreen->dotToMouse(dot->x, dot->y);
+            if (!UBApplication::penController->isVirtualDesktopEnabled()) {
+                virtualScreen->dotToMouse(x, y, dot->x, dot->y);
             }
             else {
-                virtualScreen->dotToMouse(dot->x, dot->y, true);
+                if (UBApplication::penController->isVirtualDesktopSelected())
+                {
+                    if (UBApplication::penController->isInsideVirtualDesktop(x, y))
+                    {
+                        auto [sX, sY] = virtualScreen->getSecondaryScreenDot(UBApplication::penController->virtualDesktopRect, x, y);
+
+                        int secondX = UBApplication::penController->secondaryScreen->geometry().x() + sX;
+                        int secondY = UBApplication::penController->secondaryScreen->geometry().y() + sY;
+                        virtualScreen->dotToMouse(secondX, secondY, dot->x, dot->y);
+                    }
+                    else
+                        virtualScreen->dotToMouse(x, y, dot->x, dot->y);
+                }
+                else
+                    virtualScreen->dotToMouse(x, y, dot->x, dot->y);
             }
         }
         else {

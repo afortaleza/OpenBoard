@@ -3,18 +3,21 @@
 
 #include <tuple>
 #include <QPoint>
+#include <QRect>
 
 class UBVirtualScreen {
 public:
     UBVirtualScreen();
 
     void calibrate();
-    void setScreenDimensions(int width, int height);
+    void setPrimaryScreenDimensions(int width, int height);
     void setSecondaryScreenDimensions(int width, int height);
     void calibrationSetFirstPoint(int pX, int pY);
     void calibrationSetSecondPoint(int pX, int pY);
     void setCalibration();
-    void dotToMouse(int pX, int pY, bool secondaryScreen = false);
+    void dotToMouse(int x, int y, int pX, int pY);
+    std::tuple<int, int> getPrimaryScreenDot(int pX, int pY);
+    std::tuple<int, int> getSecondaryScreenDot(QRect vRect, int pX, int pY);
     bool connected;
     bool hasSecondaryScreen;
 
@@ -43,7 +46,6 @@ private:
     int y_max;
 
     // Private methods
-    std::tuple<int, int> getComputerScreenDot(int pX, int pY);
     bool enteredDragMode(int pX, int pY);
 };
 

@@ -338,7 +338,6 @@ class UBBoardController : public UBDocumentContainer
         std::shared_ptr<UBGraphicsScene> mInitialDocumentScene;
 
         QTimer *mAutosaveTimer;
-        UBGraphicsVirtualDesktop *mVirtualDesktop;
         QMovie *penBluetoothConnectingIcon;
 
     private slots:
