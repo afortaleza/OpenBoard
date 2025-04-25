@@ -39,7 +39,7 @@ UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
     setPos(m_width * -0.5, m_height * -0.5);
 
     // Delegate setup with flags
-    setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_Y_AXIS | GF_RESPECT_RATIO));
+    setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_ALL_AXIS | GF_RESPECT_RATIO));
 
     // Set the data layer types
     setData(UBGraphicsItemData::ItemLayerType, UBItemLayerType::Object);
