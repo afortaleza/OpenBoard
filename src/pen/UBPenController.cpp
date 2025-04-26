@@ -319,21 +319,40 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
                 virtualScreen->dotToMouse(x, y, dot->x, dot->y);
             }
             else {
+                qInfo() << "[=VD] Enabled";
                 if (UBApplication::penController->isVirtualDesktopSelected())
                 {
+                    qInfo() << QString("[==VD] Selected. QRect is x: %1, y: %2, w: %3, h: %4. Point is: x: %5, y: %6")
+                                   .arg(UBApplication::penController->virtualDesktopRect.x())
+                                   .arg(UBApplication::penController->virtualDesktopRect.y())
+                                   .arg(UBApplication::penController->virtualDesktopRect.width())
+                                   .arg(UBApplication::penController->virtualDesktopRect.height())
+                                   .arg(x)
+                                   .arg(y);
                     if (UBApplication::penController->isInsideVirtualDesktop(x, y))
                     {
+                        qInfo() << "[===VD] Is Inside";
                         auto [sX, sY] = virtualScreen->getSecondaryScreenDot(UBApplication::penController->virtualDesktopRect, x, y);
+
+                        qInfo() << QString("===[VD] Secondary Screen Pixel: x: %1, y: %2").arg(sX).arg(sY);
 
                         int secondX = UBApplication::penController->secondaryScreen->geometry().x() + sX;
                         int secondY = UBApplication::penController->secondaryScreen->geometry().y() + sY;
+
+                        qInfo() << QString("===[VD] DotToMouse: X: %1, Y: %2").arg(secondX).arg(secondY);
                         virtualScreen->dotToMouse(secondX, secondY, dot->x, dot->y);
                     }
                     else
+                    {
+                        qInfo() << "[VD] Is outside";
                         virtualScreen->dotToMouse(x, y, dot->x, dot->y);
+                    }
                 }
                 else
+                {
+                    qInfo() << "[VD] Not Selected";
                     virtualScreen->dotToMouse(x, y, dot->x, dot->y);
+                }
             }
         }
         else {

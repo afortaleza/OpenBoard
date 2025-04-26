@@ -515,11 +515,13 @@ void UBBoardController::saveData(SaveFlags fls)
 void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
+        qInfo() << "[VD] Enabling Virtual Desktop";
         UBApplication::penController->virtualDesktop = new UBGraphicsVirtualDesktop();
-        UBApplication::penController->virtualDesktop->setVirtualDesktopRect();
         mActiveScene->addItem(UBApplication::penController->virtualDesktop);
+        UBApplication::penController->virtualDesktop->setVirtualDesktopRect();
     }
     else {
+        qInfo() << "[VD] Disabling Virtual Desktop";
         mActiveScene->removeItem(UBApplication::penController->virtualDesktop);
         delete UBApplication::penController->virtualDesktop;
         UBApplication::penController->virtualDesktop = nullptr;

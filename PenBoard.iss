@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PenBoard"
-#define MyAppVersion "1.0"
+#define MyAppVersion "20250425-1900"
 #define MyAppPublisher "PenBoard"
 #define MyAppURL "https://www.penboard.com.br/"
 #define MyAppExeName "PenBoard.exe"
@@ -31,7 +31,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only).
 ;PrivilegesRequired=lowest
-OutputBaseFilename=InstaladorPenBoard
+OutputBaseFilename=PenBoard-{#MyAppVersion}
 SolidCompression=yes
 WizardStyle=modern
 

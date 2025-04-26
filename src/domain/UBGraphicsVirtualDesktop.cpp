@@ -108,13 +108,6 @@ void UBGraphicsVirtualDesktop::setVirtualDesktopRect() const
     // Step 6: Construct the QRect with top-left and bottom-right points
     auto rect = QRect(topLeftScreen, bottomRightScreen);
 
-    QString dimensions = QString("QRect dimensions: X=%1, Y=%2, Width=%3, Height=%4")
-                             .arg(rect.x())
-                             .arg(rect.y())
-                             .arg(rect.width())
-                             .arg(rect.height());
-    UBApplication::showMessage(dimensions);
-
     UBApplication::penController->virtualDesktopRect = rect;
 }
 
