@@ -675,10 +675,10 @@
      <normaloff>:/images/toolbar/window.png</normaloff>:/images/toolbar/window.png</iconset>
    </property>
    <property name="text">
-    <string>Virtual</string>
+    <string>Meu PC</string>
    </property>
    <property name="toolTip">
-    <string>Virtual Desktop</string>
+    <string>Meu PC</string>
    </property>
    <property name="font">
     <font>

@@ -308,6 +308,7 @@ class UBBoardController : public UBDocumentContainer
         void saveViewState();
         int autosaveTimeoutFromSettings();
         QMimeData* convertOfficeToPdf(const QMimeData* inputMimeData);
+        bool runPowerShellScript(const QString& scriptPath, const QStringList& scriptArgs);
 
         UBMainWindow *mMainWindow;
         std::shared_ptr<UBGraphicsScene> mActiveScene;

@@ -1953,100 +1953,93 @@ QMimeData *UBBoardController::convertOfficeToPdf(const QMimeData *inputMimeData)
         QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_HHmmss_zzz");
         outputPdfPath = tempDir + "/converted_" + timestamp + ".pdf";
 
-        QString appName;
-        if (wordExtensions.contains("." + extension)) {
-            appName = "Word.Application";
-        } else if (excelExtensions.contains("." + extension)) {
-            appName = "Excel.Application";
-        } else if (powerpointExtensions.contains("." + extension)) {
-            appName = "PowerPoint.Application";
-        }
-
-        QAxObject* officeApp = new QAxObject(appName);
-        if (!officeApp || officeApp->isNull()) {
-            qWarning() << "Failed to create" << appName << "object. Skipping:" << filePath;
-            outputUrls << url;
-            delete officeApp;
-            continue;
-        }
-
         try {
-            if (appName == "Word.Application") {
-                officeApp->setProperty("Visible", false);
-                QAxObject* documents = officeApp->querySubObject("Documents");
-                // Open with ReadOnly=false, AddToRecentFiles=false, and bypass Protected View
-                QAxObject* doc = documents->querySubObject("Open(const QString&,bool,bool)",
-                                                           filePath, false, false);
-                if (doc) {
-                    doc->dynamicCall("SaveAs2(const QString&, int)", outputPdfPath, 17);
-                    doc->dynamicCall("Close()");
-                    delete doc;
+            if (wordExtensions.contains("." + extension)) {
+                QString scriptPath = "./ps/word2pdf.ps1";
+                QStringList scriptArgs = {
+                    "-WordFilePath", QDir::toNativeSeparators(filePath),
+                    "-OutputPDFPath", QDir::toNativeSeparators(outputPdfPath)
+                };
+
+                if (!runPowerShellScript(scriptPath, scriptArgs)) {
+                    qDebug() << "Failed to run Word 2 PDF PowerShell script.";
+                    continue;
                 }
-                delete documents;
-            }
-            else if (appName == "Excel.Application") {
-                officeApp->setProperty("Visible", false);
-                QAxObject* workbooks = officeApp->querySubObject("Workbooks");
-                // Open with UpdateLinks=0, ReadOnly=false
-                QAxObject* book = workbooks->querySubObject("Open(const QString&,int,bool)",
-                                                            filePath, 0, false);
-                if (book) {
-                    book->dynamicCall("ExportAsFixedFormat(int, const QString&)", 0, outputPdfPath);
-                    book->dynamicCall("Close()");
-                    delete book;
+                else {
+                    outputUrls << QUrl::fromLocalFile(outputPdfPath);
                 }
-                delete workbooks;
-            }
-            else if (appName == "PowerPoint.Application") {
-                QAxObject* presentations = officeApp->querySubObject("Presentations");
-                if (presentations) {
-                    // Using QVariant list for multiple parameters
-                    QVariantList params;
-                    params << QDir::toNativeSeparators(filePath)  // FileName
-                           << false                       // ReadOnly (msoFalse)
-                           << false                       // Untitled (msoFalse)
-                           << false;                      // WithWindow (msoFalse)
+            } else if (excelExtensions.contains("." + extension)) {
+                QString scriptPath = "./ps/excel2pdf.ps1";
+                QStringList scriptArgs = {
+                    "-ExcelFilePath", QDir::toNativeSeparators(filePath),
+                    "-OutputPDFPath", QDir::toNativeSeparators(outputPdfPath)
+                };
 
-                    QAxObject* presentation = presentations->querySubObject(
-                        "Open(const QString&, const bool&, const bool&, const bool&)",
-                        params
-                        );
+                if (!runPowerShellScript(scriptPath, scriptArgs)) {
+                    qDebug() << "Failed to run Excel 2 PDF PowerShell script.";
+                    continue;
+                }
+                else {
+                    outputUrls << QUrl::fromLocalFile(outputPdfPath);
+                }
+            } else if (powerpointExtensions.contains("." + extension)) {
+                QString scriptPath = "./ps/powerpoint2pdf.ps1";
+                QStringList scriptArgs = {
+                    "-PowerPointFilePath", QDir::toNativeSeparators(filePath),
+                    "-OutputPDFPath", QDir::toNativeSeparators(outputPdfPath)
+                };
 
-                    if (!presentation) {
-                        qDebug() << "Failed to open presentation";
-                    }
-                    else {
-                        // Save as PDF (32 is the PpSaveAsFileType enumeration for PDF)
-                        presentation->dynamicCall(
-                            "SaveAs(const QString&, int)",
-                            QDir::toNativeSeparators(outputPdfPath),
-                            32
-                            );
-
-                        // Close presentation
-                        presentation->dynamicCall("Close()");
-                        delete presentation;
-
-                        qDebug() << "Conversion completed successfully. PDF saved to:" << outputPdfPath;
-                    }
-
-                    delete presentations;
+                if (!runPowerShellScript(scriptPath, scriptArgs)) {
+                    qDebug() << "Failed to run PowerPoint 2 PDF PowerShell script.";
+                    continue;
+                }
+                else {
+                    outputUrls << QUrl::fromLocalFile(outputPdfPath);
                 }
             }
-
-            outputUrls << QUrl::fromLocalFile(outputPdfPath);
         }
         catch (const std::exception& e) {
             qWarning() << "Conversion failed for" << filePath << ":" << e.what();
             outputUrls << url;
         }
-
-        officeApp->dynamicCall("Quit()");
-        delete officeApp;
     }
 
     outputMimeData->setUrls(outputUrls);
     return outputMimeData;
+}
+
+bool UBBoardController::runPowerShellScript(const QString& scriptPath, const QStringList& scriptArgs)
+{
+    QProcess process;
+
+    // Try PowerShell Core first, fallback to Windows PowerShell
+    QStringList interpreters = {"pwsh.exe", "powershell.exe"};
+    QStringList arguments;
+    arguments << "-NoProfile" << "-ExecutionPolicy" << "Bypass" << "-File" << scriptPath << scriptArgs;
+
+    for (const QString& interpreter : interpreters) {
+        process.start(interpreter, arguments);
+        if (!process.waitForFinished(-1)) {
+            qDebug() << interpreter << "failed:" << process.errorString();
+            continue; // Try next interpreter
+        }
+
+        QString output = process.readAllStandardOutput();
+        QString error = process.readAllStandardError();
+
+        if (process.exitCode() == 0) {
+            qDebug() << "Script executed successfully.";
+            if (!output.isEmpty()) qDebug() << "Output:" << output;
+            return true;
+        } else {
+            qDebug() << "Script failed with exit code:" << process.exitCode();
+            if (!error.isEmpty()) qDebug() << "Error:" << error;
+            continue; // Try next interpreter
+        }
+    }
+
+    qDebug() << "All PowerShell interpreters failed.";
+    return false;
 }
 
 void UBBoardController::changeBackground(bool isDark, UBPageBackground pageBackground)

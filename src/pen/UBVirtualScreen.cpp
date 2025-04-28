@@ -114,12 +114,8 @@ std::tuple<int, int> UBVirtualScreen::getSecondaryScreenDot(QRect vRect, int pX,
     int pRectX = pX - vRect.x();
     int pRectY = pY - vRect.y();
 
-    qInfo() << QString("[====VD] Point Inside QRect: pRectX: %1, pRectY: %2").arg(pRectX).arg(pRectY);
-
     qreal propWidth = static_cast<qreal>(secondaryScreenWidth) / vRect.width();
     qreal propHeight = static_cast<qreal>(secondaryScreenHeight) / vRect.height();
-
-    qInfo() << QString("[====VD] W/H Proportions: W: %1, H: %2").arg(propWidth).arg(propHeight);
 
     return std::tuple<int, int> { pRectX * propWidth, pRectY * propHeight };
 }
