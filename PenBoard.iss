@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PenBoard"
-#define MyAppVersion "20250426-2322"
+#define MyAppVersion "20250427-2255"
 #define MyAppPublisher "PenBoard"
 #define MyAppURL "https://www.penboard.com.br/"
 #define MyAppExeName "PenBoard.exe"
@@ -42,8 +42,8 @@ Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortugue
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Temp\PenBoard\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Temp\PenBoard\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Deploy\PenBoard\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Deploy\PenBoard\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

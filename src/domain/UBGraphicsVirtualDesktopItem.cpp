@@ -1,4 +1,4 @@
-#include "UBGraphicsVirtualDesktop.h"
+#include "UBGraphicsVirtualDesktopItem.h"
 #include <QPainter>
 #include <QGuiApplication>
 #include <QScreen>
@@ -6,10 +6,13 @@
 #include "../core/UBApplication.h"
 #include "gui/UBMainWindow.h"
 #include "../pen/UBPenController.h"
+#include "UBGraphicsVirtualDesktopItemDelegate.h"
 
-UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
+UBGraphicsVirtualDesktopItem::UBGraphicsVirtualDesktopItem()
     : m_timerId(0)
 {
+    setDelegate(new UBGraphicsVirtualDesktopItemDelegate(this));
+
     QScreen* mainWindowScreen = UBApplication::mainWindow->screen();
 
     // Get the list of available screens
@@ -39,7 +42,7 @@ UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
     setPos(m_width * -0.5, m_height * -0.5);
 
     // Delegate setup with flags
-    setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_ALL_AXIS | GF_RESPECT_RATIO));
+    // setDelegate(new UBGraphicsItemDelegate(this, 0, GF_SCALABLE_ALL_AXIS | GF_RESPECT_RATIO));
 
     // Set the data layer types
     setData(UBGraphicsItemData::ItemLayerType, UBItemLayerType::Object);
@@ -56,13 +59,21 @@ UBGraphicsVirtualDesktop::UBGraphicsVirtualDesktop()
     setFlag(QGraphicsItem::ItemIsSelectable);  // Make the item selectable
 }
 
-QRectF UBGraphicsVirtualDesktop::boundingRect() const
+UBGraphicsVirtualDesktopItem::~UBGraphicsVirtualDesktopItem()
+{
+    if (m_timerId != 0) {
+        killTimer(m_timerId);
+        m_timerId = 0;
+    }
+}
+
+QRectF UBGraphicsVirtualDesktopItem::boundingRect() const
 {
     // The bounding rectangle of the virtual desktop is simply the area of the secondary screen
     return QRectF(0, 0, m_width, m_height);
 }
 
-void UBGraphicsVirtualDesktop::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void UBGraphicsVirtualDesktopItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     // Paint the captured secondary screen content (QImage)
     if (!m_screenImage.isNull()) {
@@ -73,7 +84,7 @@ void UBGraphicsVirtualDesktop::paint(QPainter *painter, const QStyleOptionGraphi
     }
 }
 
-void UBGraphicsVirtualDesktop::setVirtualDesktopRect() const
+void UBGraphicsVirtualDesktopItem::setVirtualDesktopRect() const
 {
     // Step 1: Get the bounding rectangle in scene coordinates
     QRectF bounding = boundingRect(); // Local coordinates (0, 0, m_width, m_height)
@@ -111,7 +122,7 @@ void UBGraphicsVirtualDesktop::setVirtualDesktopRect() const
     UBApplication::penController->virtualDesktopRect = rect;
 }
 
-void UBGraphicsVirtualDesktop::captureSecondaryScreen()
+void UBGraphicsVirtualDesktopItem::captureSecondaryScreen()
 {
     // Get the list of available screens
     QList<QScreen *> screens = QGuiApplication::screens();
@@ -125,7 +136,7 @@ void UBGraphicsVirtualDesktop::captureSecondaryScreen()
     }
 }
 
-void UBGraphicsVirtualDesktop::timerEvent(QTimerEvent *event)
+void UBGraphicsVirtualDesktopItem::timerEvent(QTimerEvent *event)
 {
     // Check if the event is the one from the timer (to capture screen content periodically)
     if (event->timerId() == m_timerId) {
@@ -137,7 +148,7 @@ void UBGraphicsVirtualDesktop::timerEvent(QTimerEvent *event)
     }
 }
 
-QVariant UBGraphicsVirtualDesktop::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant UBGraphicsVirtualDesktopItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     // Handle position changes
     if (change == GraphicsItemChange::ItemTransformHasChanged) {

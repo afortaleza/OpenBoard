@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <QString>
 #include <QScreen>
-#include "domain/UBGraphicsVirtualDesktop.h"
+#include "domain/UBGraphicsVirtualDesktopItem.h"
 #include "qobject.h"
 #include "xb.h"
 
@@ -23,7 +23,7 @@ class UBPenController: public QObject
         PenTipStatus penTipStatus = PenUp;
         CalibrationStatus calibrationStatus = NotCalibrated;
         bool scanningCanceled = false;
-        UBGraphicsVirtualDesktop* virtualDesktop = nullptr;
+        UBGraphicsVirtualDesktopItem* virtualDesktop = nullptr;
         void loadPenSDK();
         void connect();
         QRect virtualDesktopRect;

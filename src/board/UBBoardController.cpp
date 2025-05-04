@@ -516,13 +516,13 @@ void UBBoardController::showVirtualDesktop(bool enabled)
 {
     if (enabled) {
         qInfo() << "[VD] Enabling Virtual Desktop";
-        UBApplication::penController->virtualDesktop = new UBGraphicsVirtualDesktop();
+        UBApplication::penController->virtualDesktop = new UBGraphicsVirtualDesktopItem();
         mActiveScene->addItem(UBApplication::penController->virtualDesktop);
         UBApplication::penController->virtualDesktop->setVirtualDesktopRect();
     }
     else {
         qInfo() << "[VD] Disabling Virtual Desktop";
-        mActiveScene->removeItem(UBApplication::penController->virtualDesktop);
+        UBApplication::penController->virtualDesktop->remove(false);
         delete UBApplication::penController->virtualDesktop;
         UBApplication::penController->virtualDesktop = nullptr;
     }
@@ -1743,6 +1743,9 @@ std::shared_ptr<UBGraphicsScene> UBBoardController::setActiveDocumentScene(std::
 
         if (sceneChange)
         {
+            // Kills virtual desktop on scene change
+            if (UBApplication::penController->virtualDesktop != nullptr)
+                UBApplication::penController->virtualDesktop->remove(false);
             emit activeSceneChanged();
         }
 

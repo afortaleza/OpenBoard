@@ -1,5 +1,6 @@
 HEADERS += src/domain/UBGraphicsScene.h \
-    $$PWD/UBGraphicsVirtualDesktop.h \
+    $$PWD/UBGraphicsVirtualDesktopItem.h \
+    $$PWD/UBGraphicsVirtualDesktopItemDelegate.h \
     src/domain/UBWebEngineView.h \
     src/domain/UBGraphicsItemUndoCommand.h \
     src/domain/UBGraphicsTextItemUndoCommand.h \
@@ -29,7 +30,8 @@ HEADERS += src/domain/UBGraphicsScene.h \
     src/domain/UBGraphicsItemZLevelUndoCommand.h
 
 SOURCES += src/domain/UBGraphicsScene.cpp \
-    $$PWD/UBGraphicsVirtualDesktop.cpp \
+    $$PWD/UBGraphicsVirtualDesktopItem.cpp \
+    $$PWD/UBGraphicsVirtualDesktopItemDelegate.cpp \
     src/domain/UBWebEngineView.cpp \
     src/domain/UBGraphicsItemUndoCommand.cpp \
     src/domain/UBGraphicsTextItemUndoCommand.cpp \

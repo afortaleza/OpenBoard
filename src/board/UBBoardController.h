@@ -39,7 +39,7 @@
 #include "core/UB.h"
 #include "document/UBDocumentContainer.h"
 #include "core/UBApplicationController.h"
-#include "domain/UBGraphicsVirtualDesktop.h"
+#include "domain/UBGraphicsVirtualDesktopItem.h"
 
 class UBMainWindow;
 class UBApplication;
@@ -60,7 +60,7 @@ class UBGraphicsWidgetItem;
 class UBBoardPaletteManager;
 class UBItem;
 class UBGraphicsItem;
-class UBGraphicsVirtualDesktop;
+class UBGraphicsVirtualDesktopItem;
 
 class UBBoardController : public UBDocumentContainer
 {
@@ -286,6 +286,9 @@ class UBBoardController : public UBDocumentContainer
         void updateSystemScaleFactor();
         QString truncate(QString text, int maxWidth);
 
+    public slots:
+        void showVirtualDesktop(bool enabled);
+
     protected slots:
         void selectionChanged();
         void undoRedoStateChange(bool canUndo);
@@ -294,7 +297,6 @@ class UBBoardController : public UBDocumentContainer
     private slots:
         void autosaveTimeout();
         void appMainModeChanged(UBApplicationController::MainMode);
-        void showVirtualDesktop(bool enabled);
         void reconnectPen();
 
         // Pen bluetooth slots
