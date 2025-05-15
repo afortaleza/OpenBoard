@@ -11,6 +11,7 @@
 // PenTipStatus
 enum PenTipStatus { PenUp, PenDown, PenMove };
 enum CalibrationStatus { NotCalibrated, CalibratingP1, CalibratingP2, Calibrated };
+enum ConnectionStatus { NotConnected, Connected };
 
 class UBPenController: public QObject
 {
@@ -22,10 +23,12 @@ class UBPenController: public QObject
         ~UBPenController();
         PenTipStatus penTipStatus = PenUp;
         CalibrationStatus calibrationStatus = NotCalibrated;
+        ConnectionStatus connectionStatus = NotConnected;
         bool scanningCanceled = false;
         UBGraphicsVirtualDesktopItem* virtualDesktop = nullptr;
         void loadPenSDK();
         void connect();
+        int getBatteryLevel();
         QRect virtualDesktopRect;
 
         QScreen* primaryScreen = nullptr;

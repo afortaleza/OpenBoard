@@ -403,5 +403,8 @@
         <file>images/toolbar/pen-connected.png</file>
         <file>images/toolbar/pen-disconnected.png</file>
         <file>images/toolbar/pen-connecting.gif</file>
+        <file>images/toolbar/pen-connected-battery-high.png</file>
+        <file>images/toolbar/pen-connected-battery-low.png</file>
+        <file>images/toolbar/pen-connected-battery-medium.png</file>
     </qresource>
 </RCC>

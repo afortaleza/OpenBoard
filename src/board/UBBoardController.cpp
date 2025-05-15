@@ -126,6 +126,8 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     mPenColorOnLightBackground = UBSettings::settings()->penColors(false).at(penColorIndex);
     mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(true).at(markerColorIndex);
     mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(false).at(markerColorIndex);
+
+    mPenBatteryTimer = new QTimer(this);
 }
 
 
@@ -133,6 +135,9 @@ void UBBoardController::init()
 {
     setupViews();
     setupToolbar();
+
+    // Start pen battery status check (every 60 seconds)
+    mPenBatteryTimer->start(60000);
 
     connect(UBApplication::undoStack, SIGNAL(canUndoChanged(bool))
             , this, SLOT(undoRedoStateChange(bool)));
@@ -486,6 +491,7 @@ void UBBoardController::connectToolbar()
     connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
     connect(UBApplication::penController, SIGNAL(stopScanning()), this, SLOT(penBluetoothStopScanning()));
+    connect(mPenBatteryTimer, SIGNAL(timeout()), this, SLOT(checkPenBatteryStatus()));
 }
 
 void UBBoardController::startScript()
@@ -2968,6 +2974,30 @@ void UBBoardController::notifyPageChanged()
 void UBBoardController::onDownloadModalFinished()
 {
 
+}
+
+void UBBoardController::checkPenBatteryStatus()
+{
+    if (UBApplication::penController->connectionStatus == NotConnected) {
+        return;
+    }
+
+    int batteryLevel = UBApplication::penController->getBatteryLevel();
+
+    QString iconPath;
+    if (batteryLevel == -1) {
+        iconPath = ":/images/toolbar/pen-connected.png";
+    }
+    else if (batteryLevel > 50) {
+        iconPath = ":/images/toolbar/pen-connected-battery-high.png";
+    } else if (batteryLevel > 20) {
+        iconPath = ":/images/toolbar/pen-connected-battery-medium.png";
+    } else {
+        iconPath = ":/images/toolbar/pen-connected-battery-low.png";
+    }
+
+    penBluetoothConnectingIcon->stop();
+    mMainWindow->actionPenBluetooth->setIcon(QIcon(iconPath));
 }
 
 void UBBoardController::displayMetaData(QMap<QString, QString> metadatas)

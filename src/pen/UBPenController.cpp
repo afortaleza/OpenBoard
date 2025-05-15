@@ -8,6 +8,7 @@
 #include "../gui/UBMainWindow.h"
 #include "UBVirtualScreen.h"
 #include <QMessageBox>
+#include "../board/UBBoardController.h"
 
 UBCalibrationWindow* penCalibrationWindow = nullptr;
 UBVirtualScreen* virtualScreen = nullptr;
@@ -146,6 +147,16 @@ void UBPenController::connect()
     }
 }
 
+int UBPenController::getBatteryLevel()
+{
+    uint16_t batteryInfo = pAFGetBatteryInfo();
+    qInfo() << "[Pen] Battery Level: " << batteryInfo;
+    if (batteryInfo == 32676)
+        return -1;
+    else
+        return batteryInfo * 10;
+}
+
 void showCalibrationWindow()
 {
     if (penCalibrationWindow == nullptr)
@@ -257,6 +268,8 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
 
         switch (deviceStatus->status) {
             case PEN_CONNECTION_SUCCESS:
+                UBApplication::penController->connectionStatus = Connected;
+                UBApplication::boardController->checkPenBatteryStatus();
                 emit UBApplication::penController->connected();
                 qInfo() << "[PEN] Connected!";
 
@@ -275,6 +288,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
                 UBApplication::penController->cancelScanning();
                 break;
             case PEN_DISCONNECTED:
+                UBApplication::penController->connectionStatus = NotConnected;
                 qInfo() << "[PEN] Disconnected from device, restarting scanning.";
                 UBApplication::penController->connect();
                 break;
@@ -289,6 +303,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
                 break;
             case PEN_CONNECTION_UNKNOWN:
                 qInfo() << "[PEN] Connection Unknown";
+                UBApplication::penController->connectionStatus = NotConnected;
                 UBApplication::penController->cancelScanning();
                 break;
             }

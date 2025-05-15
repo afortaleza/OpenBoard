@@ -288,6 +288,7 @@ class UBBoardController : public UBDocumentContainer
 
     public slots:
         void showVirtualDesktop(bool enabled);
+        void checkPenBatteryStatus();
 
     protected slots:
         void selectionChanged();
@@ -342,6 +343,7 @@ class UBBoardController : public UBDocumentContainer
 
         QTimer *mAutosaveTimer;
         QMovie *penBluetoothConnectingIcon;
+        QTimer* mPenBatteryTimer;
 
     private slots:
         void stylusToolDoubleClicked(int tool);
