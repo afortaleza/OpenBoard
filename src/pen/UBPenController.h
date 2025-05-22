@@ -28,7 +28,7 @@ class UBPenController: public QObject
         UBGraphicsVirtualDesktopItem* virtualDesktop = nullptr;
         void loadPenSDK();
         void connect();
-        int getBatteryLevel();
+        void getBatteryLevel();
         QRect virtualDesktopRect;
 
         QScreen* primaryScreen = nullptr;
