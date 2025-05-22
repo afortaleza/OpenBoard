@@ -24,9 +24,6 @@
  * along with OpenBoard. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
 #ifndef UBPODCASTRECORDINGPALETTE_H_
 #define UBPODCASTRECORDINGPALETTE_H_
 
@@ -35,6 +32,7 @@
 
 #include <QtGui>
 #include <QLabel>
+#include <QVideoWidget>
 
 class UBVuMeter;
 
@@ -42,37 +40,34 @@ class UBPodcastRecordingPalette : public UBActionPalette
 {
     Q_OBJECT;
 
-    public:
-        UBPodcastRecordingPalette(QWidget *parent = 0);
-        virtual ~UBPodcastRecordingPalette();
+public:
+    UBPodcastRecordingPalette(QWidget *parent = 0);
+    virtual ~UBPodcastRecordingPalette();
 
-    public slots:
+public slots:
+    void recordingStateChanged(UBPodcastController::RecordingState);
+    void recordingProgressChanged(qint64 ms);
+    void audioLevelChanged(quint8 level);
 
-        void recordingStateChanged(UBPodcastController::RecordingState);
-        void recordingProgressChanged(qint64 ms);
-        void audioLevelChanged(quint8 level);
-
-    private:
-        QLabel *mTimerLabel;
-        UBVuMeter *mLevelMeter;
+private:
+    QLabel *mTimerLabel;
+    UBVuMeter *mLevelMeter;
+    QVideoWidget *mCameraView;
 };
-
 
 class UBVuMeter : public QWidget
 {
+public:
+    UBVuMeter(QWidget* pParent);
+    virtual ~UBVuMeter();
 
-    public:
-        UBVuMeter(QWidget* pParent);
-        virtual ~UBVuMeter();
+    void setVolume(quint8 pVolume);
 
-        void setVolume(quint8 pVolume);
-    protected:
+protected:
+    virtual void paintEvent(QPaintEvent* e);
 
-        virtual void paintEvent(QPaintEvent* e);
-
-    private:
-        quint8 mVolume;
-
+private:
+    quint8 mVolume;
 };
 
 #endif /* UBPODCASTRECORDINGPALETTE_H_ */

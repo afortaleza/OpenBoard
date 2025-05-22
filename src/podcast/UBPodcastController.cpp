@@ -24,57 +24,42 @@
  * along with OpenBoard. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
 #include "UBPodcastController.h"
-
 #include "frameworks/UBFileSystemUtils.h"
 #include "frameworks/UBStringUtils.h"
 #include "frameworks/UBPlatformUtils.h"
-
 #include "core/UBApplication.h"
 #include "core/UBSettings.h"
 #include "core/UBSetting.h"
 #include "core/UBDisplayManager.h"
-
 #include "board/UBBoardController.h"
 #include "board/UBBoardView.h"
 #include "board/UBBoardPaletteManager.h"
-
 #include "gui/UBMainWindow.h"
-
+#include "qmediaformat.h"
 #include "web/UBWebController.h"
 #include "web/simplebrowser/webview.h"
-
 #include "domain/UBGraphicsScene.h"
-
 #include "UBAbstractVideoEncoder.h"
-
 #include "podcast/youtube/UBYouTubePublisher.h"
 #include "podcast/intranet/UBIntranetPodcastPublisher.h"
 #include "UBPodcastRecordingPalette.h"
 
-
-
-
 #ifdef Q_OS_WIN
-    #include "windowsmedia/UBWindowsMediaVideoEncoder.h"
-    #include "windowsmedia/UBWaveRecorder.h"
+#include "windowsmedia/UBWindowsMediaVideoEncoder.h"
+#include "windowsmedia/UBWaveRecorder.h"
 #elif defined(Q_OS_OSX)
-    #include "ffmpeg/UBFFmpegVideoEncoder.h"
-    #include "ffmpeg/UBMicrophoneInput.h"
+#include "ffmpeg/UBFFmpegVideoEncoder.h"
+#include "ffmpeg/UBMicrophoneInput.h"
 #elif defined(Q_OS_LINUX)
-    #include "ffmpeg/UBFFmpegVideoEncoder.h"
-    #include "ffmpeg/UBMicrophoneInput.h"
+#include "ffmpeg/UBFFmpegVideoEncoder.h"
+#include "ffmpeg/UBMicrophoneInput.h"
 #endif
 
 #include "core/memcheck.h"
 
 UBPodcastController* UBPodcastController::sInstance = 0;
-
-unsigned int UBPodcastController::sBackgroundColor = 0x00000000;  // BBGGRRAA
-
+unsigned int UBPodcastController::sBackgroundColor = 0x00000000;
 
 UBPodcastController::UBPodcastController(QObject* pParent)
     : QObject(pParent)
@@ -103,35 +88,27 @@ UBPodcastController::UBPodcastController(QObject* pParent)
 {
     connect(UBApplication::applicationController, SIGNAL(mainModeChanged(UBApplicationController::MainMode)),
             this, SLOT(applicationMainModeChanged(UBApplicationController::MainMode)));
-
     connect(UBApplication::applicationController, SIGNAL(desktopMode(bool)),
             this, SLOT(applicationDesktopMode(bool)));
-
     connect(UBApplication::webController, SIGNAL(activeWebPageChanged(WebView*)),
             this, SLOT(webActiveWebPageChanged(WebView*)));
-
     connect(UBApplication::app(), SIGNAL(lastWindowClosed()),
             this, SLOT(applicationAboutToQuit()));
-
 }
-
 
 UBPodcastController::~UBPodcastController()
 {
     // NOOP
 }
 
-
 void UBPodcastController::applicationAboutToQuit()
 {
     mApplicationIsClosing = true;
-
-    if(mRecordingState == Recording || mRecordingState == Paused)
+    if (mRecordingState == Recording || mRecordingState == Paused)
     {
         stop();
     }
 }
-
 
 void UBPodcastController::groupActionTriggered(QAction* action)
 {
@@ -139,13 +116,11 @@ void UBPodcastController::groupActionTriggered(QAction* action)
     updateActionState();
 }
 
-
 void UBPodcastController::actionToggled(bool checked)
 {
     Q_UNUSED(checked);
     updateActionState();
 }
-
 
 void UBPodcastController::updateActionState()
 {
@@ -159,9 +134,9 @@ void UBPodcastController::updateActionState()
     UBSettings::settings()->podcastAudioRecordingDevice->reset();
 
     if (mDefaultAudioInputDeviceAction && mDefaultAudioInputDeviceAction->isChecked())
-         UBSettings::settings()->podcastAudioRecordingDevice->set("Default");
+        UBSettings::settings()->podcastAudioRecordingDevice->set("Default");
     else if (mNoAudioInputDeviceAction && mNoAudioInputDeviceAction->isChecked())
-         UBSettings::settings()->podcastAudioRecordingDevice->set("None");
+        UBSettings::settings()->podcastAudioRecordingDevice->set("None");
     else
     {
         foreach(QAction* action, mAudioInputDevicesActions)
@@ -176,7 +151,6 @@ void UBPodcastController::updateActionState()
 
     UBSettings::settings()->podcastPublishToYoutube->set(mYoutubePublicationAction && mYoutubePublicationAction->isChecked());
     UBSettings::settings()->podcastPublishToIntranet->set(mIntranetPublicationAction && mIntranetPublicationAction->isChecked());
-
 }
 
 void UBPodcastController::widgetSizeChanged(const QSizeF size)
@@ -199,12 +173,10 @@ void UBPodcastController::widgetSizeChanged(const QSizeF size)
     mViewToVideoTransform.translate(offsetX / scale, offsetY / scale);
 }
 
-
 void UBPodcastController::setSourceWidget(QWidget* pWidget)
 {
     if (mSourceWidget != pWidget)
     {
-        // cleanup timer and event filter
         if (mScreenGrabingTimerEventID)
         {
             killTimer(mScreenGrabingTimerEventID);
@@ -216,7 +188,6 @@ void UBPodcastController::setSourceWidget(QWidget* pWidget)
             mSourceWidget->removeEventFilter(this);
         }
 
-        // setup new source widget
         mSourceWidget = pWidget;
         mInitialized = false;
         mViewToVideoTransform.reset();
@@ -233,7 +204,6 @@ void UBPodcastController::setSourceWidget(QWidget* pWidget)
                 connect(UBApplication::boardController, SIGNAL(activeSceneChanged()), this, SLOT(activeSceneChanged()));
                 connect(UBApplication::boardController, SIGNAL(backgroundChanged()), this, SLOT(sceneBackgroundChanged()));
                 connect(UBApplication::boardController, SIGNAL(controlViewportChanged()), this, SLOT(activeSceneChanged()));
-
                 activeSceneChanged();
             }
             else
@@ -241,14 +211,11 @@ void UBPodcastController::setSourceWidget(QWidget* pWidget)
                 disconnect(UBApplication::boardController, SIGNAL(activeSceneChanged()), this, SLOT(activeSceneChanged()));
                 disconnect(UBApplication::boardController, SIGNAL(backgroundChanged()), this, SLOT(sceneBackgroundChanged()));
                 disconnect(UBApplication::boardController, SIGNAL(controlViewportChanged()), this, SLOT(activeSceneChanged()));
-
                 mSourceScene = nullptr;
-
                 startNextChapter();
-
                 if (mIsDesktopMode || UBApplication::applicationController->displayMode() == UBApplicationController::Internet)
                 {
-                    mScreenGrabingTimerEventID  = startTimer(1000 / mVideoFramesPerSecondAtStart);
+                    mScreenGrabingTimerEventID = startTimer(1000 / mVideoFramesPerSecondAtStart);
                 }
             }
 
@@ -257,15 +224,12 @@ void UBPodcastController::setSourceWidget(QWidget* pWidget)
     }
 }
 
-
 UBPodcastController* UBPodcastController::instance()
 {
-    if(!sInstance)
+    if (!sInstance)
         sInstance = new UBPodcastController(UBApplication::staticMemoryCleaner);
-
     return sInstance;
 }
-
 
 void UBPodcastController::start()
 {
@@ -274,7 +238,6 @@ void UBPodcastController::start()
         mInitialized = false;
 
         QSize recommendedSize(1024, 768);
-
         int fullBitRate = UBSettings::settings()->podcastWindowsMediaBitsPerSecond->get().toInt();
 
         if (mSmallVideoSizeAction && mSmallVideoSizeAction->isChecked())
@@ -296,23 +259,20 @@ void UBPodcastController::start()
         QSize scaledboardSize = UBApplication::boardController->controlView()->size();
         scaledboardSize.scale(recommendedSize, Qt::KeepAspectRatio);
 
-        // Video width/height should be a multiple of 4
-
         int width = scaledboardSize.width();
         int height = scaledboardSize.height();
 
         if (width % 4 != 0)
-                width = ((width / 4) * 4);
-
+            width = ((width / 4) * 4);
         if (height % 4 != 0)
-                height = ((height / 4) * 4);
+            height = ((height / 4) * 4);
 
         mVideoFrameSizeAtStart = QSize(width, height);
 
         applicationMainModeChanged(UBApplication::applicationController->displayMode());
 
 #ifdef Q_OS_WIN
-        mVideoEncoder = new UBWindowsMediaVideoEncoder(this);  //deleted on stop
+        mVideoEncoder = new UBWindowsMediaVideoEncoder(this);
 #elif defined(Q_OS_OSX)
         mVideoEncoder = new UBFFmpegVideoEncoder(this);
 #elif defined(Q_OS_LINUX)
@@ -323,17 +283,13 @@ void UBPodcastController::start()
         {
             connect(mVideoEncoder, SIGNAL(encodingStatus(const QString&)), this, SLOT(encodingStatus(const QString&)));
             connect(mVideoEncoder, SIGNAL(encodingFinished(bool)), this, SLOT(encodingFinished(bool)));
-
-            if(mRecordingPalette)
+            if (mRecordingPalette)
             {
-                connect(mVideoEncoder, SIGNAL(audioLevelChanged(quint8))
-                        , mRecordingPalette, SLOT(audioLevelChanged(quint8)));
+                connect(mVideoEncoder, SIGNAL(audioLevelChanged(quint8)), mRecordingPalette, SLOT(audioLevelChanged(quint8)));
             }
-
             mVideoEncoder->setRecordAudio(!mNoAudioInputDeviceAction->isChecked());
 
             QString recordingDevice = "";
-
             if (!mNoAudioInputDeviceAction->isChecked() && !mDefaultAudioInputDeviceAction->isChecked())
             {
                 foreach(QAction* audioDevice, mAudioInputDevicesActions)
@@ -347,44 +303,37 @@ void UBPodcastController::start()
             }
 
             mVideoEncoder->setAudioRecordingDevice(recordingDevice);
-
             mVideoEncoder->setFramesPerSecond(mVideoFramesPerSecondAtStart);
             mVideoEncoder->setVideoSize(mVideoFrameSizeAtStart);
             mVideoEncoder->setVideoBitsPerSecond(mVideoBitsPerSecondAtStart);
 
             mPartNumber = 0;
-
             mPodcastRecordingPath = UBSettings::settings()->userPodcastRecordingDirectory();
 
-            qDebug() << "mPodcastRecordingPath: " << mPodcastRecordingPath;
-
             QString videoFileName;
-
             if (mIntranetPublicationAction && mIntranetPublicationAction->isChecked())
             {
-                videoFileName = mPodcastRecordingPath + "/" + "Podcast-"
-                        + QDateTime::currentDateTime().toString("yyyyMMddhhmmss")
-                        + "-" + UBPlatformUtils::computerName() + "." + mVideoEncoder->videoFileExtension();
+                videoFileName = mPodcastRecordingPath + "/" + "Podcast-" + QDateTime::currentDateTime().toString("yyyyMMddhhmmss") + "-" + UBPlatformUtils::computerName() + "." + mVideoEncoder->videoFileExtension();
             }
             else
             {
                 videoFileName = mPodcastRecordingPath + "/" + tr("OpenBoard Cast") + "." + mVideoEncoder->videoFileExtension();
             }
-
             videoFileName = UBFileSystemUtils::nextAvailableFileName(videoFileName, " ");
-
             mVideoEncoder->setVideoFileName(videoFileName);
 
-            mLatestCapture = QImage(mVideoFrameSizeAtStart, QImage::Format_RGB32); //0xffRRGGBB
+            // Initialize camera recording
+            mCameraRecordingPath = mPodcastRecordingPath + "/" + "Camera-Podcast-" + QDateTime::currentDateTime().toString("yyyyMMddhhmmss") + ".mp4";
+            mCameraRecordingPath = UBFileSystemUtils::nextAvailableFileName(mCameraRecordingPath, " ");
+            startCamera();
 
+            mLatestCapture = QImage(mVideoFrameSizeAtStart, QImage::Format_RGB32);
             mRecordStartTime = QTime::currentTime();
-
             mRecordingProgressTimerEventID = startTimer(100);
 
-            if(mVideoEncoder->start())
+            if (mVideoEncoder->start())
             {
                 setRecordingState(Recording);
-
                 if (mSourceScene)
                 {
                     processScenePaintEvent();
@@ -397,11 +346,13 @@ void UBPodcastController::start()
             else
             {
                 UBApplication::showMessage(tr("Failed to start encoder ..."), false);
+                stopCamera();
             }
         }
         else
         {
             UBApplication::showMessage(tr("No Podcast encoder available ..."), false);
+            stopCamera();
         }
     }
 }
@@ -411,16 +362,15 @@ void UBPodcastController::pause()
     if (mVideoEncoder && mRecordingState == Recording && mVideoEncoder->canPause())
     {
         sendLatestPixmapToEncoder();
-
         mTimeAtPaused = QTime::currentTime();
-
         if (mVideoEncoder->pause())
         {
+            if (mCameraRecorder)
+                mCameraRecorder->pause();
             setRecordingState(Paused);
         }
     }
 }
-
 
 void UBPodcastController::unpause()
 {
@@ -428,14 +378,14 @@ void UBPodcastController::unpause()
     {
         if (mVideoEncoder->unpause())
         {
-             mRecordingTimestampOffset += mTimeAtPaused.msecsTo(QTime::currentTime());
-             sendLatestPixmapToEncoder();
-
-             setRecordingState(Recording);
+            mRecordingTimestampOffset += mTimeAtPaused.msecsTo(QTime::currentTime());
+            sendLatestPixmapToEncoder();
+            if (mCameraRecorder)
+                mCameraRecorder->record();
+            setRecordingState(Recording);
         }
     }
 }
-
 
 void UBPodcastController::stop()
 {
@@ -446,20 +396,80 @@ void UBPodcastController::stop()
             killTimer(mScreenGrabingTimerEventID);
             mScreenGrabingTimerEventID = 0;
         }
-
         if (mRecordingProgressTimerEventID != 0)
             killTimer(mRecordingProgressTimerEventID);
 
         sendLatestPixmapToEncoder();
-
         setRecordingState(Stopping);
-
         mVideoEncoder->stop();
+        stopCamera();
     }
-
     mSourceScene = nullptr;
 }
 
+void UBPodcastController::startCamera()
+{
+    mCamera.reset(new QCamera(QCameraDevice()));
+    mCaptureSession.reset(new QMediaCaptureSession());
+    mCameraRecorder.reset(new QMediaRecorder(mCamera.data()));
+
+    mCaptureSession->setCamera(mCamera.data());
+    mCaptureSession->setRecorder(mCameraRecorder.data());
+    if (mRecordingPalette)
+        mCaptureSession->setVideoOutput(mRecordingPalette->findChild<QVideoWidget*>());
+
+    connect(mCamera.data(), &QCamera::errorOccurred, this, &UBPodcastController::cameraError);
+
+    QMediaFormat format;
+    format.setFileFormat(QMediaFormat::MPEG4);
+    format.setVideoCodec(QMediaFormat::VideoCodec::H264);
+    mCameraRecorder->setMediaFormat(format);
+    mCameraRecorder->setOutputLocation(QUrl::fromLocalFile(mCameraRecordingPath));
+    mCameraRecorder->setQuality(QMediaRecorder::LowQuality);
+    mCameraRecorder->setVideoResolution(mVideoFrameSizeAtStart);
+
+    if (mCamera->isAvailable())
+    {
+        mCamera->start();
+        mCameraRecorder->record();
+    }
+    else
+    {
+        UBApplication::showMessage(tr("No camera available ..."), false);
+    }
+}
+
+void UBPodcastController::stopCamera()
+{
+    if (mCameraRecorder)
+    {
+        mCameraRecorder->stop();
+        mCameraRecorder.reset();
+    }
+    if (mCamera)
+    {
+        mCamera->stop();
+        mCamera.reset();
+    }
+    if (mCaptureSession)
+    {
+        mCaptureSession->setVideoOutput(nullptr);
+        mCaptureSession.reset();
+    }
+    if (!mApplicationIsClosing && !mCameraRecordingPath.isEmpty())
+    {
+        QString location = (mPodcastRecordingPath == QStandardPaths::writableLocation(QStandardPaths::DesktopLocation))
+        ? tr("on your desktop ...")
+        : tr("in folder %1").arg(mPodcastRecordingPath);
+        UBApplication::showMessage(tr("Camera recording saved %1").arg(location), false);
+    }
+}
+
+void UBPodcastController::cameraError(QCamera::Error error)
+{
+    Q_UNUSED(error);
+    UBApplication::showMessage(tr("Camera error occurred ..."), false);
+}
 
 bool UBPodcastController::eventFilter(QObject *obj, QEvent *event)
 {
@@ -468,65 +478,49 @@ bool UBPodcastController::eventFilter(QObject *obj, QEvent *event)
         QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(event);
         widgetSizeChanged(resizeEvent->size());
     }
-
     return QObject::eventFilter(obj, event);
 }
-
 
 void UBPodcastController::activeSceneChanged()
 {
     if (mSourceScene)
     {
-        disconnect(mSourceScene.get(), SIGNAL(changed(const QList<QRectF>&)),
-                this, SLOT(sceneChanged(const QList<QRectF> &)));
+        disconnect(mSourceScene.get(), SIGNAL(changed(const QList<QRectF>&)), this, SLOT(sceneChanged(const QList<QRectF> &)));
     }
-
     mSourceScene = UBApplication::boardController->activeScene();
-
-    connect(mSourceScene.get(), SIGNAL(changed(const QList<QRectF>&)),
-        this, SLOT(sceneChanged(const QList<QRectF> &)));
-
+    connect(mSourceScene.get(), SIGNAL(changed(const QList<QRectF>&)), this, SLOT(sceneChanged(const QList<QRectF> &)));
     mInitialized = false;
-
     startNextChapter();
-
     UBBoardView *bv = qobject_cast<UBBoardView*>(mSourceWidget);
     if (bv)
     {
         QRectF viewportRect = bv->mapToScene(bv->geometry()).boundingRect();
         mSceneRepaintRectQueue.enqueue(viewportRect);
     }
-
     processScenePaintEvent();
 }
 
 void UBPodcastController::sceneBackgroundChanged()
 {
     UBBoardView *bv = qobject_cast<UBBoardView*>(mSourceWidget);
-
     if (bv)
     {
         mInitialized = false;
     }
-
     processScenePaintEvent();
 }
-
 
 long UBPodcastController::elapsedRecordingMs()
 {
     QTime now = QTime::currentTime();
     long msFromStart = mRecordStartTime.msecsTo(now);
-
     return msFromStart - mRecordingTimestampOffset;
 }
-
 
 void UBPodcastController::startNextChapter()
 {
     if (mVideoEncoder && !mEmptyChapter)
     {
-        //punch chapter in
         ++mPartNumber;
         mVideoEncoder->newChapter(tr("Part %1").arg(mPartNumber), elapsedRecordingMs());
         mEmptyChapter = true;
@@ -534,14 +528,11 @@ void UBPodcastController::startNextChapter()
     }
 }
 
-
 void UBPodcastController::sceneChanged(const QList<QRectF> & region)
 {
-    if(mRecordingState != Recording)
+    if (mRecordingState != Recording)
         return;
-
     bool shouldRepaint = (mSceneRepaintRectQueue.length() == 0);
-
     UBBoardView *bv = qobject_cast<UBBoardView *>(mSourceWidget);
     if (bv)
     {
@@ -551,82 +542,60 @@ void UBPodcastController::sceneChanged(const QList<QRectF> & region)
             QRectF maxRect = rect.intersected(viewportRect);
             mSceneRepaintRectQueue.enqueue(maxRect);
         }
-
         if (shouldRepaint)
             QTimer::singleShot(1000.0 / mVideoFramesPerSecondAtStart, this, SLOT(processScenePaintEvent()));
-
     }
 }
 
-
 void UBPodcastController::processScenePaintEvent()
 {
-    if(mRecordingState != Recording)
+    if (mRecordingState != Recording)
         return;
-
     UBBoardView *bv = qobject_cast<UBBoardView *>(mSourceWidget);
-
-    if(!bv)
+    if (!bv)
         return;
-
     QRectF repaintRect;
-
     if (!mInitialized)
     {
         mSceneRepaintRectQueue.clear();
         repaintRect = bv->mapToScene(QRect(0, 0, bv->width(), bv->height())).boundingRect();
-
         if (bv->scene()->isDarkBackground())
             mLatestCapture.fill(Qt::black);
         else
             mLatestCapture.fill(Qt::white);
-
         mInitialized = true;
     }
     else
     {
-        while(mSceneRepaintRectQueue.size() > 0)
+        while (mSceneRepaintRectQueue.size() > 0)
         {
             repaintRect = repaintRect.united(mSceneRepaintRectQueue.dequeue());
         }
     }
-
     if (!repaintRect.isNull())
     {
         std::shared_ptr<UBGraphicsScene> scene = bv->scene();
-
         QPainter p(&mLatestCapture);
-
         p.setTransform(mViewToVideoTransform);
         p.setTransform(bv->viewportTransform(), true);
-
         p.setRenderHints(QPainter::Antialiasing);
         p.setRenderHints(QPainter::SmoothPixmapTransform);
-
         repaintRect.adjust(-1, -1, 1, 1);
-
         p.setClipRect(repaintRect);
-
         if (scene->isDarkBackground())
             p.fillRect(repaintRect, Qt::black);
         else
             p.fillRect(repaintRect, Qt::white);
-
         scene->setRenderingContext(UBGraphicsScene::Podcast);
-
         scene->render(&p, repaintRect, repaintRect);
-
         scene->setRenderingContext(UBGraphicsScene::Screen);
-
         sendLatestPixmapToEncoder();
     }
 }
 
-
 void UBPodcastController::applicationMainModeChanged(UBApplicationController::MainMode pMode)
 {
     mIsDesktopMode = false;
-
     if (pMode == UBApplicationController::Internet)
     {
         setSourceWidget(UBApplication::webController->controlView());
@@ -637,11 +606,9 @@ void UBPodcastController::applicationMainModeChanged(UBApplicationController::Ma
     }
 }
 
-
 void UBPodcastController::applicationDesktopMode(bool displayed)
 {
     mIsDesktopMode = displayed;
-
     if (displayed)
     {
         setSourceWidget(UBApplication::displayManager->widget(ScreenRole::Desktop));
@@ -652,21 +619,18 @@ void UBPodcastController::applicationDesktopMode(bool displayed)
     }
 }
 
-
 void UBPodcastController::webActiveWebPageChanged(WebView* pWebView)
 {
-    if(UBApplication::applicationController->displayMode() == UBApplicationController::Internet)
+    if (UBApplication::applicationController->displayMode() == UBApplicationController::Internet)
     {
         setSourceWidget(pWebView);
     }
 }
 
-
 void UBPodcastController::encodingStatus(const QString& pStatus)
 {
     UBApplication::showMessage(pStatus, true);
 }
-
 
 void UBPodcastController::encodingFinished(bool ok)
 {
@@ -677,26 +641,19 @@ void UBPodcastController::encodingFinished(bool ok)
             if (!mApplicationIsClosing)
             {
                 QString location;
-
                 if (mPodcastRecordingPath == QStandardPaths::writableLocation(QStandardPaths::DesktopLocation))
                     location = tr("on your desktop ...");
                 else
-                {
-                    QDir dir(mPodcastRecordingPath);
                     location = tr("in folder %1").arg(mPodcastRecordingPath);
-                }
-
                 UBApplication::showMessage(tr("Podcast created %1").arg(location), false);
-
                 if (mIntranetPublicationAction && mIntranetPublicationAction->isChecked())
                 {
-                    UBIntranetPodcastPublisher* intranet = new UBIntranetPodcastPublisher(this); // Self destroyed
+                    UBIntranetPodcastPublisher* intranet = new UBIntranetPodcastPublisher(this);
                     intranet->publishVideo(mVideoEncoder->videoFileName(), elapsedRecordingMs());
                 }
-
                 if (mYoutubePublicationAction && mYoutubePublicationAction->isChecked())
                 {
-                    UBYouTubePublisher* youTube = new UBYouTubePublisher(this); // Self destroyed
+                    UBYouTubePublisher* youTube = new UBYouTubePublisher(this);
                     youTube->uploadVideo(mVideoEncoder->videoFileName());
                 }
             }
@@ -704,22 +661,17 @@ void UBPodcastController::encodingFinished(bool ok)
         else
         {
             qWarning() << mVideoEncoder->lastErrorMessage();
-
             UBApplication::showMessage(tr("Podcast recording error (%1)").arg(mVideoEncoder->lastErrorMessage()), false);
         }
-
         mVideoEncoder->deleteLater();
-
         setRecordingState(Stopped);
     }
 }
-
 
 void UBPodcastController::sendLatestPixmapToEncoder()
 {
     if (mVideoEncoder)
         mVideoEncoder->newPixmap(mLatestCapture, elapsedRecordingMs());
-
     mEmptyChapter = false;
 }
 
@@ -741,41 +693,32 @@ void UBPodcastController::timerEvent(QTimerEvent *event)
 void UBPodcastController::processScreenGrabingTimerEvent()
 {
     QPixmap widgetContent;
-
     if (mIsDesktopMode)
     {
         widgetContent = UBApplication::displayManager->grab(ScreenRole::Control);
     }
     else
     {
-        // render web view
         widgetContent = QPixmap(mSourceWidget->size());
         QPainter p(&widgetContent);
         mSourceWidget->render(&p);
     }
-
     QPainter p(&mLatestCapture);
-
     if (!mInitialized)
     {
         mLatestCapture.fill(sBackgroundColor);
         mInitialized = true;
     }
-
     QRectF targetRect = mViewToVideoTransform.mapRect(QRectF(0, 0, widgetContent.width(), widgetContent.height()));
-
     p.setRenderHints(QPainter::Antialiasing);
     p.setRenderHints(QPainter::SmoothPixmapTransform);
-    p.drawPixmap(targetRect.left(), targetRect.top(), widgetContent.scaled(targetRect.width(), targetRect.height(),  Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
+    p.drawPixmap(targetRect.left(), targetRect.top(), widgetContent.scaled(targetRect.width(), targetRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     sendLatestPixmapToEncoder();
 }
-
 
 QStringList UBPodcastController::audioRecordingDevices()
 {
     QStringList devices;
-
 #ifdef Q_OS_WIN
     devices = UBWaveRecorder::waveInDevices();
 #elif defined(Q_OS_OSX)
@@ -783,10 +726,8 @@ QStringList UBPodcastController::audioRecordingDevices()
 #elif defined(Q_OS_LINUX)
     devices = UBMicrophoneInput::availableDevicesNames();
 #endif
-
     return devices;
 }
-
 
 void UBPodcastController::recordToggled(bool record)
 {
@@ -804,70 +745,47 @@ void UBPodcastController::pauseToggled(bool paused)
         unpause();
 }
 
-
 void UBPodcastController::toggleRecordingPalette(bool visible)
 {
-    if(!mRecordingPalette)
+    if (!mRecordingPalette)
     {
         mRecordingPalette = new UBPodcastRecordingPalette(UBApplication::mainWindow);
-
         mRecordingPalette->adjustSizeAndPosition();
         mRecordingPalette->setCustomPosition(true);
-
-        int left = UBApplication::boardController->controlView()->width() * 0.75
-                   - mRecordingPalette->width() / 2;
-
-        int top = UBApplication::boardController->controlView()->height()
-                   - mRecordingPalette->height() - UBSettings::boardMargin;
-
+        int left = UBApplication::boardController->controlView()->width() * 0.75 - mRecordingPalette->width() / 2;
+        int top = UBApplication::boardController->controlView()->height() - mRecordingPalette->height() - UBSettings::boardMargin;
         QPoint controlViewPoint(left, top);
         QPoint mainWindowsPoint = UBApplication::boardController->controlView()->mapTo(UBApplication::mainWindow, controlViewPoint);
-
         mRecordingPalette->move(mainWindowsPoint);
-
-        connect(UBApplication::mainWindow->actionPodcastRecord, SIGNAL(triggered(bool))
-             , this, SLOT(recordToggled(bool)));
-
-        connect(UBApplication::mainWindow->actionPodcastPause, SIGNAL(toggled(bool))
-             , this, SLOT(pauseToggled(bool)));
-
-        connect(this, SIGNAL(recordingStateChanged(UBPodcastController::RecordingState))
-                , mRecordingPalette, SLOT(recordingStateChanged(UBPodcastController::RecordingState)));
-        connect(this, SIGNAL(recordingProgressChanged(qint64))
-                , mRecordingPalette, SLOT(recordingProgressChanged(qint64)));
+        connect(UBApplication::mainWindow->actionPodcastRecord, SIGNAL(triggered(bool)), this, SLOT(recordToggled(bool)));
+        connect(UBApplication::mainWindow->actionPodcastPause, SIGNAL(toggled(bool)), this, SLOT(pauseToggled(bool)));
+        connect(this, SIGNAL(recordingStateChanged(UBPodcastController::RecordingState)), mRecordingPalette, SLOT(recordingStateChanged(UBPodcastController::RecordingState)));
+        connect(this, SIGNAL(recordingProgressChanged(qint64)), mRecordingPalette, SLOT(recordingProgressChanged(qint64)));
     }
-
     mRecordingPalette->setVisible(visible);
 }
 
-
 void UBPodcastController::setRecordingState(RecordingState pRecordingState)
 {
-    if(mRecordingState != pRecordingState)
+    if (mRecordingState != pRecordingState)
     {
         mRecordingState = pRecordingState;
         emit recordingStateChanged(mRecordingState);
     }
 }
 
-
 QList<QAction*> UBPodcastController::audioRecordingDevicesActions()
 {
     if (mAudioInputDevicesActions.length() == 0)
     {
         QString settingsDevice = UBSettings::settings()->podcastAudioRecordingDevice->get().toString();
-
         mDefaultAudioInputDeviceAction = new QAction(tr("Default Audio Input"), this);
         QAction *checkedAction = mDefaultAudioInputDeviceAction;
-
         mNoAudioInputDeviceAction = new QAction(tr("No Audio Recording"), this);
-
         if (settingsDevice == "None")
             checkedAction = mNoAudioInputDeviceAction;
-
         mAudioInputDevicesActions << mNoAudioInputDeviceAction;
         mAudioInputDevicesActions << mDefaultAudioInputDeviceAction;
-
         foreach(QString audioDevice, audioRecordingDevices())
         {
             QAction* act = new QAction(audioDevice, this);
@@ -876,24 +794,18 @@ QList<QAction*> UBPodcastController::audioRecordingDevicesActions()
             if (settingsDevice == audioDevice)
                 checkedAction = act;
         }
-
         QActionGroup* audioInputActionGroup = new QActionGroup(this);
         audioInputActionGroup->setExclusive(true);
-
         foreach(QAction* action, mAudioInputDevicesActions)
         {
             audioInputActionGroup->addAction(action);
             action->setCheckable(true);
         }
         checkedAction->setChecked(true);
-
         connect(audioInputActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(groupActionTriggered(QAction*)));
     }
-
     return mAudioInputDevicesActions;
-
 }
-
 
 QList<QAction*> UBPodcastController::videoSizeActions()
 {
@@ -902,61 +814,44 @@ QList<QAction*> UBPodcastController::videoSizeActions()
         mSmallVideoSizeAction = new QAction(tr("Small"), this);
         mMediumVideoSizeAction = new QAction(tr("Medium"), this);
         mFullVideoSizeAction = new QAction(tr("Full"), this);
-
         mVideoSizesActions << mSmallVideoSizeAction;
         mVideoSizesActions << mMediumVideoSizeAction;
         mVideoSizesActions << mFullVideoSizeAction;
-
         QActionGroup* videoSizeActionGroup = new QActionGroup(this);
         videoSizeActionGroup->setExclusive(true);
-
         foreach(QAction* videoSizeAction, mVideoSizesActions)
         {
             videoSizeAction->setCheckable(true);
             videoSizeActionGroup->addAction(videoSizeAction);
         }
-
         QString videoSize = UBSettings::settings()->podcastVideoSize->get().toString();
-
         if (videoSize == "Small")
             mSmallVideoSizeAction->setChecked(true);
         else if (videoSize == "Full")
             mFullVideoSizeAction->setChecked(true);
         else
             mMediumVideoSizeAction->setChecked(true);
-
         connect(videoSizeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(groupActionTriggered(QAction*)));
     }
-
     return mVideoSizesActions;
 }
-
 
 QList<QAction*> UBPodcastController::podcastPublicationActions()
 {
     if (mPodcastPublicationActions.length() == 0)
     {
         mIntranetPublicationAction = new QAction(tr("Publish to Intranet"), this);
-
         mIntranetPublicationAction->setCheckable(true);
         mIntranetPublicationAction->setChecked(UBSettings::settings()->podcastPublishToIntranet->get().toBool());
-
         mPodcastPublicationActions << mIntranetPublicationAction;
-
         mYoutubePublicationAction = new QAction(tr("Publish to Youtube"), this);
         mYoutubePublicationAction->setCheckable(true);
         mYoutubePublicationAction->setChecked(UBSettings::settings()->podcastPublishToYoutube->get().toBool());
-
         mPodcastPublicationActions << mYoutubePublicationAction;
-
         foreach(QAction* publicationAction, mPodcastPublicationActions)
         {
             connect(publicationAction, SIGNAL(toggled(bool)), this, SLOT(actionToggled(bool)));
         }
     }
-
     return mPodcastPublicationActions;
 }
-
-
-

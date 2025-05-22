@@ -24,49 +24,41 @@
  * along with OpenBoard. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
 #include "UBPodcastRecordingPalette.h"
-
 #include "UBPodcastController.h"
-
 #include "core/UBApplication.h"
-
 #include "gui/UBResources.h"
-
 #include "core/UBSettings.h"
-
 #include "gui/UBMainWindow.h"
-
 #include "core/memcheck.h"
 
 UBPodcastRecordingPalette::UBPodcastRecordingPalette(QWidget *parent)
-     : UBActionPalette(Qt::Horizontal, parent)
+    : UBActionPalette(Qt::Horizontal, parent)
 {
     addAction(UBApplication::mainWindow->actionPodcastRecord);
 
     mTimerLabel = new QLabel(this);
     mTimerLabel->setStyleSheet(QString("QLabel {color: white; font-size: 14px; font-weight: bold; font-family: Arial; background-color: transparent; border: none}"));
     recordingProgressChanged(0);
-
     layout()->addWidget(mTimerLabel);
 
     mLevelMeter = new UBVuMeter(this);
     mLevelMeter->setMinimumSize(6, 32);
-
     layout()->addWidget(mLevelMeter);
+
+    mCameraView = new QVideoWidget(this);
+    mCameraView->setMinimumSize(160, 120); // Set a reasonable size for the camera preview
+    layout()->addWidget(mCameraView);
 
     addAction(UBApplication::mainWindow->actionPodcastConfig);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    foreach(QObject* menuWidget,  UBApplication::mainWindow->actionPodcastConfig->associatedObjects())
+    foreach(QObject* menuWidget, UBApplication::mainWindow->actionPodcastConfig->associatedObjects())
 #else
-    foreach(QWidget* menuWidget,  UBApplication::mainWindow->actionPodcastConfig->associatedWidgets())
+    foreach(QWidget* menuWidget, UBApplication::mainWindow->actionPodcastConfig->associatedWidgets())
 #endif
     {
         QToolButton *tb = qobject_cast<QToolButton*>(menuWidget);
-
         tb->setIconSize(QSize(16, 16));
 
         if (tb && !tb->menu())
@@ -90,7 +82,6 @@ UBPodcastRecordingPalette::UBPodcastRecordingPalette(QWidget *parent)
             menu->addSeparator();
 
             QList<QAction*> podcastPublication = UBPodcastController::instance()->podcastPublicationActions();
-
             foreach(QAction* publicationAction, podcastPublication)
             {
                 menu->addAction(publicationAction);
@@ -101,12 +92,10 @@ UBPodcastRecordingPalette::UBPodcastRecordingPalette(QWidget *parent)
     }
 }
 
-
 UBPodcastRecordingPalette::~UBPodcastRecordingPalette()
 {
     // NOOP
 }
-
 
 void UBPodcastRecordingPalette::recordingStateChanged(UBPodcastController::RecordingState state)
 {
@@ -114,34 +103,24 @@ void UBPodcastRecordingPalette::recordingStateChanged(UBPodcastController::Recor
     {
         UBApplication::mainWindow->actionPodcastRecord->setChecked(true);
         UBApplication::mainWindow->actionPodcastRecord->setEnabled(true);
-
         UBApplication::mainWindow->actionPodcastPause->setChecked(false);
         UBApplication::mainWindow->actionPodcastPause->setEnabled(true);
-
-        //UBApplication::mainWindow->actionPodcastMic->setEnabled(false);
-
         UBApplication::mainWindow->actionPodcastConfig->setEnabled(false);
     }
     else if (state == UBPodcastController::Stopped)
     {
         UBApplication::mainWindow->actionPodcastRecord->setChecked(false);
         UBApplication::mainWindow->actionPodcastRecord->setEnabled(true);
-
         UBApplication::mainWindow->actionPodcastPause->setChecked(false);
         UBApplication::mainWindow->actionPodcastPause->setEnabled(false);
-
-        //UBApplication::mainWindow->actionPodcastMic->setEnabled(true);
         UBApplication::mainWindow->actionPodcastConfig->setEnabled(true);
     }
     else if (state == UBPodcastController::Paused)
     {
         UBApplication::mainWindow->actionPodcastRecord->setChecked(true);
         UBApplication::mainWindow->actionPodcastRecord->setEnabled(true);
-
         UBApplication::mainWindow->actionPodcastPause->setChecked(true);
         UBApplication::mainWindow->actionPodcastPause->setEnabled(true);
-
-        //UBApplication::mainWindow->actionPodcastMic->setEnabled(false);
         UBApplication::mainWindow->actionPodcastConfig->setEnabled(false);
     }
     else
@@ -152,21 +131,17 @@ void UBPodcastRecordingPalette::recordingStateChanged(UBPodcastController::Recor
     }
 }
 
-
 void UBPodcastRecordingPalette::recordingProgressChanged(qint64 ms)
 {
     int min = ms / 60000;
     int seconds = (ms / 1000) % 60;
-
     mTimerLabel->setText(QString("%1:%2").arg(min, 3, 10, QChar(' ')).arg(seconds, 2, 10, QChar('0')));
 }
-
 
 void UBPodcastRecordingPalette::audioLevelChanged(quint8 level)
 {
     mLevelMeter->setVolume(level);
 }
-
 
 UBVuMeter::UBVuMeter(QWidget* pParent)
     : QWidget(pParent)
@@ -174,7 +149,6 @@ UBVuMeter::UBVuMeter(QWidget* pParent)
 {
     // NOOP
 }
-
 
 UBVuMeter::~UBVuMeter()
 {
@@ -190,16 +164,11 @@ void UBVuMeter::setVolume(quint8 pVolume)
     }
 }
 
-
 void UBVuMeter::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);
-
     QPainter painter(this);
-
     int h = (height() - 8) * mVolume / 255;
     QRectF rect(0, height() - 4 - h, width(), h);
-
     painter.fillRect(rect, UBSettings::documentViewLightColor);
 }
-
