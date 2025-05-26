@@ -1,5 +1,6 @@
 
 HEADERS      += src/core/UB.h \
+    $$PWD/UBPenBoardConfiguration.h \
                 src/core/UBShortcutManager.h \
                 src/core/UBApplication.h \
                 src/core/UBSettings.h \
@@ -19,6 +20,7 @@ HEADERS      += src/core/UB.h \
     $$PWD/UBForeignObjectsHandler.h
 
 SOURCES      += src/core/main.cpp \
+    $$PWD/UBPenBoardConfiguration.cpp \
                 src/core/UBShortcutManager.cpp \
                 src/core/UBApplication.cpp \
                 src/core/UBSettings.cpp \

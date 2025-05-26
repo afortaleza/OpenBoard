@@ -85,6 +85,7 @@ UBPreferencesController::UBPreferencesController(QWidget *parent)
     mPreferencesWindow = new UBPreferencesDialog(this,parent, Qt::Dialog);
     mPreferencesUI = new Ui::preferencesDialog();  // deleted in destructor
     mPreferencesUI->setupUi(mPreferencesWindow);
+
     adjustScreensPreferences();
 
     connect(UBApplication::displayManager, &UBDisplayManager::availableScreenCountChanged, this, &UBPreferencesController::adjustScreensPreferences);
@@ -191,7 +192,7 @@ void UBPreferencesController::wire()
     });
     connect(mPreferencesUI->startModeComboBox, SIGNAL(currentIndexChanged(int)), settings->appStartMode, SLOT(setInt(int)));
 
-    connect(mPreferencesUI->useExternalBrowserCheckBox, SIGNAL(clicked(bool)), settings->webUseExternalBrowser, SLOT(setBool(bool)));
+    //connect(mPreferencesUI->useExternalBrowserCheckBox, SIGNAL(clicked(bool)), settings->webUseExternalBrowser, SLOT(setBool(bool)));
     connect(mPreferencesUI->displayBrowserPageCheckBox, SIGNAL(clicked(bool)), settings->webShowPageImmediatelyOnMirroredScreen, SLOT(setBool(bool)));
 
     connect(mPreferencesUI->toolbarAtTopRadioButton, SIGNAL(clicked(bool)), this, SLOT(toolbarPositionChanged(bool)));
@@ -321,13 +322,13 @@ void UBPreferencesController::init()
 
     mPreferencesUI->startModeComboBox->setCurrentIndex(settings->appStartMode->get().toInt());
 
-    mPreferencesUI->useExternalBrowserCheckBox->setChecked(settings->webUseExternalBrowser->get().toBool());
+    //mPreferencesUI->useExternalBrowserCheckBox->setChecked(settings->webUseExternalBrowser->get().toBool());
     mPreferencesUI->displayBrowserPageCheckBox->setChecked(settings->webShowPageImmediatelyOnMirroredScreen->get().toBool());
     mPreferencesUI->screenList->loadScreenList(settings->appScreenList->get().toStringList());
-    mPreferencesUI->webHomePage->setText(settings->webHomePage->get().toString());
+    //mPreferencesUI->webHomePage->setText(settings->webHomePage->get().toString());
 
-    mPreferencesUI->proxyUsername->setText(settings->proxyUsername());
-    mPreferencesUI->proxyPassword->setText(settings->proxyPassword());
+    //mPreferencesUI->proxyUsername->setText(settings->proxyUsername());
+    //mPreferencesUI->proxyPassword->setText(settings->proxyPassword());
 
     mPreferencesUI->toolbarAtTopRadioButton->setChecked(settings->appToolBarPositionedAtTop->get().toBool());
     mPreferencesUI->toolbarAtBottomRadioButton->setChecked(!settings->appToolBarPositionedAtTop->get().toBool());
@@ -356,11 +357,11 @@ void UBPreferencesController::init()
 void UBPreferencesController::close()
 {
     //web
-    QString homePage = mPreferencesUI->webHomePage->text();
+    //QString homePage = mPreferencesUI->webHomePage->text();
 
-    UBSettings::settings()->webHomePage->set(homePage);
-    UBSettings::settings()->setProxyUsername(mPreferencesUI->proxyUsername->text());
-    UBSettings::settings()->setProxyPassword(mPreferencesUI->proxyPassword->text());
+    //UBSettings::settings()->webHomePage->set(homePage);
+    //UBSettings::settings()->setProxyUsername(mPreferencesUI->proxyUsername->text());
+    //UBSettings::settings()->setProxyPassword(mPreferencesUI->proxyPassword->text());
 
     mPreferencesWindow->accept();
 }
@@ -445,6 +446,7 @@ void UBPreferencesController::defaultSettings()
         mPreferencesUI->checkSoftwareUpdateAtLaunchCheckBox->setChecked(defaultValue);
 
     }
+    /*
     else if(mPreferencesUI->mainTabWidget->currentWidget() == mPreferencesUI->networkTab){
         bool defaultValue = settings->webUseExternalBrowser->reset().toBool();
         mPreferencesUI->useExternalBrowserCheckBox->setChecked(defaultValue);
@@ -453,6 +455,7 @@ void UBPreferencesController::defaultSettings()
 
         mPreferencesUI->webHomePage->setText(settings->webHomePage->reset().toString());
     }
+    */
     else if(mPreferencesUI->mainTabWidget->currentWidget() == mPreferencesUI->gridTab)
     {
         settings->boardCrossColorDarkBackground->reset();

@@ -34,6 +34,7 @@
 #include <QFontDatabase>
 #include <QStyleFactory>
 
+#include "core/UBPenBoardConfiguration.h"
 #include "frameworks/UBPlatformUtils.h"
 #include "frameworks/UBFileSystemUtils.h"
 #include "frameworks/UBStringUtils.h"
@@ -423,6 +424,8 @@ int UBApplication::exec(const QString& pFileToImport)
 
     onScreenCountChanged(displayManager->numScreens());
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
+
+    UBPenBoardConfiguration::hideComponents();
 
     penController->loadPenSDK();
     penController->connect();

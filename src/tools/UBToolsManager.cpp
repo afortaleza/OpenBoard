@@ -52,12 +52,12 @@ UBToolsManager::UBToolsManager(QObject *parent)
     : QObject(parent)
 {
 
-    mask.id = "openboardtool://openboard/mask";
-    mask.icon = QPixmap(":/images/toolPalette/maskTool.png");
-    mask.label = tr("Mask");
-    mask.version = "1.0";
-    mToolsIcon.insert(mask.id, ":/images/toolPalette/maskTool.png");
-    mDescriptors << mask;
+//    mask.id = "openboardtool://openboard/mask";
+//    mask.icon = QPixmap(":/images/toolPalette/maskTool.png");
+//    mask.label = tr("Mask");
+//    mask.version = "1.0";
+//    mToolsIcon.insert(mask.id, ":/images/toolPalette/maskTool.png");
+//    mDescriptors << mask;
 
 
     ruler.id = "openboardtool://ruler";
@@ -108,12 +108,12 @@ UBToolsManager::UBToolsManager(QObject *parent)
     mDescriptors << magnifier;
 
 
-    cache.id = "openboardtool://cache";
-    cache.icon = QPixmap(":/images/toolPalette/cacheTool.png");
-    cache.label = tr("Cache");
-    cache.version = "1.0";
-    mToolsIcon.insert(cache.id, ":/images/toolPalette/cacheTool.png");
-    mDescriptors << cache;
+//    cache.id = "openboardtool://cache";
+//   cache.icon = QPixmap(":/images/toolPalette/cacheTool.png");
+//    cache.label = tr("Cache");
+//   cache.version = "1.0";
+//    mToolsIcon.insert(cache.id, ":/images/toolPalette/cacheTool.png");
+//    mDescriptors << cache;
 
 }
 
