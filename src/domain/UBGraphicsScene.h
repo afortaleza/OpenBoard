@@ -208,6 +208,11 @@ class UBGraphicsScene: public UBCoreGraphicsScene, public UBItem, public std::en
             return mDocument;
         }
 
+        UBPageBackgroundColor pageBackgroundColor() const
+        {
+            return mPageBackgroundColor;
+        }
+
         bool isDarkBackground() const
         {
             return mDarkBackground;
@@ -363,7 +368,7 @@ public slots:
         void initStroke();
         void hideTool();
 
-        void setBackground(bool pIsDark, UBPageBackground pBackground);
+        void setBackground(UBPageBackgroundColor pBackgroundColor, UBPageBackground pBackground);
         void setBackgroundZoomFactor(qreal zoom);
         void setBackgroundGridSize(int pSize);
         void setIntermediateLines(bool checked);
@@ -463,6 +468,7 @@ signals:
         std::shared_ptr<UBDocumentProxy> mDocument;
 
         bool mDarkBackground;
+        UBPageBackgroundColor mPageBackgroundColor;
         UBPageBackground mPageBackground;
         int mBackgroundGridSize;
         bool mIntermediateLines;

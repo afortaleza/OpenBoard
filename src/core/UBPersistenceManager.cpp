@@ -1005,7 +1005,7 @@ std::shared_ptr<UBGraphicsScene> UBPersistenceManager::createDocumentSceneAt(std
 
     std::shared_ptr<UBGraphicsScene> newScene = mSceneCache.createScene(proxy, index, useUndoRedoStack);
 
-    newScene->setBackground(UBSettings::settings()->isDarkBackground(),
+    newScene->setBackground(UBSettings::settings()->getPageBackgroundColor(),
             UBSettings::settings()->UBSettings::pageBackground());
 
     newScene->setBackgroundGridSize(UBSettings::settings()->crossSize);

@@ -36,7 +36,15 @@ class UBBackgroundPalette : public UBActionPalette
 
 
         QVBoxLayout* mVLayout;
+
         QHBoxLayout* mTopLayout;
+        QHBoxLayout* mTopLeftLayout;
+        QVBoxLayout* mTopRightLayout;
+        QButtonGroup* mTopRightRadioGroup;
+        QRadioButton* mTopRightRadioPlain;
+        QRadioButton* mTopRightRadioCrossed;
+        QRadioButton* mTopRightRadioRuled;
+
         QHBoxLayout* mBottomLayout;
 
         QSlider* mSlider;

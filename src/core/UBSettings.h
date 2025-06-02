@@ -67,16 +67,16 @@ class UBSettings : public QObject
 
         int penColorIndex();
         QColor currentPenColor();
-        QColor penColor(bool onDarkBackground);
-        QList<QColor> penColors(bool onDarkBackground);
+        QColor penColor(UBPageBackgroundColor pageBackgroundColor);
+        QList<QColor> penColors(UBPageBackgroundColor pageBackgroundColor);
 
         // Marker related
         int markerWidthIndex();
         qreal currentMarkerWidth();
         int markerColorIndex();
         QColor currentMarkerColor();
-        QColor markerColor(bool onDarkBackground);
-        QList<QColor> markerColors(bool onDarkBackground);
+        QColor markerColor(UBPageBackgroundColor pageBackgroundColor);
+        QList<QColor> markerColors(UBPageBackgroundColor pageBackgroundColor);
 
         // Eraser related
         int eraserWidthIndex();
@@ -86,10 +86,10 @@ class UBSettings : public QObject
         qreal currentEraserWidth();
 
         // Background related
-        bool isDarkBackground();
+        UBPageBackgroundColor getPageBackgroundColor();
         UBPageBackground pageBackground();
         bool isSeyesRuledBackground();
-        void setDarkBackground(bool isDarkBackground);
+        void setPageBackgroundColor(UBPageBackgroundColor pageBackgroundColor);
         void setPageBackground(UBPageBackground background);
         void setSeyesRuledBackground(bool isSeyesRuledBackground);
 
@@ -169,26 +169,34 @@ class UBSettings : public QObject
 
         static QColor documentViewLightColor;
 
+        // Backgrounds
         static QBrush eraserBrushDarkBackground;
         static QBrush eraserBrushLightBackground;
+        static QBrush eraserBrushGreenBackground;
 
         static QPen eraserPenDarkBackground;
         static QPen eraserPenLightBackground;
+        static QPen eraserPenGreenBackground;
 
         static QColor markerCircleBrushColorDarkBackground;
         static QColor markerCircleBrushColorLightBackground;
+        static QColor markerCircleBrushColorGreenBackground;
 
         static QColor markerCirclePenColorDarkBackground;
         static QColor markerCirclePenColorLightBackground;
+        static QColor markerCirclePenColorGreenBackground;
 
         static QColor penCircleBrushColorDarkBackground;
         static QColor penCircleBrushColorLightBackground;
+        static QColor penCircleBrushColorGreenBackground;
 
         static QColor penCirclePenColorDarkBackground;
         static QColor penCirclePenColorLightBackground;
+        static QColor penCirclePenColorGreenBackground;
 
         static QColor documentSizeMarkColorDarkBackground;
         static QColor documentSizeMarkColorLightBackground;
+        static QColor documentSizeMarkColorGreenBackground;
 
         // Background grid
         static int crossSize;
@@ -303,15 +311,20 @@ class UBSettings : public QObject
 
         UBSetting* boardCrossColorDarkBackground;
         UBSetting* boardCrossColorLightBackground;
+        UBSetting* boardCrossColorGreenBackground;
 
         UBColorListSetting* boardGridLightBackgroundColors;
         UBColorListSetting* boardGridDarkBackgroundColors;
+        UBColorListSetting* boardGridGreenBackgroundColors;
 
         UBColorListSetting* boardPenLightBackgroundColors;
         UBColorListSetting* boardPenLightBackgroundSelectedColors;
 
         UBColorListSetting* boardPenDarkBackgroundColors;
         UBColorListSetting* boardPenDarkBackgroundSelectedColors;
+
+        UBColorListSetting* boardPenGreenBackgroundColors;
+        UBColorListSetting* boardPenGreenBackgroundSelectedColors;
 
         UBSetting* boardMarkerAlpha;
 
@@ -320,6 +333,9 @@ class UBSettings : public QObject
 
         UBColorListSetting* boardMarkerDarkBackgroundColors;
         UBColorListSetting* boardMarkerDarkBackgroundSelectedColors;
+
+        UBColorListSetting* boardMarkerGreenBackgroundColors;
+        UBColorListSetting* boardMarkerGreenBackgroundSelectedColors;
 
         UBSetting* showEraserPreviewCircle;
         UBSetting* showMarkerPreviewCircle;

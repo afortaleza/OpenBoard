@@ -59,10 +59,10 @@ class UBDrawingController : public QObject
         qreal currentToolWidth();
         int currentToolColorIndex();
         QColor currentToolColor();
-        QColor toolColor(bool onDarkBackground);
+        QColor toolColor(UBPageBackgroundColor pPageBackgroundColor);
 
-        void setPenColor(bool onDarkBackground, const QColor& color, int pIndex);
-        void setMarkerColor(bool onDarkBackground, const QColor& color, int pIndex);
+        void setPenColor(UBPageBackgroundColor pPageBackgroundColor, const QColor& color, int pIndex);
+        void setMarkerColor(UBPageBackgroundColor pPageBackgroundColor, const QColor& color, int pIndex);
         void setMarkerAlpha(qreal alpha);
 
         void setActiveRuler(UBAbstractDrawRuler* ruler);

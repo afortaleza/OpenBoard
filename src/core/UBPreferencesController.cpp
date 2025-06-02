@@ -256,8 +256,11 @@ void UBPreferencesController::wire()
     // pen
     QList<QColor> penLightBackgroundColors = settings->boardPenLightBackgroundColors->colors();
     QList<QColor> penDarkBackgroundColors = settings->boardPenDarkBackgroundColors->colors();
+    QList<QColor> penGreenBackgroundColors = settings->boardPenGreenBackgroundColors->colors();
+
     QList<QColor> penLightBackgroundSelectedColors = settings->boardPenLightBackgroundSelectedColors->colors();
     QList<QColor> penDarkBackgroundSelectedColors = settings->boardPenDarkBackgroundSelectedColors->colors();
+    QList<QColor> penGreenBackgroundSelectedColors = settings->boardPenGreenBackgroundSelectedColors->colors();
 
     mPenProperties = new UBBrushPropertiesFrame(mPreferencesUI->penFrame,
                                                 penLightBackgroundColors, penDarkBackgroundColors, penLightBackgroundSelectedColors,
@@ -413,10 +416,14 @@ void UBPreferencesController::defaultSettings()
         settings->boardPenDarkBackgroundSelectedColors->reset();
         QList<QColor> darkBackgroundSelectedColors = settings->boardPenDarkBackgroundSelectedColors->colors();
 
+        settings->boardPenGreenBackgroundSelectedColors->reset();
+        QList<QColor> greenBackgroundSelectedColors = settings->boardPenDarkBackgroundSelectedColors->colors();
+
         for (int i = 0 ; i < settings->colorPaletteSize ; i++)
         {
-            mPenProperties->lightBackgroundColorPickers[i]->setSelectedColorIndex(lightBackgroundSelectedColors.indexOf(settings->penColors(false).at(i)));
-            mPenProperties->darkBackgroundColorPickers[i]->setSelectedColorIndex(darkBackgroundSelectedColors.indexOf(settings->penColors(true).at(i)));
+            mPenProperties->lightBackgroundColorPickers[i]->setSelectedColorIndex(lightBackgroundSelectedColors.indexOf(settings->penColors(white).at(i)));
+            mPenProperties->darkBackgroundColorPickers[i]->setSelectedColorIndex(darkBackgroundSelectedColors.indexOf(settings->penColors(black).at(i)));
+            mPenProperties->greenBackgroundColorPickers[i]->setSelectedColorIndex(greenBackgroundSelectedColors.indexOf(settings->penColors(green).at(i)));
         }
     }
     else if (mPreferencesUI->mainTabWidget->currentWidget() == mPreferencesUI->markerTab)
@@ -436,8 +443,9 @@ void UBPreferencesController::defaultSettings()
 
         for (int i = 0 ; i < settings->colorPaletteSize ; i++)
         {
-            mMarkerProperties->lightBackgroundColorPickers[i]->setSelectedColorIndex(lightBackgroundSelectedColors.indexOf(settings->markerColors(false).at(i)));
-            mMarkerProperties->darkBackgroundColorPickers[i]->setSelectedColorIndex(darkBackgroundSelectedColors.indexOf(settings->markerColors(true).at(i)));
+            mMarkerProperties->lightBackgroundColorPickers[i]->setSelectedColorIndex(lightBackgroundSelectedColors.indexOf(settings->markerColors(white).at(i)));
+            mMarkerProperties->darkBackgroundColorPickers[i]->setSelectedColorIndex(darkBackgroundSelectedColors.indexOf(settings->markerColors(black).at(i)));
+            mMarkerProperties->greenBackgroundColorPickers[i]->setSelectedColorIndex(darkBackgroundSelectedColors.indexOf(settings->markerColors(green).at(i)));
         }
     }
     else if (mPreferencesUI->mainTabWidget->currentWidget() == mPreferencesUI->aboutTab)
@@ -612,7 +620,7 @@ void UBPreferencesController::colorSelected(const QColor& color)
 
     if (index >= 0)
     {
-        UBDrawingController::drawingController()->setPenColor(false, color, index);
+        UBDrawingController::drawingController()->setPenColor(white, color, index);
         return;
     }
 
@@ -620,21 +628,21 @@ void UBPreferencesController::colorSelected(const QColor& color)
 
     if (index >= 0)
     {
-        UBDrawingController::drawingController()->setPenColor(true, color, index);
+        UBDrawingController::drawingController()->setPenColor(black, color, index);
     }
 
     index = mMarkerProperties->lightBackgroundColorPickers.indexOf(colorPicker);
 
     if (index >= 0)
     {
-        UBDrawingController::drawingController()->setMarkerColor(false, color, index);
+        UBDrawingController::drawingController()->setMarkerColor(white, color, index);
     }
 
     index = mMarkerProperties->darkBackgroundColorPickers.indexOf(colorPicker);
 
     if (index >= 0)
     {
-        UBDrawingController::drawingController()->setMarkerColor(true, color, index);
+        UBDrawingController::drawingController()->setMarkerColor(black, color, index);
     }
 
 }

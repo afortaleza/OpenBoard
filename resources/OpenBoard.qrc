@@ -406,5 +406,7 @@
         <file>images/toolbar/pen-connected-battery-high.png</file>
         <file>images/toolbar/pen-connected-battery-low.png</file>
         <file>images/toolbar/pen-connected-battery-medium.png</file>
+        <file>images/backgroundPalette/background9.svg</file>
+        <file>images/backgroundPalette/background9On.svg</file>
     </qresource>
 </RCC>

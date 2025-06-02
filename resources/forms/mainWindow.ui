@@ -681,11 +681,9 @@
     <string>Meu PC</string>
    </property>
    <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-    </font>
+    <font/>
    </property>
-  </action>  
+  </action>
   <action name="actionPenBluetooth">
    <property name="enabled">
     <bool>false</bool>
@@ -701,11 +699,9 @@
     <string>Bluetooth Pen Control</string>
    </property>
    <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-    </font>
+    <font/>
    </property>
-  </action>  
+  </action>
   <action name="actionPreferences">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
@@ -1168,6 +1164,25 @@
    </property>
    <property name="font">
     <font/>
+   </property>
+  </action>
+  <action name="actionPlainGreenBackground">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../OpenBoard.qrc">
+     <normaloff>:/images/backgroundPalette/background9.svg</normaloff>
+     <normalon>:/images/backgroundPalette/background9On.svg</normalon>:/images/backgroundPalette/background9.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Plain Green Background</string>
+   </property>
+   <property name="iconText">
+    <string>Green</string>
+   </property>
+   <property name="toolTip">
+    <string>Plain Green Background</string>
    </property>
   </action>
   <action name="actionPlainLightBackground">

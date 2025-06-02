@@ -121,6 +121,11 @@ class UBGraphicsPolygonItem : public QGraphicsPolygonItem, public UBItem
             mColorOnDarkBackground = pColorOnDarkBackground;
         }
 
+        void setColorOnGreenBackground(QColor pColorOnGreenBackground)
+        {
+            mColorOnGreenBackground = pColorOnGreenBackground;
+        }
+
         QColor colorOnLightBackground() const
         {
             return mColorOnLightBackground;
@@ -150,6 +155,7 @@ class UBGraphicsPolygonItem : public QGraphicsPolygonItem, public UBItem
 
         QColor mColorOnDarkBackground;
         QColor mColorOnLightBackground;
+        QColor mColorOnGreenBackground;
 
         UBGraphicsStroke* mStroke;
         UBGraphicsStrokesGroup* mpGroup;

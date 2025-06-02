@@ -127,6 +127,16 @@ class UBBoardController : public UBDocumentContainer
             emit penColorChanged();
         }
 
+        void setPenColorOnGreenBackground(const QColor& pColor)
+        {
+            if (mPenColorOnGreenBackground == pColor)
+                return;
+
+            mPenColorOnGreenBackground = pColor;
+            emit penColorChanged();
+        }
+
+
         void setMarkerColorOnDarkBackground(const QColor& pColor)
         {
             mMarkerColorOnDarkBackground = pColor;
@@ -135,6 +145,11 @@ class UBBoardController : public UBDocumentContainer
         void setMarkerColorOnLightBackground(const QColor& pColor)
         {
             mMarkerColorOnLightBackground = pColor;
+        }
+
+        void setMarkerColorOnGreenBackground(const QColor& pColor)
+        {
+            mMarkerColorOnGreenBackground = pColor;
         }
 
         QColor penColorOnDarkBackground()
@@ -147,6 +162,11 @@ class UBBoardController : public UBDocumentContainer
             return mPenColorOnLightBackground;
         }
 
+        QColor penColorOnGreenBackground()
+        {
+            return mPenColorOnGreenBackground;
+        }
+
         QColor markerColorOnDarkBackground()
         {
             return mMarkerColorOnDarkBackground;
@@ -155,6 +175,11 @@ class UBBoardController : public UBDocumentContainer
         QColor markerColorOnLightBackground()
         {
             return mMarkerColorOnLightBackground;
+        }
+
+        QColor markerColorOnGreenBackground()
+        {
+            return mMarkerColorOnGreenBackground;
         }
 
         qreal systemScaleFactor()
@@ -230,7 +255,7 @@ class UBBoardController : public UBDocumentContainer
         UBItem *downloadFinished(bool pSuccess, QUrl sourceUrl, QUrl contentUrl, QString pHeader,
                                  QByteArray pData, QPointF pPos, QSize pSize,
                                  bool isBackground = false, bool internalData = false);
-        void changeBackground(bool isDark, UBPageBackground pageBackground);
+        void changeBackground(UBPageBackgroundColor pageBackgroundColor, UBPageBackground pageBackground);
         void setToolCursor(int tool);
         void showMessage(const QString& message, bool showSpinningWheel = false);
         void hideMessage();
@@ -329,8 +354,10 @@ class UBBoardController : public UBDocumentContainer
         bool mIsClosing;
         QColor mPenColorOnDarkBackground;
         QColor mPenColorOnLightBackground;
+        QColor mPenColorOnGreenBackground;
         QColor mMarkerColorOnDarkBackground;
         QColor mMarkerColorOnLightBackground;
+        QColor mMarkerColorOnGreenBackground;
         qreal mSystemScaleFactor;
         bool mCleanupDone;
         QMap<QAction*, QPair<QString, QString> > mActionTexts;

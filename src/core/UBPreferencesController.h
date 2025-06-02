@@ -124,6 +124,7 @@ class UBBrushPropertiesFrame : public Ui::brushProperties
 
         QList<UBColorPicker*> lightBackgroundColorPickers;
         QList<UBColorPicker*> darkBackgroundColorPickers;
+        QList<UBColorPicker*> greenBackgroundColorPickers;
 
 };
 

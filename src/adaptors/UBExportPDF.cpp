@@ -105,18 +105,20 @@ bool UBExportPDF::persistsDocument(std::shared_ptr<UBDocumentProxy> pDocumentPro
         UBApplication::showMessage(tr("Exporting page %1 of %2").arg(pageIndex + 1).arg(existingPageCount));
 
         // set background to white, no crossing for PDF output
-        bool isDark = scene->isDarkBackground();
+        UBPageBackgroundColor pageBackgroundColor = scene->pageBackgroundColor();
         UBPageBackground pageBackground = scene->pageBackground();
 
-        bool exportDark = isDark && UBSettings::settings()->exportBackgroundColor->get().toBool();
+        UBPageBackgroundColor exportBackgroundColor = pageBackgroundColor == UBPageBackgroundColor::black && UBSettings::settings()->exportBackgroundColor->get().toBool() ?
+            UBPageBackgroundColor::black : UBPageBackgroundColor::white;
+
 
         if (UBSettings::settings()->exportBackgroundGrid->get().toBool())
         {
-            scene->setBackground(exportDark, pageBackground);
+            scene->setBackground(exportBackgroundColor, pageBackground);
         }
         else
         {
-            scene->setBackground(exportDark, UBPageBackground::plain);
+            scene->setBackground(exportBackgroundColor, UBPageBackground::plain);
         }
 
         // pageSize is the output PDF page size; it is set to equal the scene's boundary size; if the contents
@@ -146,7 +148,7 @@ bool UBExportPDF::persistsDocument(std::shared_ptr<UBDocumentProxy> pDocumentPro
         scene->setRenderingQuality(UBItem::RenderingQualityNormal, UBItem::CacheAllowed);
 
         // Restore background state
-        scene->setBackground(isDark, pageBackground);
+        scene->setBackground(pageBackgroundColor, pageBackground);
     }
 
     if(!painterNeedsBegin)

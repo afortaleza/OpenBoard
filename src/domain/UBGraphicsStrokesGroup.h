@@ -43,6 +43,7 @@ public:
         currentColor = 0
         , colorOnLightBackground
         , colorOnDarkBackground
+        , colorOnGreenBackground
     };
 
     UBGraphicsStrokesGroup(QGraphicsItem* parent = 0);

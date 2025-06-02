@@ -224,18 +224,18 @@ void UBToolbarButtonGroup::paintEvent(QPaintEvent *)
 
 void UBToolbarButtonGroup::colorPaletteChanged()
 {
-    bool isDarkBackground = UBSettings::settings()->isDarkBackground();
+    UBPageBackgroundColor pageBackgroundColor = UBSettings::settings()->getPageBackgroundColor();
 
     QList<QColor> colors;
 
     if (UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Pen 
         || UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Line)
     {
-        colors = UBSettings::settings()->penColors(isDarkBackground);
+        colors = UBSettings::settings()->penColors(pageBackgroundColor);
     }
     else if (UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Marker)
     {
-        colors = UBSettings::settings()->markerColors(isDarkBackground);
+        colors = UBSettings::settings()->markerColors(pageBackgroundColor);
     }
 
     for (int i = 0; i < mButtons.size() && i < colors.size(); i++)

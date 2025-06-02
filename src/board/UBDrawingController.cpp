@@ -252,24 +252,24 @@ int UBDrawingController::currentToolColorIndex()
 
 QColor UBDrawingController::currentToolColor()
 {
-    return toolColor(UBSettings::settings()->isDarkBackground());
+    return toolColor(UBSettings::settings()->getPageBackgroundColor());
 }
 
 
-QColor UBDrawingController::toolColor(bool onDarkBackground)
+QColor UBDrawingController::toolColor(UBPageBackgroundColor pPageBackgroundColor)
 {
     if (stylusTool() == UBStylusTool::Pen || stylusTool() == UBStylusTool::Line)
     {
-        return UBSettings::settings()->penColor(onDarkBackground);
+        return UBSettings::settings()->penColor(pPageBackgroundColor);
     }
     else if (stylusTool() == UBStylusTool::Marker)
     {
-        return UBSettings::settings()->markerColor(onDarkBackground);
+        return UBSettings::settings()->markerColor(pPageBackgroundColor);
     }
     else
     {
         //failsafe
-        if (onDarkBackground)
+        if (pPageBackgroundColor == UBPageBackgroundColor::white)
         {
             return Qt::white;
         }
@@ -304,30 +304,38 @@ void UBDrawingController::setEraserWidthIndex(int index)
     UBSettings::settings()->setEraserWidthIndex(index);
 }
 
-void UBDrawingController::setPenColor(bool onDarkBackground, const QColor& color, int pIndex)
+void UBDrawingController::setPenColor(UBPageBackgroundColor pPageBackgroundColor, const QColor& color, int pIndex)
 {
-    if (onDarkBackground)
+    if (pPageBackgroundColor == UBPageBackgroundColor::black)
     {
         UBSettings::settings()->boardPenDarkBackgroundSelectedColors->setColor(pIndex, color);
     }
-    else
+    else if (pPageBackgroundColor == UBPageBackgroundColor::white)
     {
         UBSettings::settings()->boardPenLightBackgroundSelectedColors->setColor(pIndex, color);
+    }
+    else if (pPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        UBSettings::settings()->boardPenGreenBackgroundSelectedColors->setColor(pIndex, color);
     }
 
     emit colorPaletteChanged();
 }
 
 
-void UBDrawingController::setMarkerColor(bool onDarkBackground, const QColor& color, int pIndex)
+void UBDrawingController::setMarkerColor(UBPageBackgroundColor pPageBackgroundColor, const QColor& color, int pIndex)
 {
-    if (onDarkBackground)
+    if (pPageBackgroundColor == UBPageBackgroundColor::black)
     {
         UBSettings::settings()->boardMarkerDarkBackgroundSelectedColors->setColor(pIndex, color);
     }
-    else
+    else if (pPageBackgroundColor == UBPageBackgroundColor::white)
     {
         UBSettings::settings()->boardMarkerLightBackgroundSelectedColors->setColor(pIndex, color);
+    }
+    else if (pPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        UBSettings::settings()->boardMarkerGreenBackgroundSelectedColors->setColor(pIndex, color);
     }
 
     emit colorPaletteChanged();

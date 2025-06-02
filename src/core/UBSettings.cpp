@@ -78,24 +78,31 @@ QString UBSettings::currentFileVersion = "4.8.0";
 
 QBrush UBSettings::eraserBrushDarkBackground = QBrush(QColor(127, 127, 127, 80));
 QBrush UBSettings::eraserBrushLightBackground = QBrush(QColor(127, 127, 127, 80));
+QBrush UBSettings::eraserBrushGreenBackground = QBrush(QColor(127, 127, 127, 80));
 
 QPen UBSettings::eraserPenDarkBackground = QPen(QColor(255, 255, 255, 127));
 QPen UBSettings::eraserPenLightBackground = QPen(QColor(0, 0, 0, 127));
+QPen UBSettings::eraserPenGreenBackground = QPen(QColor(255, 255, 255, 127));
 
 QColor UBSettings::markerCircleBrushColorDarkBackground = QColor(127, 127, 127, 80);
 QColor UBSettings::markerCircleBrushColorLightBackground = QColor(127, 127, 127, 80);
+QColor UBSettings::markerCircleBrushColorGreenBackground = QColor(127, 127, 127, 80);
 
 QColor UBSettings::markerCirclePenColorDarkBackground = QColor(255, 255, 255, 127);
 QColor UBSettings::markerCirclePenColorLightBackground = QColor(0, 0, 0, 127);
+QColor UBSettings::markerCirclePenColorGreenBackground = QColor(255, 255, 255, 127);
 
 QColor UBSettings::penCircleBrushColorDarkBackground = QColor(127, 127, 127, 80);
 QColor UBSettings::penCircleBrushColorLightBackground = QColor(127, 127, 127, 80);
+QColor UBSettings::penCircleBrushColorGreenBackground = QColor(127, 127, 127, 80);
 
 QColor UBSettings::penCirclePenColorDarkBackground = QColor(255, 255, 255, 127);
 QColor UBSettings::penCirclePenColorLightBackground = QColor(0, 0, 0, 127);
+QColor UBSettings::penCirclePenColorGreenBackground = QColor(255, 255, 255, 127);
 
 QColor UBSettings::documentSizeMarkColorDarkBackground = QColor(44, 44, 44, 200);
 QColor UBSettings::documentSizeMarkColorLightBackground = QColor(241, 241, 241);
+QColor UBSettings::documentSizeMarkColorGreenBackground = QColor(44, 44, 44, 200);
 
 QColor UBSettings::paletteColor = QColor(127, 127, 127, 127);
 QColor UBSettings::opaquePaletteColor = QColor(66, 66, 66, 200);
@@ -635,26 +642,30 @@ void UBSettings::setPenColorIndex(int index)
 
 QColor UBSettings::currentPenColor()
 {
-    return penColor(isDarkBackground());
+    return penColor(getPageBackgroundColor());
 }
 
 
-QColor UBSettings::penColor(bool onDarkBackground)
+QColor UBSettings::penColor(UBPageBackgroundColor pPageBackgroundColor)
 {
-    QList<QColor> colors = penColors(onDarkBackground);
+    QList<QColor> colors = penColors(pPageBackgroundColor);
     return colors.at(penColorIndex());
 }
 
 
-QList<QColor> UBSettings::penColors(bool onDarkBackground)
+QList<QColor> UBSettings::penColors(UBPageBackgroundColor pPageBackgroundColor)
 {
-    if (onDarkBackground)
+    if (pPageBackgroundColor == UBPageBackgroundColor::black)
     {
         return boardPenDarkBackgroundSelectedColors->colors();
     }
-    else
+    else if (pPageBackgroundColor == UBPageBackgroundColor::white)
     {
         return boardPenLightBackgroundSelectedColors->colors();
+    }
+    else if (pPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        return boardPenGreenBackgroundSelectedColors->colors();
     }
 }
 
@@ -717,26 +728,30 @@ void UBSettings::setMarkerColorIndex(int index)
 
 QColor UBSettings::currentMarkerColor()
 {
-    return markerColor(isDarkBackground());
+    return markerColor(getPageBackgroundColor());
 }
 
 
-QColor UBSettings::markerColor(bool onDarkBackground)
+QColor UBSettings::markerColor(UBPageBackgroundColor pPageBackgroundColor)
 {
-    QList<QColor> colors = markerColors(onDarkBackground);
+    QList<QColor> colors = markerColors(pPageBackgroundColor);
     return colors.at(markerColorIndex());
 }
 
 
-QList<QColor> UBSettings::markerColors(bool onDarkBackground)
+QList<QColor> UBSettings::markerColors(UBPageBackgroundColor pPageBackgroundColor)
 {
-    if (onDarkBackground)
+    if (pPageBackgroundColor == UBPageBackgroundColor::black)
     {
         return boardMarkerDarkBackgroundSelectedColors->colors();
     }
-    else
+    else if (pPageBackgroundColor == UBPageBackgroundColor::white)
     {
         return boardMarkerLightBackgroundSelectedColors->colors();
+    }
+    else if (pPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        return boardMarkerGreenBackgroundSelectedColors->colors();
     }
 }
 
@@ -808,9 +823,9 @@ qreal UBSettings::currentEraserWidth()
     return width;
 }
 
-bool UBSettings::isDarkBackground()
+UBPageBackgroundColor UBSettings::getPageBackgroundColor()
 {
-    return value("Board/DarkBackground", 0).toBool();
+    return static_cast<UBPageBackgroundColor>(value("Board/PageBackgroundColor", 0).toUInt());
 }
 
 
@@ -831,9 +846,9 @@ bool UBSettings::isSeyesRuledBackground()
     return value("Board/SeyesRuledBackground", false).toBool();
 }
 
-void UBSettings::setDarkBackground(bool isDarkBackground)
+void UBSettings::setPageBackgroundColor(UBPageBackgroundColor pageBackgroundColor)
 {
-    setValue("Board/DarkBackground", isDarkBackground);
+    setValue("Board/PageBackgroundColor", pageBackgroundColor);
     emit colorContextChanged();
 }
 

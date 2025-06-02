@@ -1158,13 +1158,13 @@ void UBGraphicsScene::drawArcTo(const QPointF& pCenterPoint, qreal pSpanAngle)
     setDocumentUpdated();
 }
 
-void UBGraphicsScene::setBackground(bool pIsDark, UBPageBackground pBackground)
+void UBGraphicsScene::setBackground(UBPageBackgroundColor pBackgroundColor, UBPageBackground pBackground)
 {
     bool needRepaint = false;
 
-    if (mDarkBackground != pIsDark)
+    if (mPageBackgroundColor != pBackgroundColor)
     {
-        mDarkBackground = pIsDark;
+        mPageBackgroundColor = pBackgroundColor;
 
         updateEraserColor();
         updateMarkerCircleColor();
@@ -1270,31 +1270,39 @@ void UBGraphicsScene::initPolygonItem(UBGraphicsPolygonItem* polygonItem)
 {
     QColor colorOnDarkBG;
     QColor colorOnLightBG;
+    QColor colorOnGreenBG;
 
     if (UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Marker)
     {
         colorOnDarkBG = UBApplication::boardController->markerColorOnDarkBackground();
         colorOnLightBG = UBApplication::boardController->markerColorOnLightBackground();
+        colorOnGreenBG = UBApplication::boardController->markerColorOnGreenBackground();
     }
     else // settings->stylusTool() == UBStylusTool::Pen + failsafe
     {
         colorOnDarkBG = UBApplication::boardController->penColorOnDarkBackground();
         colorOnLightBG = UBApplication::boardController->penColorOnLightBackground();
+        colorOnGreenBG = UBApplication::boardController->penColorOnGreenBackground();
     }
 
-    if (mDarkBackground)
+    if (mPageBackgroundColor == UBPageBackgroundColor::black)
     {
         polygonItem->setColor(colorOnDarkBG);
     }
-    else
+    else if (mPageBackgroundColor == UBPageBackgroundColor::white)
     {
         polygonItem->setColor(colorOnLightBG);
+    }
+    else if (mPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        polygonItem->setColor(colorOnGreenBG);
     }
 
     //polygonItem->setColor(QColor(rand()%256, rand()%256, rand()%256, polygonItem->brush().color().alpha()));
 
     polygonItem->setColorOnDarkBackground(colorOnDarkBG);
     polygonItem->setColorOnLightBackground(colorOnLightBG);
+    polygonItem->setColorOnGreenBackground(colorOnGreenBG);
 
     polygonItem->setData(UBGraphicsItemData::ItemLayerType, QVariant(UBItemLayerType::Graphic));
 }
@@ -1411,7 +1419,7 @@ std::shared_ptr<UBGraphicsScene> UBGraphicsScene::sceneDeepCopy() const
 {
     std::shared_ptr<UBGraphicsScene> copy = std::make_shared<UBGraphicsScene>(this->document(), this->mUndoRedoStackEnabled);
 
-    copy->setBackground(this->isDarkBackground(), mPageBackground);
+    copy->setBackground(this->mPageBackgroundColor, mPageBackground);
     copy->setBackgroundGridSize(mBackgroundGridSize);
     copy->setSceneRect(this->sceneRect());
 
@@ -3255,14 +3263,20 @@ void UBGraphicsScene::updateEraserColor()
     if (!mEraser)
         return;
 
-    if (mDarkBackground) {
+    if (mPageBackgroundColor == UBPageBackgroundColor::black)
+    {
         mEraser->setBrush(UBSettings::eraserBrushDarkBackground);
         mEraser->setPen(UBSettings::eraserPenDarkBackground);
     }
-
-    else {
+    else if (mPageBackgroundColor == UBPageBackgroundColor::white)
+    {
         mEraser->setBrush(UBSettings::eraserBrushLightBackground);
         mEraser->setPen(UBSettings::eraserPenLightBackground);
+    }
+    else if (mPageBackgroundColor == UBPageBackgroundColor::green)
+    {
+        mEraser->setBrush(UBSettings::eraserBrushGreenBackground);
+        mEraser->setPen(UBSettings::eraserPenGreenBackground);
     }
 }
 
@@ -3273,14 +3287,17 @@ void UBGraphicsScene::updateMarkerCircleColor()
 
     QPen mcPen = mMarkerCircle->pen();
 
-    if (mDarkBackground) {
+    if (mPageBackgroundColor == UBPageBackgroundColor::black) {
         mcPen.setColor(UBSettings::markerCirclePenColorDarkBackground);
         mMarkerCircle->setBrush(UBSettings::markerCircleBrushColorDarkBackground);
     }
-
-    else {
+    else if (mPageBackgroundColor == UBPageBackgroundColor::white) {
         mcPen.setColor(UBSettings::markerCirclePenColorLightBackground);
         mMarkerCircle->setBrush(UBSettings::markerCircleBrushColorLightBackground);
+    }
+    else if (mPageBackgroundColor == UBPageBackgroundColor::green) {
+        mcPen.setColor(UBSettings::markerCirclePenColorGreenBackground);
+        mMarkerCircle->setBrush(UBSettings::markerCircleBrushColorGreenBackground);
     }
 
     mcPen.setStyle(Qt::DotLine);
@@ -3294,14 +3311,18 @@ void UBGraphicsScene::updatePenCircleColor()
 
     QPen mcPen = mPenCircle->pen();
 
-    if (mDarkBackground) {
+    if (mPageBackgroundColor == UBPageBackgroundColor::black) {
         mcPen.setColor(UBSettings::penCirclePenColorDarkBackground);
         mPenCircle->setBrush(UBSettings::penCircleBrushColorDarkBackground);
     }
 
-    else {
+    else if (mPageBackgroundColor == UBPageBackgroundColor::white) {
         mcPen.setColor(UBSettings::penCirclePenColorLightBackground);
         mPenCircle->setBrush(UBSettings::penCircleBrushColorLightBackground);
+    }
+    else if (mPageBackgroundColor == UBPageBackgroundColor::green) {
+        mcPen.setColor(UBSettings::penCirclePenColorGreenBackground);
+        mPenCircle->setBrush(UBSettings::penCircleBrushColorGreenBackground);
     }
 
     mcPen.setStyle(Qt::DotLine);

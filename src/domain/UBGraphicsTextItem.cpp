@@ -89,7 +89,7 @@ void UBGraphicsTextItem::initFontProperties()
 
     font.setPointSize(UBSettings::settings()->fontPointSize());
     format.setFont(font);
-    if (UBSettings::settings()->isDarkBackground())
+    if (UBSettings::settings()->getPageBackgroundColor())
     {
         if (UBGraphicsTextItem::lastUsedTextColor == Qt::black)
             UBGraphicsTextItem::lastUsedTextColor = Qt::white;

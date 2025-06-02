@@ -109,10 +109,10 @@ void UBExportFullPDF::saveOverlayPdf(std::shared_ptr<UBDocumentProxy> pDocumentP
         {
             std::shared_ptr<UBGraphicsScene> scene = UBPersistenceManager::persistenceManager()->loadDocumentScene(pDocumentProxy, pageIndex);
             // set background according to PDF export settings
-            bool isDark = scene->isDarkBackground();
             UBPageBackground pageBackground = scene->pageBackground();
 
-            bool exportDark = isDark && UBSettings::settings()->exportBackgroundColor->get().toBool();
+            UBPageBackgroundColor exportBackgroundColor = pageBackground == UBPageBackgroundColor::black && UBSettings::settings()->exportBackgroundColor->get().toBool() ?
+                UBPageBackgroundColor::black : UBPageBackgroundColor::white;
 
             bool sceneHasPDFBackground = false;
 
@@ -148,15 +148,15 @@ void UBExportFullPDF::saveOverlayPdf(std::shared_ptr<UBDocumentProxy> pDocumentP
             if (sceneHasPDFBackground)
             {
                 scene->setDrawingMode(true);
-                scene->setBackground(false, UBPageBackground::plain);
+                scene->setBackground(UBPageBackgroundColor::white, UBPageBackground::plain);
             }
             else if (UBSettings::settings()->exportBackgroundGrid->get().toBool())
             {
-                scene->setBackground(exportDark, pageBackground);
+                scene->setBackground(exportBackgroundColor, pageBackground);
             }
             else
             {
-                scene->setBackground(exportDark, UBPageBackground::plain);
+                scene->setBackground(exportBackgroundColor, UBPageBackground::plain);
             }
 
             //render to PDF
@@ -168,7 +168,7 @@ void UBExportFullPDF::saveOverlayPdf(std::shared_ptr<UBDocumentProxy> pDocumentP
 
             //restore background state
             scene->setDrawingMode(false);
-            scene->setBackground(isDark, pageBackground);
+            scene->setBackground(exportBackgroundColor, pageBackground);
         }
 
         if (pdfPainter) delete pdfPainter;

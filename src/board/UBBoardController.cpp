@@ -122,10 +122,14 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     int penColorIndex = UBSettings::settings()->penColorIndex();
     int markerColorIndex = UBSettings::settings()->markerColorIndex();
 
-    mPenColorOnDarkBackground = UBSettings::settings()->penColors(true).at(penColorIndex);
-    mPenColorOnLightBackground = UBSettings::settings()->penColors(false).at(penColorIndex);
-    mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(true).at(markerColorIndex);
-    mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(false).at(markerColorIndex);
+    mPenColorOnDarkBackground = UBSettings::settings()->penColors(black).at(penColorIndex);
+    mPenColorOnLightBackground = UBSettings::settings()->penColors(white).at(penColorIndex);
+    mPenColorOnGreenBackground = UBSettings::settings()->penColors(green).at(penColorIndex);
+
+    // Change the markerColors signature
+    mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(black).at(markerColorIndex);
+    mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(white).at(markerColorIndex);
+    mMarkerColorOnGreenBackground = UBSettings::settings()->markerColors(green).at(markerColorIndex);
 
     mPenBatteryTimer = new QTimer(this);
 }
@@ -1745,7 +1749,7 @@ std::shared_ptr<UBGraphicsScene> UBBoardController::setActiveDocumentScene(std::
 
         adjustDisplayViews();
 
-        UBSettings::settings()->setDarkBackground(mActiveScene->isDarkBackground());
+        UBSettings::settings()->setPageBackgroundColor(mActiveScene->pageBackgroundColor());
         UBSettings::settings()->setPageBackground(mActiveScene->pageBackground());
 
         freezeW3CWidgets(false);
@@ -2069,17 +2073,17 @@ bool UBBoardController::runPowerShellScript(const QString& scriptPath, const QSt
     return false;
 }
 
-void UBBoardController::changeBackground(bool isDark, UBPageBackground pageBackground)
+void UBBoardController::changeBackground(UBPageBackgroundColor pageBackgroundColor, UBPageBackground pageBackground)
 {
-    bool currentIsDark = mActiveScene->isDarkBackground();
+    UBPageBackgroundColor currentBackgroundColor = mActiveScene->pageBackgroundColor();
     UBPageBackground currentBackgroundType = mActiveScene->pageBackground();
 
-    if ((isDark != currentIsDark) || (currentBackgroundType != pageBackground))
+    if ((pageBackgroundColor != currentBackgroundColor) || (currentBackgroundType != pageBackground))
     {
-        UBSettings::settings()->setDarkBackground(isDark);
+        UBSettings::settings()->setPageBackgroundColor(pageBackgroundColor);
         UBSettings::settings()->setPageBackground(pageBackground);
 
-        mActiveScene->setBackground(isDark, pageBackground);
+        mActiveScene->setBackground(pageBackgroundColor, pageBackground);
 
         emit backgroundChanged();
     }
@@ -2286,8 +2290,9 @@ void UBBoardController::setColorIndex(int pColorIndex)
             UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Text ||
             UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Selector)
     {
-        mPenColorOnDarkBackground = UBSettings::settings()->penColors(true).at(pColorIndex);
-        mPenColorOnLightBackground = UBSettings::settings()->penColors(false).at(pColorIndex);
+        mPenColorOnDarkBackground = UBSettings::settings()->penColors(black).at(pColorIndex);
+        mPenColorOnLightBackground = UBSettings::settings()->penColors(white).at(pColorIndex);
+        mPenColorOnGreenBackground = UBSettings::settings()->penColors(green).at(pColorIndex);
 
         if (UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Selector)
         {
@@ -2303,17 +2308,20 @@ void UBBoardController::setColorIndex(int pColorIndex)
     }
     else if (UBDrawingController::drawingController()->stylusTool() == UBStylusTool::Marker)
     {
-        mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(true).at(pColorIndex);
-        mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(false).at(pColorIndex);
+        mMarkerColorOnDarkBackground = UBSettings::settings()->markerColors(black).at(pColorIndex);
+        mMarkerColorOnLightBackground = UBSettings::settings()->markerColors(white).at(pColorIndex);
+        mMarkerColorOnGreenBackground = UBSettings::settings()->markerColors(green).at(pColorIndex);
     }
 }
 
 void UBBoardController::colorPaletteChanged()
 {
-    mPenColorOnDarkBackground = UBSettings::settings()->penColor(true);
-    mPenColorOnLightBackground = UBSettings::settings()->penColor(false);
-    mMarkerColorOnDarkBackground = UBSettings::settings()->markerColor(true);
-    mMarkerColorOnLightBackground = UBSettings::settings()->markerColor(false);
+    mPenColorOnDarkBackground = UBSettings::settings()->penColor(black);
+    mPenColorOnLightBackground = UBSettings::settings()->penColor(white);
+    mPenColorOnGreenBackground = UBSettings::settings()->penColor(green);
+    mMarkerColorOnDarkBackground = UBSettings::settings()->markerColor(black);
+    mMarkerColorOnLightBackground = UBSettings::settings()->markerColor(white);
+    mMarkerColorOnGreenBackground = UBSettings::settings()->markerColor(green);
 }
 
 

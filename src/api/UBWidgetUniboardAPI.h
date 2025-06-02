@@ -34,6 +34,7 @@
 #include <QGraphicsSceneDragDropEvent>
 
 #include "UBW3CWidgetAPI.h"
+#include "core/UB.h"
 #include "core/UBDownloadManager.h"
 
 class UBGraphicsScene;
@@ -162,7 +163,7 @@ public:
         /**
          * set the scene backgroung to black/white with crossing or not
          */
-        void setBackground(bool pIsDark, bool pIsCrossed);
+        void setBackground(UBPageBackgroundColor pPageBackgroundColor, bool pIsCrossed);
 
         /**
          * add any supported objects (pictures/video/widget) centered at scene position x/y.

@@ -234,7 +234,7 @@ void UBGraphicsTextItemDelegate::contentsChanged()
 // will remain in the font list.
 void UBGraphicsTextItemDelegate::customize(QFontDialog &fontDialog)
 {
-    if (UBSettings::settings()->isDarkBackground()) {
+    if (UBSettings::settings()->getPageBackgroundColor()) {
         fontDialog.setStyleSheet("background-color: white;");
     }
 
@@ -337,7 +337,7 @@ void UBGraphicsTextItemDelegate::pickColor()
         QColorDialog colorDialog(delegated()->defaultTextColor(), static_cast<QGraphicsView*>(UBApplication::boardController->controlView()));
         colorDialog.setWindowTitle(tr("Text Color"));
         colorDialog.setOption(QColorDialog::DontUseNativeDialog);
-        if (UBSettings::settings()->isDarkBackground())
+        if (UBSettings::settings()->getPageBackgroundColor())
         {
             colorDialog.setStyleSheet("background-color: white;");
         }

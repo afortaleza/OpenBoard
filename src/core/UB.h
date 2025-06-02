@@ -231,6 +231,13 @@ enum UBPageBackground
     ruled
 };
 
+enum UBPageBackgroundColor
+{
+    white,
+    black,
+    green
+};
+
 /*
  * Qt Version Compatibility
  */

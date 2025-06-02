@@ -160,8 +160,9 @@ void UBWidgetUniboardAPI::setPenColor(const QString& penColor)
 
     if (conversionState && index > 0 && index <= 4)
     {
-        UBApplication::boardController->setPenColorOnDarkBackground(settings->penColors(true).at(index - 1));
-        UBApplication::boardController->setPenColorOnLightBackground(settings->penColors(false).at(index - 1));
+        UBApplication::boardController->setPenColorOnDarkBackground(settings->penColors(black).at(index - 1));
+        UBApplication::boardController->setPenColorOnLightBackground(settings->penColors(white).at(index - 1));
+        UBApplication::boardController->setPenColorOnGreenBackground(settings->penColors(green).at(index - 1));
     }
     else
     {
@@ -175,6 +176,7 @@ void UBWidgetUniboardAPI::setPenColor(const QString& penColor)
         {
             UBApplication::boardController->setPenColorOnDarkBackground(svgColor);
             UBApplication::boardController->setPenColorOnLightBackground(svgColor);
+            UBApplication::boardController->setPenColorOnGreenBackground(svgColor);
         }
     }
 }
@@ -193,8 +195,9 @@ void UBWidgetUniboardAPI::setMarkerColor(const QString& penColor)
 
     if (conversionState && index > 0 && index <= 4)
     {
-        UBApplication::boardController->setMarkerColorOnDarkBackground(settings->markerColors(true).at(index - 1));
-        UBApplication::boardController->setMarkerColorOnLightBackground(settings->markerColors(false).at(index - 1));
+        UBApplication::boardController->setMarkerColorOnDarkBackground(settings->markerColors(black).at(index - 1));
+        UBApplication::boardController->setMarkerColorOnLightBackground(settings->markerColors(white).at(index - 1));
+        UBApplication::boardController->setMarkerColorOnGreenBackground(settings->markerColors(green).at(index - 1));
     }
     else
     {
@@ -208,6 +211,7 @@ void UBWidgetUniboardAPI::setMarkerColor(const QString& penColor)
         {
             UBApplication::boardController->setMarkerColorOnDarkBackground(svgColor);
             UBApplication::boardController->setMarkerColorOnLightBackground(svgColor);
+            UBApplication::boardController->setMarkerColorOnGreenBackground(svgColor);
         }
     }
 }
@@ -228,15 +232,15 @@ void UBWidgetUniboardAPI::addObject(QString pUrl, int width, int height, int x, 
 }
 
 
-void UBWidgetUniboardAPI::setBackground(bool pIsDark, bool pIsCrossed)
+void UBWidgetUniboardAPI::setBackground(UBPageBackgroundColor pPageBackgroundColor, bool pIsCrossed)
 {
     auto scene = mScene.lock();
 
     if (scene) {
         if (pIsCrossed)
-            scene->setBackground(pIsDark, UBPageBackground::crossed);
+            scene->setBackground(pPageBackgroundColor, UBPageBackground::crossed);
         else
-            scene->setBackground(pIsDark, UBPageBackground::plain);
+            scene->setBackground(pPageBackgroundColor, UBPageBackground::plain);
     }
 }
 

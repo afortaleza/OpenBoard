@@ -34,7 +34,25 @@ void UBBackgroundPalette::init()
 
     mVLayout = new QVBoxLayout(this);
     mTopLayout = new QHBoxLayout();
+    mTopLeftLayout = new QHBoxLayout();
+    mTopRightLayout = new QVBoxLayout();
     mBottomLayout = new QHBoxLayout();
+
+    mTopRightRadioGroup = new QButtonGroup();
+    mTopRightRadioPlain = new QRadioButton(tr("Plain"));
+    mTopRightRadioCrossed = new QRadioButton(tr("Crossed"));
+    mTopRightRadioRuled = new QRadioButton(tr("Ruled"));
+
+    mTopRightRadioGroup->addButton(mTopRightRadioPlain);
+    mTopRightRadioGroup->addButton(mTopRightRadioCrossed);
+    mTopRightRadioGroup->addButton(mTopRightRadioRuled);
+
+    mTopRightLayout->addWidget(mTopRightRadioPlain);
+    mTopRightLayout->addWidget(mTopRightRadioCrossed);
+    mTopRightLayout->addWidget(mTopRightRadioRuled);
+
+    mTopLayout->addLayout(mTopLeftLayout);
+    mTopLayout->addLayout(mTopRightLayout);
 
     mVLayout->addLayout(mTopLayout);
     mVLayout->addLayout(mBottomLayout);
@@ -79,7 +97,7 @@ void UBBackgroundPalette::addAction(QAction* action)
 {
     UBActionPaletteButton* button = createPaletteButton(action, this);
 
-    mTopLayout->addWidget(button);
+    mTopLeftLayout->addWidget(button);
     mActions << action;
 }
 

@@ -535,7 +535,13 @@ void UBSvgSubsetAdaptor::UBSvgSubsetReader::processElement()
             else
                 bg = UBPageBackground::plain;
 
-            mScene->setBackground(darkBackground, bg);
+            UBPageBackgroundColor bgc;
+            if (darkBackground)
+                bgc = black;
+            else
+                bgc = white;
+
+            mScene->setBackground(bgc, bg);
 
             auto pageNominalSize = mXmlReader.attributes().value(mNamespaceUri, "nominal-size");
             if (!pageNominalSize.isNull())
