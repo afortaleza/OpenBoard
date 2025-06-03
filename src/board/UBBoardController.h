@@ -36,10 +36,10 @@
 #include <QHBoxLayout>
 #include <QUndoCommand>
 
+#include "board/UBToolbarEventFilter.h"
 #include "core/UB.h"
 #include "document/UBDocumentContainer.h"
 #include "core/UBApplicationController.h"
-#include "domain/UBGraphicsVirtualDesktopItem.h"
 
 class UBMainWindow;
 class UBApplication;
@@ -345,6 +345,8 @@ class UBBoardController : public UBDocumentContainer
         QTimer *mAutosaveTimer;
         QMovie *penBluetoothConnectingIcon;
         QTimer* mPenBatteryTimer;
+
+        UBToolbarEventFilter* mToolbarEventFilter; // Moved from inline definition
 
     private slots:
         void stylusToolDoubleClicked(int tool);

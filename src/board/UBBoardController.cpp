@@ -116,6 +116,7 @@ UBBoardController::UBBoardController(UBMainWindow* mainWindow)
     , mActionUngroupText(tr("Ungroup"))
     , mAutosaveTimer(0)
     , penBluetoothConnectingIcon(nullptr)
+    , mToolbarEventFilter(new UBToolbarEventFilter(this)) // Initialize the event filter
 {
     mZoomFactor = UBSettings::settings()->boardZoomFactor->get().toDouble();
 
@@ -177,6 +178,7 @@ UBBoardController::~UBBoardController()
 {
     delete penBluetoothConnectingIcon;
     delete mDisplayView;
+    delete mToolbarEventFilter; // Clean up the event filter
 }
 
 /**
@@ -371,6 +373,9 @@ void UBBoardController::setupToolbar()
     colorChoice->setLabel(tr("Color"));
 
     mMainWindow->boardToolBar->insertWidget(mMainWindow->actionBackgrounds, colorChoice);
+
+    // Install event filter on boardToolBar
+    mMainWindow->boardToolBar->installEventFilter(mToolbarEventFilter);
 
     connect(settings->appToolBarDisplayText, SIGNAL(changed(QVariant)), colorChoice, SLOT(displayText(QVariant)));
     connect(colorChoice, SIGNAL(activated(int)), this, SLOT(setColorIndex(int)));

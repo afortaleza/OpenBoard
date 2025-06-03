@@ -37,6 +37,7 @@
 #include "domain/UBGraphicsMediaItem.h"
 #include "domain/UBGraphicsStrokesGroup.h"
 #include "domain/UBGraphicsGroupContainerItem.h"
+#include "domain/UBGraphicsVirtualDesktopItem.h"
 #include "domain/UBGraphicsWidgetItem.h"
 #include "domain/UBGraphicsScene.h"
 #include "tools/UBGraphicsCurtainItem.h"
