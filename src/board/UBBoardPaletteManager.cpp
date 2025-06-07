@@ -168,7 +168,6 @@ void UBBoardPaletteManager::setupDockPaletteWidgets()
     // Hide the tabs that must be hidden
     mRightPalette->removeTab(mpDownloadWidget);
     mRightPalette->removeTab(mpCachePropWidget);
-
 }
 
 void UBBoardPaletteManager::slot_changeMainMode(UBApplicationController::MainMode mainMode)

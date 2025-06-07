@@ -70,6 +70,7 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
 
     //Path icon view on the top of the palette
     pathListView = new UBFeaturesListView(this, objNamePathList);
+    pathListView->setStyleSheet("QScrollBar:vertical, QScrollBar:horizontal { width: 0px; height: 0px; }");
     controller->assignPathListView(pathListView);
 
     centralWidget = new UBFeaturesCentralWidget(this);
@@ -80,9 +81,9 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
     mActionBar = new UBFeaturesActionBar(controller, this);
 
     //Filling main layout
-    layout->addWidget(pathListView);
-    layout->addWidget(centralWidget);
     layout->addWidget(mActionBar);
+    layout->addWidget(centralWidget);
+    layout->addWidget(pathListView);
 
     connect(centralWidget->listView(), SIGNAL(pressed(const QModelIndex &)), this, SLOT(currentSelected(const QModelIndex &)));
     connect(this, SIGNAL(sendFileNameList(QStringList)), centralWidget, SIGNAL(sendFileNameList(QStringList)));
@@ -108,6 +109,8 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
     connect(controller, SIGNAL(featureAddedFromThread()), centralWidget, SIGNAL(increaseStatusBarValue()));
     connect(controller, SIGNAL(scanCategory(QString)), centralWidget, SIGNAL(scanCategory(QString)));
     connect(controller, SIGNAL(scanPath(QString)), centralWidget, SIGNAL(scanPath(QString)));
+
+    mActionBar->setVisible(false);
 }
 
 UBFeaturesWidget::~UBFeaturesWidget()
@@ -504,9 +507,11 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     mListSlider->setMinimum(UBFeaturesWidget::minThumbnailSize);
     mListSlider->setMaximum(UBFeaturesWidget::maxThumbnailSize);
     mListSlider->setValue(UBFeaturesWidget::minThumbnailSize);
-    mListSlider->setMinimumHeight(20);
+    mListSlider->setMinimumHeight(30);
 
     mListView->setParent(this);
+    mListView->setStyleSheet("QScrollBar:vertical { width: 25px; }");
+
     QVBoxLayout *mainLayer = new QVBoxLayout(this);
 
     mainLayer->addWidget(mListView, 1);
