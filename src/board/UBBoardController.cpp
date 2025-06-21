@@ -458,6 +458,11 @@ void UBBoardController::setupToolbar()
     });
 
     mMainWindow->actionVirtualDesktop->setEnabled(QGuiApplication::screens().length() == 2);
+
+    // Penboard - Remove labels from board bar
+    colorChoice->setLabel("");
+    lineWidthChoice->setLabel("");
+    eraserWidthChoice->setLabel("");
 }
 
 
