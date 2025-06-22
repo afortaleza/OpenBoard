@@ -34,6 +34,7 @@
 #include "UBMainWindow.h"
 
 #include "core/UBApplication.h"
+#include "core/UBPenBoardConfiguration.h"
 #include "core/UBSettings.h"
 #include "core/UBApplicationController.h"
 #include "core/UBShortcutManager.h"
@@ -111,7 +112,7 @@ void UBStylusPalette::initPosition()
     }
     else {
         int posX = (parentWidth / 2) - (width() / 2);
-        int posY = parentHeight - border() - height();
+        int posY = parentHeight - border() - height() - UBPenBoardConfiguration::sizeBarMaximized;
         pos.setX(posX);
         pos.setY(posY);
     }

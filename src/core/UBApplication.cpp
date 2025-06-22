@@ -425,7 +425,7 @@ int UBApplication::exec(const QString& pFileToImport)
     onScreenCountChanged(displayManager->numScreens());
     connect(displayManager, SIGNAL(availableScreenCountChanged(int)), this, SLOT(onScreenCountChanged(int)));
 
-    UBPenBoardConfiguration::hideComponents();
+    UBPenBoardConfiguration::initComponents();
 
     penController->loadPenSDK();
     penController->connect();

@@ -31,6 +31,7 @@
 
 #include <QtWidgets>
 
+#include "core/UBPenBoardConfiguration.h"
 #include "frameworks/UBFileSystemUtils.h"
 #include "frameworks/UBPlatformUtils.h"
 
@@ -2097,32 +2098,34 @@ void UBBoardController::changeBackground(bool isDark, UBPageBackground pageBackg
 
 void UBBoardController::boardViewResized(QResizeEvent* event)
 {
-    Q_UNUSED(event);
+    if (!UBPenBoardConfiguration::mSkipCentering) {
+        Q_UNUSED(event);
 
-    int innerMargin = UBSettings::boardMargin;
-    int userHeight = mControlContainer->height() - (2 * innerMargin);
+        int innerMargin = UBSettings::boardMargin;
+        int userHeight = mControlContainer->height() - (2 * innerMargin);
 
-    mMessageWindow->move(innerMargin, innerMargin + userHeight - mMessageWindow->height());
-    mMessageWindow->adjustSizeAndPosition();
+        mMessageWindow->move(innerMargin, innerMargin + userHeight - mMessageWindow->height());
+        mMessageWindow->adjustSizeAndPosition();
 
-    UBApplication::applicationController->initViewState(
-                mControlView->horizontalScrollBar()->value(),
-                mControlView->verticalScrollBar()->value());
+        UBApplication::applicationController->initViewState(
+            mControlView->horizontalScrollBar()->value(),
+            mControlView->verticalScrollBar()->value());
 
-    updateSystemScaleFactor();
 
-    mControlView->centerOn(0,0);
+        updateSystemScaleFactor();
 
-    if (mDisplayView && UBApplication::displayManager->hasDisplay()) {
-        UBApplication::applicationController->adjustDisplayView();
-        mDisplayView->centerOn(0,0);
-        setBoxing(mDisplayView->geometry());
+        mControlView->centerOn(0,0);
+
+        if (mDisplayView && UBApplication::displayManager->hasDisplay()) {
+            UBApplication::applicationController->adjustDisplayView();
+            mDisplayView->centerOn(0,0);
+            setBoxing(mDisplayView->geometry());
+        }
+
+        mPaletteManager->containerResized();
+
+        UBApplication::boardController->controlView()->scene()->moveMagnifier();
     }
-
-    mPaletteManager->containerResized();
-
-    UBApplication::boardController->controlView()->scene()->moveMagnifier();
-
 }
 
 

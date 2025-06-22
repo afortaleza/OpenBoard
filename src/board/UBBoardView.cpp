@@ -36,6 +36,7 @@
 
 #include "UBDrawingController.h"
 
+#include "core/UBPenBoardConfiguration.h"
 #include "frameworks/UBGeometryUtils.h"
 #include "frameworks/UBPlatformUtils.h"
 
@@ -1815,13 +1816,16 @@ void UBBoardView::dropEvent (QDropEvent *event)
 
 void UBBoardView::resizeEvent (QResizeEvent * event)
 {
-    const qreal maxWidth = width () * 10;
-    const qreal maxHeight = height () * 10;
+    if (!UBPenBoardConfiguration::mSkipCentering)
+    {
+        const qreal maxWidth = width () * 10;
+        const qreal maxHeight = height () * 10;
 
-    setSceneRect (-(maxWidth / 2), -(maxHeight / 2), maxWidth, maxHeight);
-    centerOn (0, 0);
+        setSceneRect (-(maxWidth / 2), -(maxHeight / 2), maxWidth, maxHeight);
+        centerOn (0, 0);
 
-    emit resized (event);
+        emit resized (event);
+    }
 }
 
 void UBBoardView::paintEvent(QPaintEvent *event)

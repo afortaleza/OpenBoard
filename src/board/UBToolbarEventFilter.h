@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QPoint>
+#include <QTimer>
 
 class UBToolbarEventFilter : public QObject {
     Q_OBJECT
@@ -16,6 +17,7 @@ private:
     QPointF mPreviousPoint;
     QPoint dragStartPosition;
     bool dragLogged; // Tracks if drag has been logged
+    QTimer *mMinimizeTimer;
 };
 
 #endif // UBTOOLBAREVENTFILTER_H
