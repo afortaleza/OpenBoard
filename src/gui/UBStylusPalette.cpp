@@ -91,6 +91,7 @@ UBStylusPalette::UBStylusPalette(QWidget *parent, Qt::Orientation orient)
         connect(button, SIGNAL(doubleClicked()), this, SLOT(stylusToolDoubleClicked()));
     }
 
+    setBackgroundBrush(QBrush(QColor(90, 90, 176)));
 }
 
 void UBStylusPalette::initPosition()

@@ -276,10 +276,10 @@ void UBFloatingPalette::paintEvent(QPaintEvent *)
 
     if(mbGrip)
     {
-        painter.setBrush(QBrush(QColor(170, 170 ,170)));
+        painter.setBrush(QBrush(QColor(90, 90, 176)));
         QPainterPath borderPath;
         borderPath.addRoundedRect(0, 0, width(), height(), radius(), radius());
-        borderPath.addRoundedRect(border(), border(), width() - 2 * border(), height() - 2 * border(), radius(), radius());
+        //borderPath.addRoundedRect(border(), border(), width() - 2 * border(), height() - 2 * border(), radius(), radius());
         painter.drawPath(borderPath);
         painter.setBrush(mBackgroundBrush);
         painter.drawRoundedRect(border(), border(), width() - 2 * border(), height() - 2 * border(), radius(), radius());
