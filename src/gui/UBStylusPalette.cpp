@@ -76,6 +76,15 @@ UBStylusPalette::UBStylusPalette(QWidget *parent, Qt::Orientation orient)
     actions << UBApplication::mainWindow->actionSnap;
     UBApplication::mainWindow->actionSnap->setProperty("ungrouped", true);
 
+    // Penboard - Change background color and add buttons
+    setBackgroundBrush(QBrush(QColor(90, 90, 176)));
+    actions << UBApplication::mainWindow->actionPenBluetooth;
+    UBApplication::mainWindow->actionPenBluetooth->setProperty("ungrouped", true);
+
+    actions << UBApplication::mainWindow->actionBattery;
+    UBApplication::mainWindow->actionBattery->setProperty("ungrouped", true);
+    UBApplication::mainWindow->actionBattery->setVisible(false);
+
     setActions(actions);
     setButtonIconSize(QSize(42, 42));
     groupActions();
@@ -90,8 +99,6 @@ UBStylusPalette::UBStylusPalette(QWidget *parent, Qt::Orientation orient)
     {
         connect(button, SIGNAL(doubleClicked()), this, SLOT(stylusToolDoubleClicked()));
     }
-
-    setBackgroundBrush(QBrush(QColor(90, 90, 176)));
 }
 
 void UBStylusPalette::initPosition()

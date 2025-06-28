@@ -199,7 +199,7 @@ class UBBoardController : public UBDocumentContainer
         {
             return mInitialDocumentScene;
         }
-        void setPenBatteryStatus(int level);
+        void setPenBatteryIcon(int level);
 
     public slots:
         void showDocumentsDialog();
@@ -289,7 +289,7 @@ class UBBoardController : public UBDocumentContainer
 
     public slots:
         void showVirtualDesktop(bool enabled);
-        void getPenBatteryStatus();
+        void setPenBattery();
 
     protected slots:
         void selectionChanged();

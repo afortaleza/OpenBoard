@@ -35,6 +35,7 @@ void UBPenBoardConfiguration::hideStylusActions()
 void UBPenBoardConfiguration::initComponents()
 {
     UBApplication::mainWindow->boardToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    // UBApplication::mainWindow->boardToolBar->setStyleSheet("QToolBar { background-color: #5a5ab0; }");
 
     hideToolbarActions();
     hideStylusActions();

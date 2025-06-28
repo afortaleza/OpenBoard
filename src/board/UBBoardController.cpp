@@ -453,7 +453,7 @@ void UBBoardController::setupToolbar()
 
     // Pen connecting icon
     penBluetoothConnectingIcon = new QMovie();
-    penBluetoothConnectingIcon->setFileName(":/images/toolbar/pen-connecting.gif");
+    penBluetoothConnectingIcon->setFileName(":/images/stylusPalette/penConnecting.gif");
     connect(penBluetoothConnectingIcon, &QMovie::frameChanged, [=]{
         mMainWindow->actionPenBluetooth->setIcon(penBluetoothConnectingIcon->currentPixmap());
     });
@@ -502,7 +502,7 @@ void UBBoardController::connectToolbar()
     connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
     connect(UBApplication::penController, SIGNAL(stopScanning()), this, SLOT(penBluetoothStopScanning()));
-    connect(mPenBatteryTimer, SIGNAL(timeout()), this, SLOT(getPenBatteryStatus()));
+    connect(mPenBatteryTimer, SIGNAL(timeout()), this, SLOT(setPenBattery()));
 }
 
 void UBBoardController::startScript()
@@ -557,21 +557,27 @@ void UBBoardController::penBluetoothConnecting()
 {
     mMainWindow->actionPenBluetooth->setEnabled(true);
     penBluetoothConnectingIcon->start();
+
+    mMainWindow->actionBattery->setVisible(false);
 }
 
 void UBBoardController::penBluetoothConnected()
 {
     penBluetoothConnectingIcon->stop();
-    QIcon icon(":/images/toolbar/pen-connected.png");
+    QIcon icon(":/images/stylusPalette/penConnected.svg");
     mMainWindow->actionPenBluetooth->setIcon(icon);
+
+    mMainWindow->actionBattery->setVisible(true);
 }
 
 void UBBoardController::penBluetoothStopScanning()
 {
     mMainWindow->actionPenBluetooth->setEnabled(true);
     penBluetoothConnectingIcon->stop();
-    QIcon icon(":/images/toolbar/pen-disconnected.png");
+    QIcon icon(":/images/stylusPalette/penDisconnected.png");
     mMainWindow->actionPenBluetooth->setIcon(icon);
+
+    mMainWindow->actionBattery->setVisible(false);
 }
 
 void UBBoardController::initToolbarTexts()
@@ -949,22 +955,26 @@ void UBBoardController::deleteScene(int nIndex)
     }
 }
 
-void UBBoardController::setPenBatteryStatus(int level)
+void UBBoardController::setPenBatteryIcon(int level)
 {
     QString iconPath;
     if (level == -1) {
-        iconPath = ":/images/toolbar/pen-connected.png";
+        iconPath = ":/images/stylePalette/batteryCharging.svg";
     }
-    else if (level > 50) {
-        iconPath = ":/images/toolbar/pen-connected-battery-high.png";
-    } else if (level > 20) {
-        iconPath = ":/images/toolbar/pen-connected-battery-medium.png";
-    } else {
-        iconPath = ":/images/toolbar/pen-connected-battery-low.png";
+    else if (level >= 8) {
+        iconPath = ":/images/stylePalette/batteryFull.svg";
+    }
+    else if (level >= 5) {
+        iconPath = ":/images/stylePalette/batteryMid.svg.png";
+    }
+    else if (level >= 2){
+        iconPath = ":/images/stylePalette/batteryLow.svg";
+    }
+    else {
+        iconPath = ":/images/stylePalette/batteryEmpty.svg";
     }
 
-    penBluetoothConnectingIcon->stop();
-    mMainWindow->actionPenBluetooth->setIcon(QIcon(iconPath));
+    mMainWindow->actionBattery->setIcon(QIcon(iconPath));
 }
 
 
@@ -3007,13 +3017,13 @@ void UBBoardController::onDownloadModalFinished()
 
 }
 
-void UBBoardController::getPenBatteryStatus()
+void UBBoardController::setPenBattery()
 {
     if (UBApplication::penController->connectionStatus == NotConnected) {
         return;
     }
 
-    UBApplication::penController->getBatteryLevel();
+    UBApplication::penController->setBatteryLevel();
 }
 
 void UBBoardController::displayMetaData(QMap<QString, QString> metadatas)

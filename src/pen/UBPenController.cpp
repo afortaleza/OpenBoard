@@ -147,7 +147,7 @@ void UBPenController::connect()
     }
 }
 
-void UBPenController::getBatteryLevel()
+void UBPenController::setBatteryLevel()
 {
     pAFGetBatteryInfo();
 }
@@ -264,7 +264,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         switch (deviceStatus->status) {
             case PEN_CONNECTION_SUCCESS:
                 UBApplication::penController->connectionStatus = Connected;
-                UBApplication::boardController->getPenBatteryStatus();
+                UBApplication::boardController->setPenBattery();
                 emit UBApplication::penController->connected();
                 qInfo() << "[PEN] Connected!";
 
@@ -387,10 +387,10 @@ bool __cdecl UBPenController::penEventCallback(PEN_EVENT_TYPE evtType, uint8_t* 
     {
         AFEGetBattery* battery = (AFEGetBattery*)data;
         if (battery->val == 32676) {
-            UBApplication::boardController->setPenBatteryStatus(-1);
+            UBApplication::boardController->setPenBatteryIcon(-1);
         }
         else {
-            UBApplication::boardController->setPenBatteryStatus(battery->val);
+            UBApplication::boardController->setPenBatteryIcon(battery->val);
         }
     }
 

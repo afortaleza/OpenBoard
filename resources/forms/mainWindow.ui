@@ -80,8 +80,6 @@
    <addaction name="separator"/>
    <addaction name="actionVirtualDesktop"/>
    <addaction name="separator"/>
-   <addaction name="actionPenBluetooth"/>
-   <addaction name="separator"/>
    <addaction name="actionBoard"/>
    <addaction name="actionWeb"/>
    <addaction name="actionDocument"/>
@@ -692,13 +690,33 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/pen-disconnected.png</normaloff>:/images/toolbar/pen-disconnected.png</iconset>
+     <normaloff>:/images/stylusPalette/penDisconnected.svg</normaloff>:/images/stylusPalette/penDisconnected.svg</iconset>
    </property>
    <property name="text">
     <string>Pen</string>
    </property>
    <property name="toolTip">
     <string>Bluetooth Pen Control</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionBattery">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../OpenBoard.qrc">
+     <normaloff>:/images/stylusPalette/batteryEmpty.svg</normaloff>:/images/stylusPalette/batteryEmpty.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Pen Battery</string>
+   </property>
+   <property name="toolTip">
+    <string>Pen Battery Level</string>
    </property>
    <property name="font">
     <font>

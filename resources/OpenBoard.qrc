@@ -420,5 +420,13 @@
         <file>images/stylusPalette/captureAreaOn.svg</file>
         <file>images/stylusPalette/text.svg</file>
         <file>images/stylusPalette/textOn.svg</file>
+        <file>images/stylusPalette/penConnected.svg</file>
+        <file>images/stylusPalette/penConnecting.gif</file>
+        <file>images/stylusPalette/penDisconnected.svg</file>
+        <file>images/stylusPalette/batteryCharging.svg</file>
+        <file>images/stylusPalette/batteryEmpty.svg</file>
+        <file>images/stylusPalette/batteryFull.svg</file>
+        <file>images/stylusPalette/batteryLow.svg</file>
+        <file>images/stylusPalette/batteryMid.svg</file>
     </qresource>
 </RCC>
