@@ -264,7 +264,6 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
         switch (deviceStatus->status) {
             case PEN_CONNECTION_SUCCESS:
                 UBApplication::penController->connectionStatus = Connected;
-                UBApplication::boardController->setPenBattery();
                 emit UBApplication::penController->connected();
                 qInfo() << "[PEN] Connected!";
 
@@ -275,6 +274,7 @@ bool __cdecl UBPenController::bleEventCallback(BLE_EVENT_TYPE evtType, uint8_t* 
                     // Show calibration window on GUI thread
                     QMetaObject::invokeMethod(QApplication::instance(), []() {
                         showCalibrationWindow();
+                        //UBApplication::boardController->setPenBattery();
                     }, Qt::QueuedConnection);
                 }
                 break;

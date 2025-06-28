@@ -428,5 +428,15 @@
         <file>images/stylusPalette/batteryFull.svg</file>
         <file>images/stylusPalette/batteryLow.svg</file>
         <file>images/stylusPalette/batteryMid.svg</file>
+        <file>images/toolbar/menu.svg</file>
+        <file>images/toolbar/display.svg</file>
+        <file>images/toolbar/documents.svg</file>
+        <file>images/toolbar/board.svg</file>
+        <file>images/toolbar/window.svg</file>
+        <file>images/toolbar/clearPage.svg</file>
+        <file>images/toolbar/newDocument.svg</file>
+        <file>images/toolbar/background.svg</file>
+        <file>images/toolbar/redoOn.svg</file>
+        <file>images/toolbar/undoOn.svg</file>
     </qresource>
 </RCC>

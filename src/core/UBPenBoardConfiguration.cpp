@@ -21,6 +21,10 @@ void UBPenBoardConfiguration::hideToolbarActions()
     UBApplication::mainWindow->actionHideApplication->setVisible(false);
 
     UBApplication::mainWindow->actionStylus->setVisible(false);
+    UBApplication::mainWindow->actionForward->setVisible(false);
+    UBApplication::mainWindow->actionBack->setVisible(false);
+    UBApplication::mainWindow->actionDocument->setVisible(false);
+    UBApplication::mainWindow->actionBoard->setVisible(false);
 }
 
 void UBPenBoardConfiguration::hideStylusActions()
@@ -39,13 +43,13 @@ void UBPenBoardConfiguration::initComponents()
 
     hideToolbarActions();
     hideStylusActions();
-    startMinimized();
+    //startMinimized();
 }
 
 void UBPenBoardConfiguration::minimizeBoard()
 {
     mSkipCentering = true;
-    startMinimized();
+    //startMinimized();
 }
 
 void UBPenBoardConfiguration::startMinimized()

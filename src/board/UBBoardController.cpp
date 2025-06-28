@@ -502,7 +502,7 @@ void UBBoardController::connectToolbar()
     connect(UBApplication::penController, SIGNAL(scanningAndConnecting()), this, SLOT(penBluetoothConnecting()));
     connect(UBApplication::penController, SIGNAL(connected()), this, SLOT(penBluetoothConnected()));
     connect(UBApplication::penController, SIGNAL(stopScanning()), this, SLOT(penBluetoothStopScanning()));
-    connect(mPenBatteryTimer, SIGNAL(timeout()), this, SLOT(setPenBattery()));
+    //connect(mPenBatteryTimer, SIGNAL(timeout()), this, SLOT(setPenBattery()));
 }
 
 void UBBoardController::startScript()
@@ -959,19 +959,19 @@ void UBBoardController::setPenBatteryIcon(int level)
 {
     QString iconPath;
     if (level == -1) {
-        iconPath = ":/images/stylePalette/batteryCharging.svg";
+        iconPath = ":/images/stylusPalette/batteryCharging.svg";
     }
     else if (level >= 8) {
-        iconPath = ":/images/stylePalette/batteryFull.svg";
+        iconPath = ":/images/stylusPalette/batteryFull.svg";
     }
     else if (level >= 5) {
-        iconPath = ":/images/stylePalette/batteryMid.svg.png";
+        iconPath = ":/images/stylusPalette/batteryMid.svg.png";
     }
     else if (level >= 2){
-        iconPath = ":/images/stylePalette/batteryLow.svg";
+        iconPath = ":/images/stylusPalette/batteryLow.svg";
     }
     else {
-        iconPath = ":/images/stylePalette/batteryEmpty.svg";
+        iconPath = ":/images/stylusPalette/batteryEmpty.svg";
     }
 
     mMainWindow->actionBattery->setIcon(QIcon(iconPath));
@@ -3023,7 +3023,7 @@ void UBBoardController::setPenBattery()
         return;
     }
 
-    UBApplication::penController->setBatteryLevel();
+    //UBApplication::penController->setBatteryLevel();
 }
 
 void UBBoardController::displayMetaData(QMap<QString, QString> metadatas)

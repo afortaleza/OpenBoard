@@ -75,6 +75,8 @@ UBToolbarButtonGroup::UBToolbarButtonGroup(QToolBar *toolBar, const QList<QActio
         button->setDefaultAction(action);
         button->setCheckable(true);
 
+        button->setStyleSheet("QToolButton { border: none; }  QToolButton:checked { background-color: #c1c1c1; }");
+
         if(i == 0)
         {
             objectNameprefix.length() > 0 ?

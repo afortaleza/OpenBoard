@@ -79,11 +79,11 @@
    <addaction name="actionErase"/>
    <addaction name="separator"/>
    <addaction name="actionVirtualDesktop"/>
+   <addaction name="actionDesktop"/>
    <addaction name="separator"/>
    <addaction name="actionBoard"/>
    <addaction name="actionWeb"/>
    <addaction name="actionDocument"/>
-   <addaction name="actionDesktop"/>
    <addaction name="actionMenu"/>
   </widget>
   <widget class="QToolBar" name="webToolBar">
@@ -220,7 +220,7 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/background.png</normaloff>:/images/toolbar/background.png</iconset>
+     <normaloff>:/images/toolbar/background.svg</normaloff>:/images/toolbar/background.svg</iconset>
    </property>
    <property name="text">
     <string>Backgrounds</string>
@@ -235,7 +235,7 @@
   <action name="actionUndo">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/undoOn.png</normaloff>:/images/toolbar/undoOn.png</iconset>
+     <normaloff>:/images/toolbar/undoOn.svg</normaloff>:/images/toolbar/undoOn.svg</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -250,7 +250,7 @@
   <action name="actionRedo">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/redoOn.png</normaloff>:/images/toolbar/redoOn.png</iconset>
+     <normaloff>:/images/toolbar/redoOn.svg</normaloff>:/images/toolbar/redoOn.svg</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -304,7 +304,7 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/documents.png</normaloff>:/images/toolbar/documents.png</iconset>
+     <normaloff>:/images/toolbar/documents.svg</normaloff>:/images/toolbar/documents.svg</iconset>
    </property>
    <property name="text">
     <string>Documents</string>
@@ -631,7 +631,7 @@
   <action name="actionBoard">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/board.png</normaloff>:/images/toolbar/board.png</iconset>
+     <normaloff>:/images/toolbar/board.svg</normaloff>:/images/toolbar/board.svg</iconset>
    </property>
    <property name="text">
     <string>Board</string>
@@ -652,7 +652,7 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/clearPage.png</normaloff>:/images/toolbar/clearPage.png</iconset>
+     <normaloff>:/images/toolbar/clearPage.svg</normaloff>:/images/toolbar/clearPage.svg</iconset>
    </property>
    <property name="text">
     <string>Erase</string>
@@ -670,7 +670,7 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/window.png</normaloff>:/images/toolbar/window.png</iconset>
+     <normaloff>:/images/toolbar/window.svg</normaloff>:/images/toolbar/window.svg</iconset>
    </property>
    <property name="text">
     <string>Meu PC</string>
@@ -757,7 +757,7 @@
   <action name="actionMenu">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/menu.png</normaloff>:/images/toolbar/menu.png</iconset>
+     <normaloff>:/images/toolbar/menu.svg</normaloff>:/images/toolbar/menu.svg</iconset>
    </property>
    <property name="text">
     <string>PenBoard</string>
@@ -778,7 +778,7 @@
   <action name="actionDesktop">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/display.png</normaloff>:/images/toolbar/display.png</iconset>
+     <normaloff>:/images/toolbar/display.svg</normaloff>:/images/toolbar/display.svg</iconset>
    </property>
    <property name="text">
     <string>Show Desktop</string>
@@ -850,7 +850,7 @@
   <action name="actionNewDocument">
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/newDocument.png</normaloff>:/images/toolbar/newDocument.png</iconset>
+     <normaloff>:/images/toolbar/newDocument.svg</normaloff>:/images/toolbar/newDocument.svg</iconset>
    </property>
    <property name="text">
     <string>New Document</string>
@@ -1655,7 +1655,7 @@
    </property>
    <property name="icon">
     <iconset resource="../OpenBoard.qrc">
-     <normaloff>:/images/toolbar/newDocument.png</normaloff>:/images/toolbar/newDocument.png</iconset>
+     <normaloff>:/images/toolbar/newDocument.svg</normaloff>:/images/toolbar/newDocument.svg</iconset>
    </property>
    <property name="text">
     <string>Pages</string>

@@ -46,7 +46,7 @@ bool UBToolbarEventFilter::eventFilter(QObject* obj, QEvent* event)
         if (!dragLogged) {
             if (UBPenBoardConfiguration::isBoardMinimized()) {
                 UBPenBoardConfiguration::maximizeBoard();
-                mMinimizeTimer->start(3000); // Start 3-second timer
+                mMinimizeTimer->start(5000); // Start 5-second timer
             }
             else {
                 UBPenBoardConfiguration::minimizeBoard();
