@@ -43,13 +43,13 @@ void UBPenBoardConfiguration::initComponents()
 
     hideToolbarActions();
     hideStylusActions();
-    //startMinimized();
+    startMinimized();
 }
 
 void UBPenBoardConfiguration::minimizeBoard()
 {
     mSkipCentering = true;
-    //startMinimized();
+    startMinimized();
 }
 
 void UBPenBoardConfiguration::startMinimized()

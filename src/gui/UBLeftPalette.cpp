@@ -38,6 +38,8 @@
 UBLeftPalette::UBLeftPalette(QWidget *parent, const char *name):
     UBDockPalette(eUBDockPaletteType_LEFT, parent)
 {
+    setBackgroundBrush(QBrush(QColor(90, 90, 176)));
+
     setObjectName(name);
     setOrientation(eUBDockOrientation_Left);
     mCollapseWidth = 150;

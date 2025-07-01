@@ -41,6 +41,8 @@
 UBRightPalette::UBRightPalette(QWidget *parent, const char *name):
     UBDockPalette(eUBDockPaletteType_RIGHT, parent)
 {
+    setBackgroundBrush(QBrush(QColor(90, 90, 176)));
+
     setObjectName(name);
     setOrientation(eUBDockOrientation_Right);
     mCollapseWidth = 150;

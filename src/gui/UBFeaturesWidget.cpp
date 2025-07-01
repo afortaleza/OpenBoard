@@ -58,8 +58,8 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
 
     SET_STYLE_SHEET();
 
-    mIconToLeft = QPixmap(":images/library_open.png");
-    mIconToRight = QPixmap(":images/library_close.png");
+    mIconToLeft = QPixmap(":images/library_open.svg");
+    mIconToRight = QPixmap(":images/library_close.svg");
     setAcceptDrops(true);
 
     //Main UBFeature functionality
@@ -70,12 +70,14 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
 
     //Path icon view on the top of the palette
     pathListView = new UBFeaturesListView(this, objNamePathList);
-    pathListView->setStyleSheet("QScrollBar:vertical, QScrollBar:horizontal { width: 0px; height: 0px; }");
+    //pathListView->setStyleSheet("QScrollBar:vertical, QScrollBar:horizontal { width: 0px; height: 0px; }");
+    //pathListView->setStyleSheet("QListView { background-color: red }");
     controller->assignPathListView(pathListView);
 
     centralWidget = new UBFeaturesCentralWidget(this);
     controller->assignFeaturesListView(centralWidget->listView());
     centralWidget->setSliderPosition(UBSettings::settings()->featureSliderPosition->get().toInt());
+    //centralWidget->setStyleSheet("QListView { background-color: yellow }");
 
     //Bottom actionbar for DnD, quick search etc
     mActionBar = new UBFeaturesActionBar(controller, this);
@@ -84,6 +86,7 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
     layout->addWidget(mActionBar);
     layout->addWidget(centralWidget);
     layout->addWidget(pathListView);
+    pathListView->setVisible(false);
 
     connect(centralWidget->listView(), SIGNAL(pressed(const QModelIndex &)), this, SLOT(currentSelected(const QModelIndex &)));
     connect(this, SIGNAL(sendFileNameList(QStringList)), centralWidget, SIGNAL(sendFileNameList(QStringList)));
