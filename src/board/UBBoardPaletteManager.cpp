@@ -614,7 +614,7 @@ void UBBoardPaletteManager::toggleBackgroundPalette(bool checked)
 
         mBackgroundsPalette->adjustSizeAndPosition();
         mBackgroundsPalette->move((mContainer->width() - mBackgroundsPalette->width()) / 2,
-            (mContainer->height() - mBackgroundsPalette->height()) / 5);
+            (mContainer->height() - mBackgroundsPalette->height()) / 2);
     }
 }
 

@@ -200,6 +200,7 @@ class UBBoardController : public UBDocumentContainer
             return mInitialDocumentScene;
         }
         void setPenBatteryIcon(int level);
+        UBBoardPaletteManager *mPaletteManager;
 
     public slots:
         void showDocumentsDialog();
@@ -317,7 +318,6 @@ class UBBoardController : public UBDocumentContainer
         UBMainWindow *mMainWindow;
         std::shared_ptr<UBGraphicsScene> mActiveScene;
         int mActiveSceneIndex;
-        UBBoardPaletteManager *mPaletteManager;
         UBSoftwareUpdateDialog *mSoftwareUpdateDialog;
         UBMessageWindow *mMessageWindow;
         UBEmbedController *mEmbedController;

@@ -83,6 +83,7 @@ class UBBoardPaletteManager : public QObject
         void changeMode(eUBDockPaletteWidgetMode newMode, bool isInit = false);
         void startDownloads();
         void stopDownloads();
+        UBFeaturesWidget *mpFeaturesWidget;
 
     public slots:
 
@@ -143,8 +144,6 @@ class UBBoardPaletteManager : public QObject
 
         /** The cache properties widget */
         UBCachePropertiesWidget* mpCachePropWidget;
-
-        UBFeaturesWidget *mpFeaturesWidget;
 
         /** The download widget */
         UBDockDownloadWidget* mpDownloadWidget;

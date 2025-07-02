@@ -23,6 +23,8 @@ void UBBackgroundPalette::init()
     UBActionPalette::clearLayout();
     delete layout();
 
+    setBackgroundBrush(QBrush(QColor(90, 90, 176, 100)));
+
 
     m_customCloseProcessing = false;
 

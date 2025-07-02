@@ -503,7 +503,8 @@ void UBDesktopAnnotationController::screenLayoutChanged()
             UBApplication::displayManager &&
             UBApplication::displayManager->hasDisplay())
     {
-        mDesktopPalette->setShowHideButtonVisible(true);
+        // Penboard
+        mDesktopPalette->setShowHideButtonVisible(false);
     }
     else
     {

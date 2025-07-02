@@ -105,6 +105,7 @@ public:
 public:
     int scrollbarHorisontalPadding() const { return 10;}
     int scrollbarVerticalIndent() const { return 0;}
+    UBFeaturesListView *pathListView;
 
 signals:
     void sendFileNameList(const QStringList lst);
@@ -132,7 +133,6 @@ private:
 
 private:
     UBFeaturesController *controller;
-    UBFeaturesListView *pathListView;
     QVBoxLayout *layout;
     UBFeaturesActionBar *mActionBar;
     UBDownloadHttpFile* imageGatherer;
@@ -186,7 +186,10 @@ public:
 private:
     UBFeaturesListView *mListView;
     QSlider *mListSlider;
+    QPushButton *mBackButton;
 
+private slots:
+    void backToRoot();
 };
 
 class UBFeaturesCentralWidget : public QWidget

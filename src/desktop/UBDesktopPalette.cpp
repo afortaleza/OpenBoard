@@ -52,7 +52,7 @@ UBDesktopPalette::UBDesktopPalette(QWidget *parent, UBRightPalette* _rightPalett
 {
     QList<QAction*> actions;
 
-    mActionUniboard = new QAction(QIcon(":/images/toolbar/board.png"), tr("Show OpenBoard"), this);
+    mActionUniboard = new QAction(QIcon(":/images/toolbar/board.svg"), tr("Show OpenBoard"), this);
     connect(mActionUniboard, SIGNAL(triggered()), this, SIGNAL(uniboardClick()));
     actions << mActionUniboard;
 
@@ -64,9 +64,13 @@ UBDesktopPalette::UBDesktopPalette(QWidget *parent, UBRightPalette* _rightPalett
     actions << UBApplication::mainWindow->actionPointer;
 
     if (UBPlatformUtils::hasVirtualKeyboard())
+    {
         actions << UBApplication::mainWindow->actionVirtualKeyboard;
+        // Penboard
+        UBApplication::mainWindow->actionVirtualKeyboard->setVisible(false);
+    }
 
-    mActionCustomSelect = new QAction(QIcon(":/images/toolbar/captureArea.png"), tr("Capture Part of the Screen"), this);
+    mActionCustomSelect = new QAction(QIcon(":/images/toolbar/captureArea.svg"), tr("Capture Part of the Screen"), this);
     connect(mActionCustomSelect, SIGNAL(triggered()), this, SIGNAL(customClick()));
     actions << mActionCustomSelect;
 
@@ -157,7 +161,8 @@ void UBDesktopPalette::setShowHideButtonVisible(bool visible)
 
 void UBDesktopPalette::setDisplaySelectButtonVisible(bool visible)
 {
-    mDisplaySelectAction->setVisible(visible);
+    // Penboard
+    mDisplaySelectAction->setVisible(false);
 }
 
 //  Called when the palette is near the border and must be minimized

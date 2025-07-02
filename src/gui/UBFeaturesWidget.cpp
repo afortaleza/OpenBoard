@@ -39,6 +39,7 @@
 #include "board/UBBoardController.h"
 #include "document/UBDocumentController.h"
 #include "web/UBWebController.h"
+#include "board/UBBoardPaletteManager.h"
 
 const char *UBFeaturesWidget::objNamePathList = "PathList";
 const char *UBFeaturesWidget::objNameFeatureList = "FeatureList";
@@ -69,14 +70,16 @@ UBFeaturesWidget::UBFeaturesWidget(QWidget *parent, const char *name)
     layout = new QVBoxLayout(this);
 
     //Path icon view on the top of the palette
-    pathListView = new UBFeaturesListView(this, objNamePathList);
+    pathListView = new UBFeaturesListView(this);
+    pathListView->setObjectName(objNamePathList);
     //pathListView->setStyleSheet("QScrollBar:vertical, QScrollBar:horizontal { width: 0px; height: 0px; }");
     //pathListView->setStyleSheet("QListView { background-color: red }");
     controller->assignPathListView(pathListView);
 
     centralWidget = new UBFeaturesCentralWidget(this);
     controller->assignFeaturesListView(centralWidget->listView());
-    centralWidget->setSliderPosition(UBSettings::settings()->featureSliderPosition->get().toInt());
+    // Penboard
+    centralWidget->setSliderPosition(100);
     //centralWidget->setStyleSheet("QListView { background-color: yellow }");
 
     //Bottom actionbar for DnD, quick search etc
@@ -504,6 +507,10 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
 //    SET_STYLE_SHEET()
 
     mListView = new UBFeaturesListView(this, UBFeaturesWidget::objNameFeatureList);
+    mBackButton = new QPushButton("", this);
+    mBackButton->setIcon(QIcon(":/images/libpalette/home.svg"));
+    mBackButton->setIconSize(QSize(32, 32));
+    mBackButton->setStyleSheet("QPushButton { margin: 0px; padding: 2px; border: none; border-radius: 5px; background-color: #5a5ab0 }");
 
     mListSlider = new QSlider(Qt::Horizontal, this);
 
@@ -511,6 +518,7 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     mListSlider->setMaximum(UBFeaturesWidget::maxThumbnailSize);
     mListSlider->setValue(UBFeaturesWidget::minThumbnailSize);
     mListSlider->setMinimumHeight(30);
+    mListSlider->setVisible(false);
 
     mListView->setParent(this);
     mListView->setStyleSheet("QScrollBar:vertical { width: 25px; }");
@@ -518,15 +526,22 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     QVBoxLayout *mainLayer = new QVBoxLayout(this);
 
     mainLayer->addWidget(mListView, 1);
-    mainLayer->addWidget(mListSlider, 0);
+    mainLayer->addWidget(mBackButton, 0);
     mainLayer->setContentsMargins(0, 0, 0, 0);
 
     connect(mListSlider, SIGNAL(valueChanged(int)), mListView, SLOT(thumbnailSizeChanged(int)));
+    connect(mBackButton, SIGNAL(clicked()), this, SLOT(backToRoot()));
 }
 
 void UBFeaturesNavigatorWidget::setSliderPosition(int pValue)
 {
     mListSlider->setValue(pValue);
+}
+
+void UBFeaturesNavigatorWidget::backToRoot()
+{
+    auto listView = UBApplication::boardController->mPaletteManager->mpFeaturesWidget->pathListView;
+    emit listView->pressed(listView->model()->index(0, 0));
 }
 
 UBFeaturesCentralWidget::UBFeaturesCentralWidget(QWidget *parent) : QWidget(parent)

@@ -440,5 +440,7 @@
         <file>images/toolbar/undoOn.svg</file>
         <file>images/library_close.svg</file>
         <file>images/library_open.svg</file>
+        <file>images/toolbar/captureArea.svg</file>
+        <file>images/libpalette/home.svg</file>
     </qresource>
 </RCC>

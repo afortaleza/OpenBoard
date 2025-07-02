@@ -417,16 +417,16 @@ void UBFeaturesController::scanFS()
     featuresList->clear();
     featuresList->append(rootElement);
 
-    *featuresList << audiosElement
+    *featuresList //<< audiosElement
                     << moviesElement
                     << picturesElement
                     << flashElement
-                    << interactElement
+                    //<< interactElement
                     << applicationsElement
-                    << shapesElement
-                    << favoriteElement
-                    << webSearchElement
-                    << trashElement;
+                    << shapesElement;
+                    //<< favoriteElement
+                    //<< webSearchElement
+                    //<< trashElement;
 
     //filling favoriteList
     loadFavoriteList();

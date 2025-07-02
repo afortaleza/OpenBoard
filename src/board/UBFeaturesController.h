@@ -142,7 +142,6 @@ public:
     const QMap<QString,QString> & getMetadata() const { return metadata; }
     void setMetadata( const QMap<QString,QString> &data ) { metadata = data; }
 
-
 private:
     QString getNameFromVirtualPath(const QString &pVirtPath);
     QString getVirtualDirFromVirtualPath(const QString &pVirtPath);

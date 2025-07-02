@@ -1,9 +1,55 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="26px" height="26px" viewBox="0 0 26 26" style="enable-background:new 0 0 26 26;" xml:space="preserve">
-<circle style="fill:#CCCCCC;" cx="13" cy="13" r="13"/>
-<circle style="fill:#999999;" cx="13" cy="13" r="11"/>
-<polygon style="fill:#FFFFFF;" points="20,15 20,11 6,11 6,15 20,15"/>
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="26px"
+   height="26px"
+   viewBox="0 0 26 26"
+   style="enable-background:new 0 0 26 26;"
+   xml:space="preserve"
+   sodipodi:docname="decrease.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs2" /><sodipodi:namedview
+   id="namedview2"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="31.038462"
+   inkscape:cx="13"
+   inkscape:cy="13"
+   inkscape:window-width="1920"
+   inkscape:window-height="1009"
+   inkscape:window-x="2552"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<circle
+   style="fill:#5a5ab0;fill-opacity:1"
+   cx="13"
+   cy="13"
+   r="13"
+   id="circle1" />
+<circle
+   style="fill:#5a5ab0;fill-opacity:1"
+   cx="13"
+   cy="13"
+   r="11"
+   id="circle2" />
+<polygon
+   style="fill:#FFFFFF;"
+   points="20,15 20,11 6,11 6,15 20,15"
+   id="polygon2" />
 </svg>

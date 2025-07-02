@@ -1,41 +1,112 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
-<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	 y="0px" width="128px" height="128px" viewBox="0 0 128 128" xml:space="preserve">
-<g id="Layer_2">
+
+<svg
+   version="1.2"
+   x="0px"
+   y="0px"
+   width="128px"
+   height="128px"
+   viewBox="0 0 128 128"
+   xml:space="preserve"
+   id="svg7"
+   sodipodi:docname="background1On.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs7">
+	
+
+		
+		<linearGradient
+   id="SVGID_1_"
+   gradientUnits="userSpaceOnUse"
+   x1="63.4995"
+   y1="24.502399"
+   x2="63.4995"
+   y2="101.9506">
+			<stop
+   offset="0"
+   style="stop-color:#FCFCFC"
+   id="stop1" />
+			<stop
+   offset="1"
+   style="stop-color:#E6E6E6"
+   id="stop2" />
+		</linearGradient>
+		
+		<linearGradient
+   id="SVGID_2_"
+   gradientUnits="userSpaceOnUse"
+   x1="66.128899"
+   y1="104.8428"
+   x2="66.128899"
+   y2="77.002197">
+			<stop
+   offset="0"
+   style="stop-color:#E0E0E0"
+   id="stop3" />
+			<stop
+   offset="1"
+   style="stop-color:#999999"
+   id="stop4" />
+		</linearGradient>
+		
+		
+		
+		<linearGradient
+   id="SVGID_3_"
+   gradientUnits="userSpaceOnUse"
+   x1="68.681602"
+   y1="92.851601"
+   x2="63.4618"
+   y2="78.9319">
+			<stop
+   offset="0"
+   style="stop-color:#657180"
+   id="stop6" />
+			<stop
+   offset="1"
+   style="stop-color:#AFB9C5"
+   id="stop7" />
+		</linearGradient>
+		
+	</defs><sodipodi:namedview
+   id="namedview7"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="6.3046875"
+   inkscape:cx="64"
+   inkscape:cy="64"
+   inkscape:window-width="1920"
+   inkscape:window-height="1009"
+   inkscape:window-x="2552"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg7" />
+<g
+   id="Layer_2">
 </g>
-<g id="Layer_1">
-	<g>
-		<path fill="#666666" d="M122,93c0,8.837-7.164,16-16,16H21c-8.836,0-16-7.163-16-16V35c0-8.836,7.164-16,16-16h85
-			c8.836,0,16,7.164,16,16V93z"/>
-		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="63.4995" y1="24.5024" x2="63.4995" y2="101.9506">
-			<stop  offset="0" style="stop-color:#FCFCFC"/>
-			<stop  offset="1" style="stop-color:#E6E6E6"/>
-		</linearGradient>
-		<path fill="url(#SVGID_1_)" d="M104.906,102.468H22.091c-6.19,0-11.227-5.038-11.227-11.231V36.028
-			c0-6.191,5.036-11.227,11.227-11.227h82.815c6.19,0,11.229,5.036,11.229,11.227v55.208
-			C116.135,97.43,111.097,102.468,104.906,102.468L104.906,102.468z"/>
-		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="66.1289" y1="104.8428" x2="66.1289" y2="77.0022">
-			<stop  offset="0" style="stop-color:#E0E0E0"/>
-			<stop  offset="1" style="stop-color:#999999"/>
-		</linearGradient>
-		<path fill="url(#SVGID_2_)" d="M113.525,71.782c0,0,0.02-0.042,0.052-0.114C113.559,71.709,113.543,71.742,113.525,71.782z
-			 M113.525,71.782c-5.221,11.31-14.791,12.181-14.791,12.181l-81.273,13.92l-3.946,4.193c2.36,1.872,5.337,3,8.577,3h82.815
-			c7.629,0,13.837-6.207,13.837-13.84V71.782H113.525z"/>
-		<path fill="#FFFFFF" d="M104.906,22.192c7.629,0,13.837,6.207,13.837,13.836v55.208c0,7.633-6.208,13.84-13.837,13.84H22.091
-			c-7.629,0-13.836-6.207-13.836-13.84V36.028c0-7.629,6.207-13.836,13.836-13.836H104.906 M104.906,27.412H22.091
-			c-4.751,0-8.616,3.865-8.616,8.616v55.208c0,4.753,3.865,8.619,8.616,8.619h82.815c4.751,0,8.617-3.866,8.617-8.619V36.028
-			C113.523,31.277,109.657,27.412,104.906,27.412L104.906,27.412z"/>
-		<path fill="#B0B9C4" d="M104.906,22.192c7.629,0,13.837,6.207,13.837,13.836v55.208c0,7.633-6.208,13.84-13.837,13.84H22.091
-			c-7.629,0-13.836-6.207-13.836-13.84V36.028c0-7.629,6.207-13.836,13.836-13.836H104.906 M104.906,25.672H22.091
-			c-5.71,0-10.356,4.646-10.356,10.356v55.208c0,5.713,4.646,10.359,10.356,10.359h82.815c5.711,0,10.357-4.646,10.357-10.359
-			V36.028C115.264,30.318,110.617,25.672,104.906,25.672L104.906,25.672z"/>
-		<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="68.6816" y1="92.8516" x2="63.4618" y2="78.9319">
-			<stop  offset="0" style="stop-color:#657180"/>
-			<stop  offset="1" style="stop-color:#AFB9C5"/>
-		</linearGradient>
-		<path fill="url(#SVGID_3_)" d="M96.125,87.346C79.1,91.045,17.461,97.883,17.461,97.883l70.542-26.666
-			c0,0,20.494,17.185,25.521-0.401C113.525,70.815,113.148,83.646,96.125,87.346z"/>
-	</g>
-</g>
+<path
+   fill="#666666"
+   d="m 122,93 c 0,8.837 -7.164,16 -16,16 H 21 C 12.164,109 5,101.837 5,93 V 35 C 5,26.164 12.164,19 21,19 h 85 c 8.836,0 16,7.164 16,16 z"
+   id="path1"
+   style="fill:#5a5ab0;fill-opacity:1" /><path
+   fill="url(#SVGID_1_)"
+   d="M 104.906,102.468 H 22.091 c -6.19,0 -11.227,-5.038 -11.227,-11.231 V 36.028 c 0,-6.191 5.036,-11.227 11.227,-11.227 h 82.815 c 6.19,0 11.229,5.036 11.229,11.227 v 55.208 c 0,6.194 -5.038,11.232 -11.229,11.232 z"
+   id="path2"
+   style="fill:#ffffff;fill-opacity:1" /><path
+   fill="#ffffff"
+   d="m 104.906,22.192 c 7.629,0 13.837,6.207 13.837,13.836 v 55.208 c 0,7.633 -6.208,13.84 -13.837,13.84 H 22.091 c -7.629,0 -13.836,-6.207 -13.836,-13.84 V 36.028 c 0,-7.629 6.207,-13.836 13.836,-13.836 h 82.815 m 0,5.22 H 22.091 c -4.751,0 -8.616,3.865 -8.616,8.616 v 55.208 c 0,4.753 3.865,8.619 8.616,8.619 h 82.815 c 4.751,0 8.617,-3.866 8.617,-8.619 V 36.028 c 0,-4.751 -3.866,-8.616 -8.617,-8.616 z"
+   id="path5" /><path
+   fill="#b0b9c4"
+   d="m 104.906,22.192 c 7.629,0 13.837,6.207 13.837,13.836 v 55.208 c 0,7.633 -6.208,13.84 -13.837,13.84 H 22.091 c -7.629,0 -13.836,-6.207 -13.836,-13.84 V 36.028 c 0,-7.629 6.207,-13.836 13.836,-13.836 h 82.815 m 0,3.48 H 22.091 c -5.71,0 -10.356,4.646 -10.356,10.356 v 55.208 c 0,5.713 4.646,10.359 10.356,10.359 h 82.815 c 5.711,0 10.357,-4.646 10.357,-10.359 V 36.028 c 10e-4,-5.71 -4.646,-10.356 -10.357,-10.356 z"
+   id="path6" />
 </svg>
