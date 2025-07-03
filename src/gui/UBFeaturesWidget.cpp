@@ -521,7 +521,12 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     mListSlider->setVisible(false);
 
     mListView->setParent(this);
-    mListView->setStyleSheet("QScrollBar:vertical { width: 25px; }");
+    mListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    QScroller::grabGesture(mListView, QScroller::LeftMouseButtonGesture);
+    QScroller *scroller = QScroller::scroller(mListView);
+    mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mListView->setStyleSheet("QListView { margin-left: 40px; }");
 
     QVBoxLayout *mainLayer = new QVBoxLayout(this);
 
