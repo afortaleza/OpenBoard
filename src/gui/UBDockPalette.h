@@ -202,6 +202,8 @@ protected:
     QString mCrntTabWidget;
     /** Last opened tab index depending on mode */
     QMap<eUBDockPaletteWidgetMode,int> mLastOpenedTabForMode;
+    /** Palette height offset **/
+    int mHeightOffset;
 
 private slots:
     void onToolbarPosUpdated();

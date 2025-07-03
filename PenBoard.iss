@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PenBoard"
-#define MyAppVersion "20250603-1015"
+#define MyAppVersion "20250603-1315"
 #define MyAppPublisher "PenBoard"
 #define MyAppURL "https://www.penboard.com.br/"
 #define MyAppExeName "PenBoard.exe"

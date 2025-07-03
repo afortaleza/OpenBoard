@@ -63,6 +63,7 @@ UBDockPalette::UBDockPalette(eUBDockPaletteType paletteType, QWidget *parent, co
 , mpStackWidget(NULL)
 , mpLayout(NULL)
 , mCurrentTab(0)
+, mHeightOffset(0)
 , mPaletteType(paletteType)
 , mTabPalette(new UBTabDockPalette(this, parent))
 {
@@ -170,7 +171,7 @@ void UBDockPalette::resizeEvent(QResizeEvent *event)
     updateMaxWidth();
     if(parentWidget())
     {
-        setMinimumHeight(parentWidget()->height());
+        setMinimumHeight(parentWidget()->height() - mHeightOffset);
     }
     // Set the position
     QPoint origin;
@@ -178,7 +179,7 @@ void UBDockPalette::resizeEvent(QResizeEvent *event)
     {
     case eUBDockOrientation_Right:
         origin.setX(parentWidget()->width() - this->width());
-        origin.setY(0);
+        origin.setY(0 + mHeightOffset);
         break;
     case eUBDockOrientation_Bottom:
         // Not supported yet
@@ -187,7 +188,7 @@ void UBDockPalette::resizeEvent(QResizeEvent *event)
     case eUBDockOrientation_Left:
     default:
         origin.setX(0);
-        origin.setY(0);
+        origin.setY(0 + mHeightOffset);
         break;
     }
     move(origin.x(), origin.y());
