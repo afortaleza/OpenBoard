@@ -442,5 +442,11 @@
         <file>images/library_open.svg</file>
         <file>images/toolbar/captureArea.svg</file>
         <file>images/libpalette/home.svg</file>
+        <file>images/toolPalette/rulerTool.svg</file>
+        <file>images/toolPalette/axesTool.svg</file>
+        <file>images/toolPalette/compassTool.svg</file>
+        <file>images/toolPalette/protractorTool.svg</file>
+        <file>images/toolPalette/triangleTool.svg</file>
+        <file>images/toolPalette/magnifierTool.svg</file>
     </qresource>
 </RCC>

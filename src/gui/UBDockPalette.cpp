@@ -95,7 +95,7 @@ UBDockPalette::UBDockPalette(eUBDockPaletteType paletteType, QWidget *parent, co
     mBackgroundBrush = QBrush(UBSettings::paletteColor);
 
     // This is the only way to set the background as transparent!
-    setStyleSheet("QWidget {background-color: transparent}");
+    setStyleSheet("QWidget {background-color: #EEEEEE}");
 
     // Set the position of the tab
     onToolbarPosUpdated();
@@ -238,11 +238,11 @@ void UBDockPalette::paintEvent(QPaintEvent *event)
         // First draw the BIG RECTANGLE (I write it big because the rectangle is big...)
         if(mOrientation == eUBDockOrientation_Left)
         {
-            path.addRect(0.0, 0.0, width(), height());
+            path.addRoundedRect(0.0, 0.0, width(), height(), 10, 10);
         }
         else if(mOrientation == eUBDockOrientation_Right)
         {
-            path.addRect(0.0, 0.0, width(), height());
+            path.addRoundedRect(0.0, 0.0, width(), height(), 10, 10);
         }
 
         painter.drawPath(path);

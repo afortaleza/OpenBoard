@@ -492,7 +492,7 @@ void UBFeaturesListView::dropEvent( QDropEvent *event )
 void UBFeaturesListView::thumbnailSizeChanged( int value )
 {
     setIconSize(QSize(value, value));
-    setGridSize(QSize(value + 20, value + 20 ));
+    setGridSize(QSize(value + 35, value + 35));
 
     UBSettings::settings()->featureSliderPosition->set(value);
 }
@@ -504,9 +504,7 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     name = "UBFeaturesNavigatorWidget";
 
     setObjectName(name);
-//    SET_STYLE_SHEET()
 
-    mListView = new UBFeaturesListView(this, UBFeaturesWidget::objNameFeatureList);
     mBackButton = new QPushButton("", this);
     mBackButton->setIcon(QIcon(":/images/libpalette/home.svg"));
     mBackButton->setIconSize(QSize(32, 32));
@@ -520,13 +518,14 @@ UBFeaturesNavigatorWidget::UBFeaturesNavigatorWidget(QWidget *parent, const char
     mListSlider->setMinimumHeight(30);
     mListSlider->setVisible(false);
 
+    mListView = new UBFeaturesListView(this, UBFeaturesWidget::objNameFeatureList);
     mListView->setParent(this);
     mListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     QScroller::grabGesture(mListView, QScroller::LeftMouseButtonGesture);
     QScroller *scroller = QScroller::scroller(mListView);
     mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    mListView->setStyleSheet("QListView { margin-left: 40px; }");
+    mListView->setStyleSheet("QListView { margin-left: 5px; }");
 
     QVBoxLayout *mainLayer = new QVBoxLayout(this);
 
